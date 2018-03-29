@@ -10,7 +10,7 @@ services:
       USER_PROFILE_DB_USERNAME:
       USER_PROFILE_DB_PASSWORD:
       USER_PROFILE_DB_USE_SSL:
-      USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition
+      USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,sscs
       IDAM_S2S_URL: http://service-auth-provider-api:8080
       REFORM_SERVICE_NAME: ccd-user-profile-api
       REFORM_TEAM: ccd
@@ -47,7 +47,7 @@ services:
       DEFINITION_STORE_DB_PASSWORD:
       DEFINITION_STORE_DB_USE_SSL:
       DEFINITION_STORE_IDAM_KEY: "${IDAM_KEY_CCD_DEFINITION_STORE}"
-      DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw
+      DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,sscs
       USER_PROFILE_HOST: http://ccd-user-profile-api:4453
       IDAM_USER_URL: http://idam-api:8080
       IDAM_S2S_URL: http://service-auth-provider-api:8080
@@ -90,7 +90,7 @@ services:
       DATA_STORE_DB_USE_SSL:
       DATA_STORE_IDAM_KEY: "${IDAM_KEY_CCD_DATA_STORE}"
       DATA_STORE_TOKEN_SECRET: iuasbcuasdcbasdgcasdgcuysachjsacyasdgjcgasdj
-      DATA_STORE_S2S_AUTHORISED_SERVICES: ccd_gw
+      DATA_STORE_S2S_AUTHORISED_SERVICES: ccd_gw,sscs
       DEFINITION_STORE_HOST: http://ccd-definition-store-api:4451
       USER_PROFILE_HOST: http://ccd-user-profile-api:4453
       IDAM_USER_URL: http://idam-api:8080
@@ -157,6 +157,8 @@ services:
       http_proxy:
       https_proxy:
       no_proxy:
+      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_SSCS: QM5RQQ53LZFOSIXJ
+      LOGGING_LEVEL_UK_GOV_HMCTS_IDAM: DEBUG
     ports:
       - 4501:8080
     links:
@@ -182,6 +184,7 @@ services:
       - 4502:8080
     environment:
       auth.provider.service.server.jwtKey: wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA==
+      auth.provider.service.server.microserviceKeys.sscs: "${IDAM_KEY_CCD_GATEWAY}"
       auth.provider.service.server.microserviceKeys.ccd_data: "${IDAM_KEY_CCD_DATA_STORE}"
       auth.provider.service.server.microserviceKeys.ccd_gw: "${IDAM_KEY_CCD_GATEWAY}"
       auth.provider.service.server.microserviceKeys.ccd_definition: "${IDAM_KEY_CCD_DEFINITION_STORE}"
@@ -189,6 +192,22 @@ services:
 
   smtp-server:
     image: mailhog/mailhog
+
+  track-your-appeal-notifications:
+    build:
+      context: .
+      args:
+        - http_proxy
+        - https_proxy
+        - no_proxy
+    image: docker.artifactory.reform.hmcts.net/reform/track-your-appeal-notifications
+    container_name: track-your-appeal-notifications
+    environment:
+      S2S_URL: http://service-auth-provider-api:8080
+      NOTIFICATION_API_KEY: emailnotificationkey
+    ports:
+      # check .env
+      - 8081:8081
 
 volumes:
   ccd-user-profile-database-data:
