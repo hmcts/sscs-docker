@@ -3,6 +3,7 @@
 - [Getting started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Setting CCD](#setting-ccd)
+  - [Starting CCD for SSCS](#starting-ccd-for-sscs)
   - [Starting CCD](#starting-ccd)
   - [Using CCD](#using-ccd)
   - [Monitoring](#monitoring-)
@@ -18,18 +19,73 @@
 
 ## Getting started
 
-The following documentation assumes that the current directory is `ccd-docker`.
-
 ### Prerequisites
 
 - [Docker](https://www.docker.com)
 
 ### Setting CCD 
 
-Clone the SSCS docker env
+* Clone the SSCS docker env
 ```bash
 git clone git@github.com:hmcts/sscs-docker.git
 ```
+The following documentation assumes that the current directory is `sscs-docker`.
+
+### Starting CCD for SSCS
+
+When setting up CCD docker for the firsttime, follow all these instructions to setup and run CCD docker.
+
+* Comment out the notifications service
+```bash
+https://github.com/hmcts/sscs-docker/blob/master/compose/backend.yml#L196-L210
+```
+* Remove the forward slash at the end of the line from IDAM_CCD_WHITELIST property
+```bash
+https://github.com/hmcts/sscs-docker/blob/master/compose/backend.yml#L144
+```
+* Start CCD
+```bash
+./compose-frontend.sh up -d
+```
+* Containers status
+```bash
+The containers will take ~1 minute to start. Their current status can be checked using the command:
+
+docker ps
+
+All containers should be flagged as `Up` and `healthy`.
+```
+* Add Roles
+```bash
+./bin/ccd-add-role.sh caseworker-sscs
+./bin/ccd-add-role.sh caseworker-sscs-systemupdate
+./bin/ccd-add-role.sh caseworker-sscs-anonymouscitizen
+./bin/ccd-add-role.sh caseworker-sscs-callagent
+```
+* Create a caseworker user 
+```bash
+./bin/idam-create-caseworker.sh caseworker-sscs  <your-email>@hmcts.net
+```
+* Download the latest CCD_SSCSDefinition_vx.x.x_AAT.xlsx from 
+```bash
+https://tools.hmcts.net/confluence/display/SSCS/Case+Definitions
+```
+* Open the downloaded CCD definition file and 
+```bash
+go to CaseEvent tab, scroll right until you see the callbacks links, remove them all, save the file 
+go to UserProfile tab, add <your-email>@hmcts.net
+```
+* Import the CCD definition file 
+```bash
+./bin/ccd-import-definition.sh ~/CCD_SSCSDefinition_vx.x.x_AAT.xlsx
+```
+* Login to CCD UI 
+```bash
+http://localhost:3451
+username: <your-email-in-case-def>
+password: password
+```
+* You should be successfully logged in
 
 ### Starting CCD
 
