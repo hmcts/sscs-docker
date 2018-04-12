@@ -82,7 +82,7 @@ go to UserProfile tab, add <your-email>@hmcts.net
 * Login to CCD UI 
 ```bash
 http://localhost:3451
-username: <your-email-in-case-def>
+username: <your-email>@hmcts.net
 password: password
 ```
 * You should be successfully logged in
