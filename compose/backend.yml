@@ -193,21 +193,53 @@ services:
   smtp-server:
     image: mailhog/mailhog
 
-  track-your-appeal-notifications:
-    build:
-      context: .
-      args:
-        - http_proxy
-        - https_proxy
-        - no_proxy
-    image: docker.artifactory.reform.hmcts.net/reform/track-your-appeal-notifications
-    container_name: track-your-appeal-notifications
-    environment:
-      S2S_URL: http://service-auth-provider-api:8080
-      NOTIFICATION_API_KEY: emailnotificationkey
-    ports:
-      # check .env
-      - 8081:8081
+#  track-your-appeal-notifications:
+#    build:
+#      context: .
+#      args:
+#        - http_proxy
+#        - https_proxy
+#        - no_proxy
+#    image: docker.artifactory.reform.hmcts.net/reform/track-your-appeal-notifications
+#    container_name: track-your-appeal-notifications
+#    environment:
+#      S2S_URL: http://service-auth-provider-api:8080
+#      NOTIFICATION_API_KEY: emailnotificationkey
+#    ports:
+#      # check .env
+#      - 8081:8081
+#
+#
+#  tribunals-case-api:
+#    build:
+#      context: .
+#      args:
+#        - http_proxy
+#        - https_proxy
+#        - no_proxy
+#    image: docker.artifactory.reform.hmcts.net/sscs/tribunals-case-api
+#    container_name: tribunals-case-api
+#    environment:
+#      IDAM_URL: http://localhost:4501
+#      IDAM_S2S-AUTH_TOTP_SECRET: "${IDAM_KEY_CCD_GATEWAY}"
+#      IDAM_S2S-AUTH_MICROSERVICE: sscs
+#      IDAM_S2S-AUTH: http://localhost:4502
+#      IDAM_SSCS_SYSTEMUPDATE_USER: SSCS_SYSTEM_UPDATE
+#      IDAM_SSCS_SYSTEMUPDATE_PASSWORD: SSCS_SYSTEM_UPDATE
+#      IDAM_OAUTH2_CLIENT_ID: sscs
+#      IDAM_OAUTH2_CLIENT_SECRET: QM5RQQ53LZFOSIXJ
+#      IDAM_SSCS_URL: https://localhost:9000/poc
+#      CORE_CASE_DATA_API_URL: http://localhost:4452
+#      CORE_CASE_DATA_USER_ID: 16
+#      CORE_CASE_DATA_JURISDICTION_ID: SSCS
+#      CORE_CASE_DATA_CASE_TYPE_ID: Benefit
+#    ports:
+#      - 8083:8083
+#    depends_on:
+#      - service-auth-provider-api
+#    links:
+#      - service-auth-provider-api
+
 
 volumes:
   ccd-user-profile-database-data:
