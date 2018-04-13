@@ -2,6 +2,8 @@
 
 - [Getting started](#getting-started)
   - [Prerequisites](#prerequisites)
+  - [Setting CCD](#setting-ccd)
+  - [Starting CCD for SSCS](#starting-ccd-for-sscs)
   - [Starting CCD](#starting-ccd)
   - [Using CCD](#using-ccd)
   - [Monitoring](#monitoring-)
@@ -17,17 +19,79 @@
 
 ## Getting started
 
-The following documentation assumes that the current directory is `ccd-docker`.
-
 ### Prerequisites
 
 - [Docker](https://www.docker.com)
+
+### Setting CCD 
+
+* Clone the SSCS docker env
+```bash
+git clone git@github.com:hmcts/sscs-docker.git
+```
+The following documentation assumes that the current directory is `sscs-docker`.
+
+### Starting CCD for SSCS
+
+When setting up CCD docker for the firsttime, follow all these instructions to setup and run CCD docker.
+
+* Comment out the notifications service
+```bash
+https://github.com/hmcts/sscs-docker/blob/master/compose/backend.yml#L196-L210
+```
+* Remove the forward slash at the end of the line from IDAM_CCD_WHITELIST property
+```bash
+https://github.com/hmcts/sscs-docker/blob/master/compose/backend.yml#L144
+```
+* Start CCD
+```bash
+./compose-frontend.sh up -d
+```
+* Containers status
+```bash
+The containers will take ~1 minute to start. Their current status can be checked using the command:
+
+docker ps
+
+All containers should be flagged as `Up` and `healthy`.
+```
+* Add Roles
+```bash
+./bin/ccd-add-role.sh caseworker-sscs
+./bin/ccd-add-role.sh caseworker-sscs-systemupdate
+./bin/ccd-add-role.sh caseworker-sscs-anonymouscitizen
+./bin/ccd-add-role.sh caseworker-sscs-callagent
+```
+* Create a caseworker user 
+```bash
+./bin/idam-create-caseworker.sh caseworker-sscs  <your-email>@hmcts.net
+```
+* Download the latest CCD_SSCSDefinition_vx.x.x_AAT.xlsx from 
+```bash
+https://tools.hmcts.net/confluence/display/SSCS/Case+Definitions
+```
+* Open the downloaded CCD definition file and 
+```bash
+go to CaseEvent tab, scroll right until you see the callbacks links, remove them all, save the file 
+go to UserProfile tab, add <your-email>@hmcts.net
+```
+* Import the CCD definition file 
+```bash
+./bin/ccd-import-definition.sh ~/CCD_SSCSDefinition_vx.x.x_AAT.xlsx
+```
+* Login to CCD UI 
+```bash
+http://localhost:3451
+username: <your-email>@hmcts.net
+password: password
+```
+* You should be successfully logged in
 
 ### Starting CCD
 
 Choice is given to start CCD with or without its front-end depending on the use case.
 
-To start CCD __with__ the front-end:
+To start CCD __with__ the front-end(Recommended):
 
 ```bash
 ./compose-frontend.sh up -d
@@ -61,26 +125,7 @@ Once the containers are running, CCD's frontend can be accessed at [http://local
 
 However, 3 more steps are required to correctly configure IDAM and CCD before it can be used:
 
-#### 1. Create a caseworker user
-
-A caseworker user can be created in IDAM using the following command:
-
-```bash
-./bin/idam-create-caseworker.sh <roles> <email> [password] [surname] [forename]
-```
-
-Parameters:
-- `roles`: a comma-separated list of roles. Roles must be existing IDAM roles for the CCD domain. Every caseworker requires at least it's coarse-grained jurisdiction role (`caseworker-<jurisdiction>`).
-- `email`: Email address used for logging in.
-- `password`: Optional. Password for logging in. Defaults to `password`.
-
-For example:
-
-```bash
-./bin/idam-create-caseworker.sh caseworker-probate,caseworker-probate-solicitor probate@hmcts.net
-```
-
-#### 2. Add roles
+#### 1. Add roles
 
 Before a definition can be imported, roles referenced in a case definition Authorisation tabs must be defined in CCD using:
 
@@ -89,10 +134,28 @@ Before a definition can be imported, roles referenced in a case definition Autho
 ```
 
 Parameters:
-- `role`: Name of the role, e.g: `caseworker-divorce`.
+- `role`: Name of the role, e.g: `caseworker-sscs`.
 - `classification`: Optional. One of `PUBLIC`, `PRIVATE` or `RESTRICTED`. Defaults to `PUBLIC`.
 
-#### 3. Import case definition
+For sscs:
+```bash
+./bin/ccd-add-role.sh caseworker-sscs
+```
+then
+```bash
+./bin/ccd-add-role.sh caseworker-sscs-systemupdate
+```
+and then
+```bash
+./bin/ccd-add-role.sh caseworker-sscs-anonymouscitizen
+```
+
+and finally
+```bash
+./bin/ccd-add-role.sh caseworker-sscs-callagent
+```
+
+#### 2. Import case definition
 
 To reduce impact on performances, case definitions are imported via the command line rather than using CCD's dedicated UI:
 
@@ -110,10 +173,35 @@ If the import fails with an error of the form:
 ```
 Validation errors occurred importing the spreadsheet.
 
-- Invalid IdamRole 'caseworker-cmc-loa1' in AuthorisationCaseField tab, case type 'MoneyClaimCase', case field 'submitterId', crud 'CRUD'
+- Invalid IdamRole 'caseworker-sscs' in AuthorisationCaseField tab, case type 'Benefit', crud 'CRUD'
 ```
 
-Then the indicated role, here `caseworker-cmc-loa1`, must be added to CCD (See [2. Add roles](#2-add-roles)).
+Then the indicated role, here `caseworker-sscs`, must be added to CCD (See [1. Add roles](#1-add-roles)).
+
+For sscs:
+```bash
+./bin/ccd-import-definition.sh ~/CCD_SSCSDefinition_<Version>.xlsx
+link here -> https://tools.hmcts.net/confluence/display/SSCS/Case+Definitions
+```
+
+#### 3. Create a caseworker user
+
+This step is required to login into CCD UI.
+A caseworker user can be created in IDAM using the following command:
+
+```bash
+./bin/idam-create-caseworker.sh <roles> <email> [password] [surname] [forename]
+```
+
+Parameters:
+- `roles`: a comma-separated list of roles. Roles must be existing IDAM roles for the CCD domain. Every caseworker requires at least it's coarse-grained jurisdiction role (`caseworker-<jurisdiction>`).
+- `email`: Email address used for logging in.
+- `password`: Optional. Password for logging in. Defaults to `password`.
+
+For sscs:
+```bash
+./bin/idam-create-caseworker.sh caseworker-sscs  <your-email-in-case-def>
+```
 
 #### Ready for take-off 🛫
 
