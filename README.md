@@ -67,9 +67,9 @@ All containers should be flagged as `Up` and `healthy`.
 ./bin/idam-create-caseworker.sh caseworker-sscs  <your-email>@hmcts.net
 ```
 * Download the latest CCD_SSCSDefinition_vx.x.x_AAT.xlsx from 
-```bash
+
 https://tools.hmcts.net/confluence/display/SSCS/Case+Definitions
-```
+
 * Open the downloaded CCD definition file and 
 ```bash
 go to CaseEvent tab, scroll right until you see the callbacks links, remove them all, save the file 
@@ -85,7 +85,11 @@ http://localhost:3451
 username: <your-email>@hmcts.net
 password: password
 ```
-* You should be successfully logged in
+* There is an current issue with log in CCD UI because of the Idam-api container to 
+fix it you have to run this:
+```bash
+sscs-docker/compose/docker-compose -f backend.yml restart idam-api
+```
 
 ### Starting CCD
 
