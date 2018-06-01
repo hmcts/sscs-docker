@@ -332,10 +332,6 @@ Store where the versioned instances of cases are recorded.
 
 Display preferences for the CCD users.
 
-#### tribunals-case-api
-
-Api to create or track appeals
-
 ### Front-end
 
 #### ccd-api-gateway
