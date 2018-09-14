@@ -35,14 +35,6 @@ The following documentation assumes that the current directory is `sscs-docker`.
 
 When setting up CCD docker for the firsttime, follow all these instructions to setup and run CCD docker.
 
-* Comment out the notifications service
-```bash
-https://github.com/hmcts/sscs-docker/blob/master/compose/backend.yml#L196-L210
-```
-* Remove the forward slash at the end of the line from IDAM_CCD_WHITELIST property
-```bash
-https://github.com/hmcts/sscs-docker/blob/master/compose/backend.yml#L144
-```
 * Start CCD
 ```bash
 ./compose-frontend.sh up -d
