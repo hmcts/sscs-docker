@@ -36,8 +36,9 @@ The following documentation assumes that the current directory is `sscs-docker`.
 When setting up CCD docker for the firsttime, follow all these instructions to setup and run CCD docker.
 
 * Start CCD
+The first time you run this script, you need to include the "--build" argument. On later runs, this flag should be omitted.
 ```bash
-./compose-frontend.sh up -d
+./compose-frontend.sh up --build -d
 ```
 * Containers status
 ```bash
@@ -64,7 +65,6 @@ https://tools.hmcts.net/confluence/display/SSCS/Case+Definitions
 
 * Open the downloaded CCD definition file and 
 ```bash
-go to CaseEvent tab, scroll right until you see the callbacks links, remove them all, save the file 
 go to UserProfile tab, add <your-email>@hmcts.net
 ```
 * Import the CCD definition file 
