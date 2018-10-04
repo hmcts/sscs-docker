@@ -37,7 +37,9 @@ When setting up CCD docker for the firsttime, follow all these instructions to s
 
 * Start CCD
 ```bash
-./compose-frontend.sh up -d
+The first time you run this script, you need to include the "--build" argument. On later runs, this flag should be omitted.
+
+./compose-frontend.sh up --build -d
 ```
 * Containers status
 ```bash
@@ -64,7 +66,6 @@ https://tools.hmcts.net/confluence/display/SSCS/Case+Definitions
 
 * Open the downloaded CCD definition file and 
 ```bash
-go to CaseEvent tab, scroll right until you see the callbacks links, remove them all, save the file 
 go to UserProfile tab, add <your-email>@hmcts.net
 ```
 * Import the CCD definition file 
