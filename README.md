@@ -36,11 +36,19 @@ The following documentation assumes that the current directory is `sscs-docker`.
 When setting up CCD docker for the firsttime, follow all these instructions to setup and run CCD docker.
 
 * Start CCD
+The first time you run this script, you need to run the follwoing:
+1. 
 ```bash
-The first time you run this script, you need to include the "--build" argument. On later runs, this flag should be omitted.
+./compose-frontend.sh down -v
+docker rm -f $(docker ps -a -q)
+docker rmi -f $(docker images -a -q)
+```
 
+2. include the "--build" argument. On later runs, this flag should be omitted.
+```bash
 ./compose-frontend.sh up --build -d
 ```
+
 * Containers status
 ```bash
 The containers will take ~1 minute to start. Their current status can be checked using the command:
