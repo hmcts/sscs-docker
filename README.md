@@ -89,7 +89,8 @@ password: password
 * There is an current issue with log in CCD UI because of the Idam-api container to 
 fix it you have to run this:
 ```bash
-sscs-docker/compose/docker-compose -f backend.yml restart idam-api
+$ cd sscs-docker/compose/
+$ docker-compose -f backend.yml restart idam-api
 ```
 
 ### Starting CCD
