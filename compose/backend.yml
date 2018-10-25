@@ -228,5 +228,19 @@ services:
   document-management-store-database:
     image: hmcts/dm-store-db:latest
 
+  sscs-tribunals-case-api:
+    image: hmcts:sscs-tribunals-case-api
+    environment:
+      EMAIL_SERVER_HOST: localhost
+      EMAIL_SERVER_PORT: 1025
+      PDF_API_URL: http://localhost:5500
+      CORE_CASE_DATA_API_URL: http://localhost:4452
+      IDAM_URL: http://localhost:4501
+      IDAM_S2S_AUTH: http://localhost:4502
+      DOCUMENT_MANAGEMENT_URL: http://localhost:4603
+      IDAM_OAUTH2_REDIRECT_URL: https://localhost:9000/poc
+    ports:
+      - 8181:8080
+
 volumes:
   ccd-docker-ccd-shared-database-data:
