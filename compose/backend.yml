@@ -229,7 +229,7 @@ services:
     image: hmcts/dm-store-db:latest
 
   sscs-tribunals-case-api:
-    image: hmcts:sscs-tribunals-case-api
+    image: hmcts/tribunals-case-api
     environment:
       EMAIL_SERVER_HOST: localhost
       EMAIL_SERVER_PORT: 1025
