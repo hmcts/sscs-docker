@@ -29,6 +29,7 @@ git clone git@github.com:hmcts/sscs-docker.git
 Pulling latest Docker images:
 
 ```bash
+./ccd enable frontend backend dm-store
 ./ccd compose pull
 ```
 

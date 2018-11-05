@@ -162,5 +162,35 @@ services:
     volumes:
       - ccd-docker-ccd-shared-database-data:/var/lib/postgresql/data
 
+  pdf-service-api:
+    image: docker.artifactory.reform.hmcts.net/reform/pdf-service-api
+    environment:
+      - JAVA_OPTS=-Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
+      - S2S_URL=http://service-auth-provider-api:8080
+      - ROOT_APPENDER
+      - JSON_CONSOLE_PRETTY_PRINT
+      - ROOT_LOGGING_LEVEL
+      - REFORM_SERVICE_NAME=pdf-service
+      - REFORM_TEAM
+      - REFORM_ENVIRONMENT
+    ports:
+      - 5500:5500
+    healthcheck:
+      retries: 40
+
+  sscs-tribunals-case-api:
+    image: hmcts/tribunals-case-api
+    environment:
+      EMAIL_SERVER_HOST: smtp-server
+      EMAIL_SERVER_PORT: 1025
+      PDF_API_URL: http://pdf-service-api:5500
+      CORE_CASE_DATA_API_URL: http://ccd-data-store-api:4452
+      IDAM_URL: http://idam-api:8080
+      IDAM_S2S_AUTH: http://service-auth-provider-api:8080
+      DOCUMENT_MANAGEMENT_URL: http://document-management-store:8080
+      IDAM_OAUTH2_REDIRECT_URL: https://localhost:9000/poc
+    ports:
+      - 8080:8080            
+
 volumes:
   ccd-docker-ccd-shared-database-data:
