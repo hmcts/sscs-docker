@@ -1,137 +1,83 @@
 # CCD Docker :whale:
 
-- [Getting started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Setting CCD](#setting-ccd)
-  - [Starting CCD for SSCS](#starting-ccd-for-sscs)
-  - [Starting CCD](#starting-ccd)
-  - [Using CCD](#using-ccd)
-  - [Monitoring](#monitoring-)
-  - [Stopping and cleaning up](#stopping-and-cleaning-up)
-  - [Applying updates](#applying-updates)
-  - [Pulling images](#pulling-images)
-  - [Switching branches](#switching-branches)
-  - [Service to service configuration](#service-to-service-configuration)
+- [Prerequisites](#prerequisites)
+- [Quick start](#quick-start)
+- [Using CCD](#using-ccd)
+- [Compose branches](#compose-branches)
+- [Compose projects](#compose-projects)
+- [Under the hood](#under-the-hood-speedboat)
 - [Containers](#containers)
 - [Local development](#local-development)
 - [Variables](#variables)
 - [Remarks](#remarks)
+- [License](#license)
 
-## Getting started
-
-### Prerequisites
+## Prerequisites
 
 - [Docker](https://www.docker.com)
 
-### Setting CCD 
+*The following documentation assumes that the current directory is `sscs-docker`.*
 
-* Clone the SSCS docker env
+## Quick start
+
+Checkout `sscs-docker` project:
+
 ```bash
 git clone git@github.com:hmcts/sscs-docker.git
 ```
-The following documentation assumes that the current directory is `sscs-docker`.
 
-### Starting CCD for SSCS
-
-When setting up CCD docker for the firsttime, follow all these instructions to setup and run CCD docker.
-
-* Start CCD
-The first time you run this script, you need to run the follwoing:
-1. 
-```bash
-./compose-frontend.sh down -v
-docker rm -f $(docker ps -a -q)
-docker rmi -f $(docker images -a -q)
-```
-
-2. include the "--build" argument. On later runs, this flag should be omitted.
-```bash
-./compose-frontend.sh up --build -d
-```
-
-* Containers status
-```bash
-The containers will take ~1 minute to start. Their current status can be checked using the command:
-
-docker ps
-
-All containers should be flagged as `Up` and `healthy`.
-```
-* Add Roles
-```bash
-./bin/ccd-add-role.sh caseworker-sscs
-./bin/ccd-add-role.sh caseworker-sscs-systemupdate
-./bin/ccd-add-role.sh caseworker-sscs-anonymouscitizen
-./bin/ccd-add-role.sh caseworker-sscs-callagent
-./bin/ccd-add-role.sh caseworker-sscs-judge
-```
-* Create a caseworker user 
-```bash
-./bin/idam-create-caseworker.sh caseworker-sscs  <your-email>@hmcts.net
-```
-* Download the latest CCD_SSCSDefinition_vx.x.x_AAT.xlsx from 
-
-https://tools.hmcts.net/confluence/display/SSCS/Case+Definitions
-
-* Open the downloaded CCD definition file and 
-```bash
-go to UserProfile tab, add <your-email>@hmcts.net
-```
-* Import the CCD definition file 
-```bash
-./bin/ccd-import-definition.sh ~/CCD_SSCSDefinition_vx.x.x_AAT.xlsx
-```
-* Login to CCD UI 
-```bash
-http://localhost:3451
-username: <your-email>@hmcts.net
-password: password
-```
-* There is an current issue with log in CCD UI because of the Idam-api container to 
-fix it you have to run this:
-```bash
-sscs-docker/compose/docker-compose -f backend.yml restart idam-api
-```
-
-### Starting CCD
-
-Choice is given to start CCD with or without its front-end depending on the use case.
-
-To start CCD __with__ the front-end(Recommended):
+Pulling latest Docker images:
 
 ```bash
-./compose-frontend.sh up -d
+./ccd compose pull
 ```
 
-To start CCD __without__ the front-end:
+Creating and starting the containers:
+
+NOTE: Include the --build argument only the first time you run the command. It should be omitted on subsequent runs.
 
 ```bash
-./compose-backend.sh up -d
+./ccd compose up --build -d
 ```
 
-The `-d` (detached) option start the containers in the background.
-
-The `./compose-frontend.sh` and `./compose-backend.sh` are wrappers for the following commands:
-- `./compose-frontend.sh` -> `docker-compose -f compose/backend.yml -f compose/frontend.yml`
-- `./compose-backend.sh` -> `docker-compose -f compose/backend.yml`
-
-Regular `docker-compose` commands and options can be provided to the wrappers.
-
-The containers will take ~1 minute to start. Their current status can be checked using the command:
+Usage and commands available:
 
 ```bash
-docker ps
+./ccd
 ```
 
-All containers should be flagged as `Up` and `healthy`.
+You can check the status of the containers with:
 
-### Using CCD
+```
+./ccd compose ps
+```
+
+## Using CCD
 
 Once the containers are running, CCD's frontend can be accessed at [http://localhost:3451](http://localhost:3451).
 
 However, 3 more steps are required to correctly configure IDAM and CCD before it can be used:
 
-#### 1. Add roles
+### 1. Create a caseworker user
+
+A caseworker user can be created in IDAM using the following command:
+
+```bash
+./bin/idam-create-caseworker.sh <roles> <email> [password] [surname] [forename]
+```
+
+Parameters:
+- `roles`: a comma-separated list of roles. Roles must be existing IDAM roles for the CCD domain. Every caseworker requires at least it's coarse-grained jurisdiction role (`caseworker-<jurisdiction>`).
+- `email`: Email address used for logging in.
+- `password`: Optional. Password for logging in. Defaults to `password`.
+
+For SSCS, use the following command:
+
+```bash
+./bin/idam-create-caseworker.sh caseworker-sscs,caseworker-sscs-systemupdate,caseworker-sscs-anonymouscitizen,caseworker-sscs-callagent <your.email@hmcts.net>
+```
+
+### 2. Add roles
 
 Before a definition can be imported, roles referenced in a case definition Authorisation tabs must be defined in CCD using:
 
@@ -140,28 +86,19 @@ Before a definition can be imported, roles referenced in a case definition Autho
 ```
 
 Parameters:
-- `role`: Name of the role, e.g: `caseworker-sscs`.
+- `role`: Name of the role, e.g: `caseworker-divorce`.
 - `classification`: Optional. One of `PUBLIC`, `PRIVATE` or `RESTRICTED`. Defaults to `PUBLIC`.
 
-For sscs:
+For SSCS:
+
 ```bash
 ./bin/ccd-add-role.sh caseworker-sscs
-```
-then
-```bash
 ./bin/ccd-add-role.sh caseworker-sscs-systemupdate
-```
-and then
-```bash
 ./bin/ccd-add-role.sh caseworker-sscs-anonymouscitizen
-```
-
-and finally
-```bash
 ./bin/ccd-add-role.sh caseworker-sscs-callagent
 ```
 
-#### 2. Import case definition
+### 3. Import case definition
 
 To reduce impact on performances, case definitions are imported via the command line rather than using CCD's dedicated UI:
 
@@ -179,144 +116,257 @@ If the import fails with an error of the form:
 ```
 Validation errors occurred importing the spreadsheet.
 
-- Invalid IdamRole 'caseworker-sscs' in AuthorisationCaseField tab, case type 'Benefit', crud 'CRUD'
+- Invalid IdamRole 'caseworker-cmc-loa1' in AuthorisationCaseField tab, case type 'MoneyClaimCase', case field 'submitterId', crud 'CRUD'
 ```
 
-Then the indicated role, here `caseworker-sscs`, must be added to CCD (See [1. Add roles](#1-add-roles)).
+Then the indicated role, here `caseworker-cmc-loa1`, must be added to CCD (See [2. Add roles](#2-add-roles)).
 
-For sscs:
-```bash
-./bin/ccd-import-definition.sh ~/CCD_SSCSDefinition_<Version>.xlsx
-link here -> https://tools.hmcts.net/confluence/display/SSCS/Case+Definitions
-```
-
-#### 3. Create a caseworker user
-
-This step is required to login into CCD UI.
-A caseworker user can be created in IDAM using the following command:
-
-```bash
-./bin/idam-create-caseworker.sh <roles> <email> [password] [surname] [forename]
-```
-
-Parameters:
-- `roles`: a comma-separated list of roles. Roles must be existing IDAM roles for the CCD domain. Every caseworker requires at least it's coarse-grained jurisdiction role (`caseworker-<jurisdiction>`).
-- `email`: Email address used for logging in.
-- `password`: Optional. Password for logging in. Defaults to `password`.
-
-For sscs:
-```bash
-./bin/idam-create-caseworker.sh caseworker-sscs  <your-email-in-case-def>
-```
-
-#### Ready for take-off 🛫
+### Ready for take-off 🛫
 
 Back to [http://localhost:3451](http://localhost:3451), you can now log in with the email and password defined at [step 1](#1-create-a-caseworker-user).
 If you left the password out when creating the caseworker, by default it's set to: `password`.
 
-### Monitoring 🚥
+## Compose branches
 
-Status of the containers can be checked using Docker's `ps` command:
+By default, all CCD containers are running with the `latest` tag, built from the `master` branch.
 
-```bash
-./compose-frontend.sh ps
-```
+### Switch to a branch
 
-Logs for running containers can be viewed with:
+Using the `set` command, branches can be changed per project.
 
-```bash
-./compose-frontend.sh logs [-f] [service]
-```
-
-The `-f` option allows to follow the tail of the logs.
-
-The `service` parameter restricts the logs to the given service. It must match the name of a service as defined in the compose file.
-
-For example:
+Usage of the command is:
 
 ```bash
-./compose-frontend.sh logs -f ccd-definition-store-api
+./ccd set <project> <branch>
 ```
 
-Omitting the `service` parameter will show logs for all the containers.
+* `<project>` must be one of:
+  * ccd-data-store-api
+  * ccd-definition-store-api
+  * ccd-user-profile-api
+  * ccd-api-gateway
+  * ccd-case-management-web
+* `<branch>` must be an existing **remote** branch for the selected project.
 
-### Stopping and cleaning up
-
-Containers can be stopped with:
+Branches for a project can be listed using:
 
 ```bash
-./compose-frontend.sh stop [service]
+./ccd branches <project>
 ```
 
-Omitting the `service` parameters will stop all containers.
+### Apply
 
-Stopped containers are **not** destroyed and can be restarted later using:
+When switching to a branch, a Docker image is built locally and the Docker compose configuration is updated.
+
+However, to make that configuration effective, the Docker containers must be updated using:
 
 ```bash
-./compose-frontend.sh start [service]
+./ccd compose up -d
 ```
 
-To stop and destroy containers:
+### Revert to `master`
+
+When a project has been switched to a branch, it can be reverted to `master` in 2 ways:
 
 ```bash
-./compose-frontend.sh down [-v] [service]
+./ccd set <project> master
 ```
+
+or
+
+```bash
+./ccd unset <project> [<projects...>]
+```
+
+The only difference is that `unset` allows for multiple projects to be reset to `master`.
+
+In both cases, like with the `set` command, for the reset to be effective it requires the containers to be updated:
+
+```bash
+./ccd compose up -d
+```
+
+### Current branches
+
+To know which branches are currently used, the `status` command can be used:
+
+```bash
+./ccd status
+```
+
+The 2nd part of the output indicates the current branches.
+The output can either be of the form:
+
+> No overrides, all using master
+
+when no branches are used; or:
+
+> Current overrides:
+> ccd-case-management-web branch:RDM-2414 hash:ced648d
+
+when branches are in use.
+
+:information_source: *In addition to the `status` command, the current status is also displayed for every `compose` commands.*
+
+## Compose projects
+
+By default, `ccd-docker` runs the most commonly used backend and frontend projects required:
+
+* Back-end:
+  * **idam-api**: Identity and access control
+  * **service-auth-provider-api**: Service-to-service security layer
+  * **ccd-user-profile-api**: Users/jurisdictions association and usage preferences
+  * **ccd-definition-store-api**: CCD's dynamic case definition repository
+  * **ccd-data-store-api**: CCD's cases repository
+* Front-end:
+  * **authentication-web**: IDAM's login UI
+  * **ccd-api-gateway**: Proxy with IDAM and S2S integration
+  * **ccd-case-management-web**: Caseworker UI
+
+In the future, optional compose files will allow other projects to be enabled on demand using the `enable` and `disable` commands.
+
+* To enable **document-management-store-app**
+  * `./ccd enable backend frontend dm-store`
+  * run docker-compose `./ccd compose up -d`
+  * create Blob Store in Azurite `./bin/document-management-store-create-blob-store-container.sh`
+
+## Under the hood :speedboat:
+
+### Set
+
+#### Non-`master` branches
+
+When switching to a branch with the `set` command, the following actions take place:
+
+1. The given branch is cloned in the temporary `.workspace` folder
+2. If required, the project is built
+3. A docker image is built
+4. The Docker image is tagged as `hmcts/<project>:<branch>-<git hash>`
+5. An entry is added to file `.tags.env` exporting an environment variable `<PROJECT>_TAG` with a value `<branch>-<git hash>` matching the Docker image tag
+
+The `.tags.env` file is sourced whenever the `ccd compose` command is used and allows to override the Docker images version used in the Docker compose files.
+
+Hence, to make that change effective, the containers must be updated using `./ccd compose up`.
+
+#### `master` branch
+
+When switching a project to `master` branch, the branch override is removed using the `unset` command detailed below.
+
+### Unset
+
+Given a list of 1 or more projects, for each project:
+
+1. If `.tags.env` contains an entry for the project, the entry is removed
+
+Similarly to when branches are set, for a change to `.tags.env` to be applied, the containers must be updated using `./ccd compose up`.
+
+### Status
+
+Retrieve from `.tags.env` the branches and compose files currently enabled and display them.
+
+### Compose
+
+```bash
+./ccd compose [<docker-compose command> [options]]
+```
+
+The compose command acts as a wrapper around `docker-compose` and accept all commands and options supported by it.
+
+:information_source: *For the complete documentation of Docker Compose CLI, see [Compose command-line reference](https://docs.docker.com/compose/reference/).*
+
+Here are some useful commands:
+
+#### Up
+
+```bash
+./ccd compose up [-d]
+```
+
+This command:
+1. Create missing containers
+2. Recreate outdated containers (= apply configuration changes)
+3. Start all enabled containers
+
+The `-d` (detached) option start the containers in the background.
+
+#### Down
+
+```bash
+./ccd compose down [-v] [project]
+```
+
+This stops and destroys all composed containers.
 
 If provided, the `-v` option will also clean the volumes.
 
-Destroyed containers cannot be restarted. A new container will need to be built using the `up` command.
+Destroyed containers cannot be restarted. New containers will need to be built using the `up` command.
 
-### Applying updates
-
-Changes to container configuration, for example by using environment variables, can be applied by calling:
+#### Ps
 
 ```bash
-./compose-frontend.sh up [service]
+./ccd compose ps [<project>]
 ```
 
-Docker will compare the new configuration with the one currently running and recreate the modified containers.
+Gives the current state of all or specified composed projects.
 
-### Pulling images
-
-To get the latest version of an image from Artifactory, the `pull` command must be used.
+#### Logs
 
 ```bash
-./compose-frontend.sh pull [service]
+./ccd compose logs [-f] [<project>]
 ```
 
-### Switching branches
+Displays the logs for all or specified composed projects.
 
-By default, the compose files are using CCD's `master` tag which indicates stable, release candidate code.
+The `-f` (follow) option allows to follow the tail of the logs.
 
-To switch to the Docker images representing the latest state of development, a `BRANCH` environment variable must be defined as `develop`.
+#### Start/stop
 
 ```bash
-export BRANCH=develop
+./ccd compose start [<project>]
+./ccd compose stop [<project>]
 ```
 
-### Service to service configuration
+Start or stop all or specified composed containers. Stopped containers can be restarted with the `start` command.
+
+:warning: Please note: Re-starting a project with stop/start does **not** apply configuration changes. Instead, the `up` command should be used to that end.
+
+#### Pull
+
+```bash
+./ccd compose pull [project]
+```
+
+Fetch the latest version of an image from its source. For the new version to be used, the associated container must be re-created using the `up` command.
+
+### Configuration
+
+#### OAuth 2
+
+OAuth 2 clients must be explicitly declared in service `idam-api` with their ID and secret.
+
+A client is defined as an environment variable complying to the pattern:
+
+```yml
+environment:
+  IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_<CLIENT_ID>: <CLIENT_SECRET>
+```
+
+The `CLIENT_SECRET` must then also be provided to the container used by the client service.
+
+:information_source: *To prevent duplication, the client secret should be defined in the `.env` file and then used in the compose files using string interpolation `"${<VARIABLE_NAME>}"`.*
+
+#### Service-to-Service
 
 Micro-services names and secret keys must be registered as part of `service-auth-provider-api` configuration by adding environment variables like:
 
 ```yml
 environment:
-  auth.provider.service.server.microserviceKeys.<microservice_name>: <secret_key>
+  MICROSERVICE_KEYS_<SERVICE_NAME>: <SERVICE_SECRET>
 ```
 
-The `secret_key` must then also be provided to the container running the micro-service.
+The `SERVICE_SECRET` must then also be provided to the container running the micro-service.
 
-To remove duplication, the `secret_key` can be extracted to the Docker `.env` file and then be interpolated in the compose file, e.g:
-
-`.env`:
-```
-IDAM_KEY_CCD_DATA_STORE=AAAAAAAAAAAAAAAB
-```
-
-`compose/backend.yml`:
-```yml
-environment:
-  auth.provider.service.server.microserviceKeys.ccd_data: "${IDAM_KEY_CCD_DATA_STORE}"
-```
+:information_source: *To prevent duplication, the client secret should be defined in the `.env` file and then used in the compose files using string interpolation `"${<VARIABLE_NAME>}"`.*
 
 ## Containers
 
@@ -387,8 +437,8 @@ For other systems, the host IP address could be used.
 
 Once the compose files have been updated, the new configuration can be applied by running:
 
-```bash
-./compose-frontend.sh up
+```
+./ccd compose up -d
 ```
 
 ### 2. Configure local project to use containers
@@ -411,15 +461,14 @@ Here are the important variables exposed in the compose files:
 | IDAM_KEY_CCD_DATA_STORE | IDAM service-to-service secret key for `ccd_data` micro-service (CCD Data store), as registered in `service-auth-provider-api` |
 | IDAM_KEY_CCD_GATEWAY | IDAM service-to-service secret key for `ccd_gw` micro-service (CCD API Gateway), as registered in `service-auth-provider-api` |
 | IDAM_KEY_CCD_DEFINITION_STORE | IDAM service-to-service secret key for `ccd_definition` micro-service (CCD Definition store), as registered in `service-auth-provider-api` |
+| IDAM_KEY_CCD_ADMIN | IDAM service-to-service secret key for `ccd_admin` micro-service (CCD Admin Web), as registered in `service-auth-provider-api` |
 | DATA_STORE_S2S_AUTHORISED_SERVICES | List of micro-service names authorised to call this service, comma-separated, as registered in `service-auth-provider-api` |
 | DEFINITION_STORE_S2S_AUTHORISED_SERVICES | List of micro-services authorised to call this service, comma-separated, as registered in `service-auth-provider-api` |
 | USER_PROFILE_S2S_AUTHORISED_SERVICES | List of micro-services authorised to call this service, comma-separated, as registered in `service-auth-provider-api` |
 | DATA_STORE_TOKEN_SECRET | Secret for generation of internal event tokens |
 | APPINSIGHTS_INSTRUMENTATIONKEY | Secret for Microsoft Insights logging, can be a dummy string in local |
-| DATA_STORE_DB_USE_SSL | `true` if data store application must use SSL while accessing DB, can be `false` for local environments |
-| DEFINITION_STORE_DB_USE_SSL | `true` if definition store application must use SSL while accessing DB, can be `false` for local environments  |
-| USER_PROFILE_DB_USE_SSL | `true` if user profile application must use SSL while accessing DB, can be `false` for local environments  |
-
+| STORAGEACCOUNT_PRIMARY_CONNECTION_STRING | (If dm-store is enabled) Secret for Azure Blob Storage. It is pointing to dockerized Azure Blob Storage emulator. |
+| STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME | (If dm-store is enabled) Container name for Azure Blob Storage |
 
 ## Remarks
 
@@ -448,4 +497,3 @@ DRIVER              VOLUME NAME
 ## LICENSE
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
-

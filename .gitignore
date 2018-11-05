@@ -1,20 +1,8 @@
-.gradle
-/build/
-!gradle/wrapper/gradle-wrapper.jar
+# Dynamic image tags
+.tags.env
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
+.workspace
 
-### IntelliJ IDEA ###
+# IntelliJ IDEA files
 .idea/
-/out
-*.iws
 *.iml
-*.ipr
-
-.DS_store
