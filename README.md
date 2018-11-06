@@ -33,12 +33,30 @@ Pulling latest Docker images:
 ./ccd compose pull
 ```
 
+Create Blob Store in Azurite:
+
+```bash
+./bin/document-management-store-create-blob-store-container.sh`
+```
+
+Initialise the DB
+```bash
+DB_USERNAME=ccd DB_PASSWORD=password sh ./database/init-db.sh
+```
+
+If necessary, you can create the evidence database manually by entering the Postgres command line of the container:
+
+```bash
+docker exec -ti compose_ccd-shared-database_1 psql -U postgres
+CREATE DATABASE evidence;
+```
+
 Creating and starting the containers:
 
 NOTE: Include the --build argument only the first time you run the command. It should be omitted on subsequent runs.
 
 ```bash
-./ccd compose up --build -d
+DB_USERNAME=ccd DB_PASSWORD=password ./ccd compose up --build -d
 ```
 
 Usage and commands available:
