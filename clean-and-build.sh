@@ -26,10 +26,17 @@ DB_USERNAME=ccd DB_PASSWORD=password sh ./database/init-db.sh
 
 docker exec -ti compose_ccd-shared-database_1 psql -U postgres -c "CREATE DATABASE evidence"
 
-./bin/ccd-add-role.sh caseworker-sscs
-./bin/ccd-add-role.sh caseworker-sscs-systemupdate
-./bin/ccd-add-role.sh caseworker-sscs-anonymouscitizen
-./bin/ccd-add-role.sh caseworker-sscs-callagent
+roles=("caseworker-sscs" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent")
+
+for role in "${roles[@]}"
+do
+  echo "Creating role $role"
+  until ./bin/ccd-add-role.sh $role
+  do
+    echo "Failed to create role, trying again in a few seconds"
+    sleep 5
+  done
+done
 
 ./bin/idam-create-caseworker.sh caseworker-sscs,caseworker-sscs-systemupdate,caseworker-sscs-anonymouscitizen,caseworker-sscs-callagent $email
 
