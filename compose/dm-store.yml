@@ -21,6 +21,7 @@ services:
   service-auth-provider-api:
     environment:
       MICROSERVICE_KEYS_EM_GW: "${IDAM_KEY_DM_STORE}"
+      MICROSERVICE_KEYS_SSCS: "${IDAM_KEY_SSCS}"
 
   dm-store:
     image: "hmcts/dm-store:${DM_STORE_TAG:-latest}"

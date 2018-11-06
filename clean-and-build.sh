@@ -1,7 +1,4 @@
 # This script will tear down everything and rebuild
-export IDAM_KEY_DM_STORE=""
-export OAUTH2_CLIENT_CCD_ADMIN=""
-export IDAM_KEY_CCD_ADMIN=""
 
 echo "Please enter your hmcts.net email address: "
 read email
