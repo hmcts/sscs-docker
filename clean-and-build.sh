@@ -37,4 +37,8 @@ done
 
 ./bin/idam-create-caseworker.sh caseworker-sscs,caseworker-sscs-systemupdate,caseworker-sscs-anonymouscitizen,caseworker-sscs-callagent $email
 
-
+#####################################################################################
+# Modify these commands to point to your local definition files
+#####################################################################################
+./bin/ccd-import-definition.sh ../CCD_SSCSDefinition_v4.0.3_AAT.xlsx
+./bin/ccd-import-definition.sh ../CCD_BulkScanningDefinition_P1P2_v1.0.1_AAT.xlsx
