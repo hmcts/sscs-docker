@@ -22,6 +22,9 @@ services:
     environment:
       MICROSERVICE_KEYS_EM_GW: "${IDAM_KEY_DM_STORE}"
       MICROSERVICE_KEYS_SSCS: "${IDAM_KEY_SSCS}"
+      MICROSERVICE_KEYS_BULK_SCAN_PROCESSOR: "${IDAM_KEY_BULK_SCAN_PROCESSOR}"
+      MICROSERVICE_KEYS_BULK_SCAN_PROCESSOR_TESTS: "${IDAM_KEY_BULK_SCAN_PROCESSOR_TESTS}"
+      MICROSERVICE_KEYS_BULK_SCAN_ORCHESTRATOR: "${IDAM_KEY_BULK_SCAN_ORCHESTRATOR}"
 
   dm-store:
     image: "hmcts/dm-store:${DM_STORE_TAG:-latest}"
@@ -47,7 +50,7 @@ services:
       LOGGING_LEVEL_UK_GOV_HMCTS_IDAM: DEBUG
       IDAM_USER_BASE_URI: http://idam-api:8080
       IDAM_S2S_BASE_URI: http://service-auth-provider-api:8080
-      S2S_NAMES_WHITELIST: sscs,divorce,ccd,em_gw,document-management-store,ccd_gw,idam-api
+      S2S_NAMES_WHITELIST: sscs,divorce,ccd,em_gw,document-management-store,ccd_gw,idam-api,ccd_data
       http_proxy:
       https_proxy:
       no_proxy:
@@ -63,6 +66,7 @@ services:
       PACKAGES_PROJECT: evidence
       PACKAGES_NAME: document-management-store
       PACKAGES_VERSION: unknown
+      CASE_WORKER_ROLES: caseworker-sscs
     #      debug mode
     #    JAVA_OPTS: -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
     links:
