@@ -14,6 +14,13 @@ fi
 
 echo "Using email address: $HMCTS_EMAIL_ADDRESS"
 
+read -p "Would you like to delete ALL Docker images and containers? [y/n] " FULL_CLEAN
+
+if [ $FULL_CLEAN == "y" ]; then
+	docker rm $(docker ps -a -q)
+	docker rmi $(docker images -q)
+fi
+
 #####################################################################################
 # Take down containers and remove volumes
 #####################################################################################
@@ -51,7 +58,7 @@ DB_USERNAME=$DB_USERNAME DB_PASSWORD=$DB_PASSWORD sh ./database/init-db.sh
 #####################################################################################
 # Create the CCD roles
 #####################################################################################
-roles=("caseworker-sscs" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent")
+roles=("caseworker-sscs" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge")
 
 for role in "${roles[@]}"
 do
@@ -72,6 +79,6 @@ done
 # Import the CCD definition files
 # Modify these commands to point to your local definition files
 #####################################################################################
-./bin/ccd-import-definition.sh ../CCD_SSCSDefinition_v4.0.3_AAT.xlsx
+./bin/ccd-import-definition.sh ../CCD_SSCSDefinition_v4.0.16_AAT.xlsx
 ./bin/ccd-import-definition.sh ../CCD_BulkScanningDefinition_P1P2_v1.0.1_AAT.xlsx
 
