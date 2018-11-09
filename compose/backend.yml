@@ -3,14 +3,14 @@ version: '3'
 
 services:
   ccd-user-profile-api:
-    image: hmcts/ccd-user-profile-api
+    image: "hmcts/ccd-user-profile-api:${CCD_USER_PROFILE_API_TAG:-latest}"
     environment:
       USER_PROFILE_DB_HOST: ccd-shared-database
       USER_PROFILE_DB_PORT: 5432
       USER_PROFILE_DB_USERNAME: "${DB_USERNAME}"
       USER_PROFILE_DB_PASSWORD: "${DB_PASSWORD}"
       USER_PROFILE_DB_USE_SSL: "${DB_USE_SSL}"
-      USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,sscs
+      USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,sscs,ccd_admin
       IDAM_S2S_URL: http://service-auth-provider-api:8080
       REFORM_SERVICE_NAME: ccd-user-profile-api
       REFORM_TEAM: ccd
@@ -25,7 +25,7 @@ services:
       - service-auth-provider-api
 
   ccd-definition-store-api:
-    image: hmcts/ccd-definition-store-api
+    image: "hmcts/ccd-definition-store-api:${CCD_DEFINITION_STORE_API_TAG:-latest}"
     environment:
       DEFINITION_STORE_DB_HOST: ccd-shared-database
       DEFINITION_STORE_DB_PORT: 5432
@@ -33,7 +33,7 @@ services:
       DEFINITION_STORE_DB_PASSWORD: "${DB_PASSWORD}"
       DEFINITION_STORE_DB_USE_SSL: "${DB_USE_SSL}"
       DEFINITION_STORE_IDAM_KEY: "${IDAM_KEY_CCD_DEFINITION_STORE}"
-      DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,sscs
+      DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,sscs,ccd_admin
       USER_PROFILE_HOST: http://ccd-user-profile-api:4453
       IDAM_USER_URL: http://idam-api:8080
       IDAM_S2S_URL: http://service-auth-provider-api:8080
@@ -53,7 +53,7 @@ services:
       - service-auth-provider-api
 
   ccd-data-store-api:
-    image: hmcts/ccd-data-store-api
+    image: "hmcts/ccd-data-store-api:${CCD_DATA_STORE_API_TAG:-latest}"
     environment:
       DATA_STORE_DB_HOST: ccd-shared-database
       DATA_STORE_DB_PORT: 5432
@@ -62,7 +62,7 @@ services:
       DATA_STORE_DB_USE_SSL: "${DB_USE_SSL}"
       DATA_STORE_IDAM_KEY: "${IDAM_KEY_CCD_DATA_STORE}"
       DATA_STORE_TOKEN_SECRET: iuasbcuasdcbasdgcasdgcuysachjsacyasdgjcgasdj
-      DATA_STORE_S2S_AUTHORISED_SERVICES: ccd_gw,sscs
+      DATA_STORE_S2S_AUTHORISED_SERVICES: ccd_gw,sscs,ccd_data
       DEFINITION_STORE_HOST: http://ccd-definition-store-api:4451
       USER_PROFILE_HOST: http://ccd-user-profile-api:4453
       IDAM_USER_URL: http://idam-api:8080
@@ -101,8 +101,10 @@ services:
       NOTIFY_CMC_ACTIVATE_USER_TEMPLATE: 76aa8695-64e8-4afd-ae13-bc8385302b1f
       IDAM_SECRET: idam_test_secret
       IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_GATEWAY: "${OAUTH2_CLIENT_CCD_GATEWAY}"
+      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_ADMIN: "${OAUTH2_CLIENT_CCD_ADMIN}"
       IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_SSCS: QM5RQQ53LZFOSIXJ
       IDAM_CCD_WHITELIST: http://localhost:3451/oauth2redirect
+      IDAM_CCD_ADMIN_WHITELIST: https://localhost:3100/oauth2redirect
       NOTIFY: "false"
       NOTIFY_CMC_WELCOME_USER_TEMPLATE: fake
       NOTIFY_DIVORCE_WELCOME_USER_TEMPLATE: fake
@@ -141,14 +143,11 @@ services:
       MICROSERVICE_KEYS_CCD_DATA: "${IDAM_KEY_CCD_DATA_STORE}"
       MICROSERVICE_KEYS_CCD_GW: "${IDAM_KEY_CCD_GATEWAY}"
       MICROSERVICE_KEYS_CCD_DEFINITION: "${IDAM_KEY_CCD_DEFINITION_STORE}"
-      MICROSERVICE_KEYS_SSCS: "${IDAM_KEY_SSCS}"
-      TESTING_SUPPORT_ENABLED:
+      MICROSERVICE_KEYS_CCD_ADMIN: "${IDAM_KEY_CCD_ADMIN}"
+      TESTING_SUPPORT_ENABLED: "true"
 
   smtp-server:
     image: mailhog/mailhog
-    ports:
-      - 1025:1025
-
 
   ccd-shared-database:
     build: ../database
@@ -180,53 +179,19 @@ services:
     healthcheck:
       retries: 40
 
-
-  document-management-store:
-    image: hmcts/dm-store:latest
-    command: --wait-for-database 30
+  sscs-tribunals-case-api:
+    image: hmcts/tribunals-case-api
     environment:
-      - SERVER_PORT=8080
-      - IDAM_SUPERUSER_EMAIL
-      - IDAM_SECRET_KEY=AAAAAAAAAAAAAAAC
-      - GOV_NOTIFY_API_KEY
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://document-management-store-database:5432/evidence
-      - SPRING_DATASOURCE_USERNAME=evidence
-      - SPRING_DATASOURCE_PASSWORD=evidence
-      - SPRING_PROFILES_ACTIVE=dev
-      - IDAM_TESTING_SUPPORT_ENABLED=true
-      - LOGGING_LEVEL_UK_GOV_HMCTS_IDAM=DEBUG
-      - IDAM_USER_BASE_URI=http://idam-api:8080
-      - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
-      - http_proxy=
-      - https_proxy=
-      - no_proxy=
-#      logging env vars
-      - ROOT_APPENDER=JSON_CONSOLE
-      - JSON_CONSOLE_PRETTY_PRINT=false
-      - REFORM_SERVICE_TYPE=java
-      - REFORM_SERVICE_NAME=dm-store
-      - REFORM_TEAM=evidence
-      - REFORM_ENVIRONMENT=docker
-#      healthcheck env vars
-      - PACKAGES_ENVIRONMENT=docker
-      - PACKAGES_PROJECT=evidence
-      - PACKAGES_NAME=dm-store
-      - PACKAGES_VERSION=unkown
-#      debug mode
-      - JAVA_OPTS=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
+      EMAIL_SERVER_HOST: smtp-server
+      EMAIL_SERVER_PORT: 1025
+      PDF_API_URL: http://pdf-service-api:5500
+      CORE_CASE_DATA_API_URL: http://ccd-data-store-api:4452
+      IDAM_URL: http://idam-api:8080
+      IDAM_S2S_AUTH: http://service-auth-provider-api:8080
+      DOCUMENT_MANAGEMENT_URL: http://dm-store:8080
+      IDAM_OAUTH2_REDIRECT_URL: https://localhost:9000/poc
     ports:
-      - 4603:8080
-    links:
-     - document-management-store-database
-     - idam-api
-     - service-auth-provider-api
-    depends_on:
-     - document-management-store-database
-     - idam-api
-     - service-auth-provider-api
-
-  document-management-store-database:
-    image: hmcts/dm-store-db:latest
+      - 8080:8080            
 
 volumes:
   ccd-docker-ccd-shared-database-data:
