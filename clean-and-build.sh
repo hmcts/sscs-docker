@@ -14,7 +14,7 @@ fi
 
 echo "Using email address: $HMCTS_EMAIL_ADDRESS"
 
-read -p "Would you like to delete ALL Docker images and containers? [y/n] " FULL_CLEAN
+read -p "Would you like to delete ALL Docker images and containers on your machine? [y/n] " FULL_CLEAN
 
 if [ $FULL_CLEAN == "y" ]; then
 	docker rm $(docker ps -a -q)

@@ -188,7 +188,7 @@ services:
       CORE_CASE_DATA_API_URL: http://ccd-data-store-api:4452
       IDAM_URL: http://idam-api:8080
       IDAM_S2S_AUTH: http://service-auth-provider-api:8080
-      DOCUMENT_MANAGEMENT_URL: http://document-management-store:8080
+      DOCUMENT_MANAGEMENT_URL: http://dm-store:8080
       IDAM_OAUTH2_REDIRECT_URL: https://localhost:9000/poc
     ports:
       - 8080:8080            
