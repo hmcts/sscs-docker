@@ -8,7 +8,7 @@ source .env
 # Get the user's email address
 # Ignore if set in .env file
 #####################################################################################
-if [ -z $CCD_CASE_DEFINITION ]; then
+if [ -z $CCD_CASE_DEFINITION_XLS ]; then
   echo "================================================================================"
   echo "Please add the location of your CCD case definition spreadsheet to the .env file"
   echo "================================================================================"
@@ -84,7 +84,7 @@ done
 # Import the CCD definition files
 # Modify these commands to point to your local definition files
 #####################################################################################
-./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION
+./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION_XLS
 
 if [ -n $CCD_BULK_SCANNING_DEFINITION_XLS ]; then
   ./bin/ccd-import-definition.sh $CCD_BULK_SCANNING_DEFINITION_XLS
