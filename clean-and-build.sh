@@ -8,13 +8,18 @@ source .env
 # Get the user's email address
 # Ignore if set in .env file
 #####################################################################################
+if [ -z $CCD_BULK_SCANNING_DEFINITION_XLS ]; then
+  echo "================================================================================"
+  echo "Please add the location of your CCD case definition spreadsheet to the .env file"
+  echo "================================================================================"
+  exit
+fi
+
 if [ -z $HMCTS_EMAIL_ADDRESS ]; then
   read -p "Enter your hmcts.net email address: " HMCTS_EMAIL_ADDRESS
 fi
 
-echo "Using email address: $HMCTS_EMAIL_ADDRESS"
-
-read -p "Would you like to delete ALL Docker images and containers on your machine? [y/n] " FULL_CLEAN
+read -p "Would you like to attempt to destroy all ALL Docker images and containers (not just SSCS ones) on your machine? [y/n] " FULL_CLEAN
 
 if [ $FULL_CLEAN == "y" ]; then
 	docker rm $(docker ps -a -q)
@@ -79,6 +84,7 @@ done
 # Import the CCD definition files
 # Modify these commands to point to your local definition files
 #####################################################################################
-./bin/ccd-import-definition.sh ../CCD_SSCSDefinition_v4.0.16_AAT.xlsx
-./bin/ccd-import-definition.sh ../CCD_BulkScanningDefinition_P1P2_v1.0.1_AAT.xlsx
+./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION
+./bin/ccd-import-definition.sh $CCD_BULK_SCANNING_DEFINITION_XLS
+
 
