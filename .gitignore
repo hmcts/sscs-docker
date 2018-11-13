@@ -6,3 +6,5 @@
 # IntelliJ IDEA files
 .idea/
 *.iml
+
+.env

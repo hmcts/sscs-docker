@@ -26,6 +26,31 @@ Checkout `sscs-docker` project:
 git clone git@github.com:hmcts/sscs-docker.git
 ```
 
+Create the .env file
+
+```bash
+cd sscs-docker
+cp .env.example .env
+```
+
+Populate the following keys in the .env file
+
+```
+HMCTS_EMAIL_ADDRESS=
+CCD_BULK_SCANNING_DEFINITION_XLS=
+CCD_CASE_DEFINITION_XLS=
+```
+
+Run the build script
+
+```bash
+./clean-and-build.sh
+```
+
+The script will pull the latest images and create the Docker environment. It will wait for the containers to be healthy and will keep attempting to create the CCD roles until it succeeds (even when the containers are healthy, it takes a while before they are ready).
+
+The following information explains the process that the clean and build script goes through.
+
 Pulling latest Docker images:
 
 ```bash
