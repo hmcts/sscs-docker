@@ -62,7 +62,7 @@ services:
       DATA_STORE_DB_USE_SSL: "${DB_USE_SSL}"
       DATA_STORE_IDAM_KEY: "${IDAM_KEY_CCD_DATA_STORE}"
       DATA_STORE_TOKEN_SECRET: iuasbcuasdcbasdgcasdgcuysachjsacyasdgjcgasdj
-      DATA_STORE_S2S_AUTHORISED_SERVICES: ccd_gw,sscs,ccd_data,sscs_bulkscan
+      DATA_STORE_S2S_AUTHORISED_SERVICES: ccd_gw,sscs,ccd_data,sscs_bulk_scan
       DEFINITION_STORE_HOST: http://ccd-definition-store-api:4451
       USER_PROFILE_HOST: http://ccd-user-profile-api:4453
       IDAM_USER_URL: http://idam-api:8080
@@ -141,7 +141,7 @@ services:
     environment:
       SERVER_PORT: 8080
       JWT_KEY: wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA==
-      MICROSERVICE_KEYS_SSCS_BULKSCAN: "${IDAM_KEY_BULK_SCAN}"
+      MICROSERVICE_KEYS_SSCS_BULK_SCAN: "${IDAM_KEY_SSCS_BULK_SCAN}"
       MICROSERVICE_KEYS_CCD_DATA: "${IDAM_KEY_CCD_DATA_STORE}"
       MICROSERVICE_KEYS_CCD_GW: "${IDAM_KEY_CCD_GATEWAY}"
       MICROSERVICE_KEYS_CCD_DEFINITION: "${IDAM_KEY_CCD_DEFINITION_STORE}"
