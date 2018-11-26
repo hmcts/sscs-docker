@@ -84,10 +84,17 @@ done
 # Import the CCD definition files
 # Modify these commands to point to your local definition files
 #####################################################################################
-./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION_XLS
+
+until ./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION_XLS
+do
+    echo "Failed to import definition, trying again in a few seconds"
+done
 
 if [ -n $CCD_BULK_SCANNING_DEFINITION_XLS ]; then
-  ./bin/ccd-import-definition.sh $CCD_BULK_SCANNING_DEFINITION_XLS
+  until ./bin/ccd-import-definition.sh $CCD_BULK_SCANNING_DEFINITION_XLS
+  do
+    echo "Failed to import definition, trying again in a few seconds"
+  done
 fi
 
 
