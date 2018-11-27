@@ -496,6 +496,15 @@ Mainly, this means:
   - :warning: using the right key, as defined in `service-auth-provider-api` container
 - **URLs**: all URLs should be updated to point to the corresponding locally exposed port
 
+#### Configure tribunal API to work with the sscs-docker containers
+- Bring Down the tribunal api container manually. 
+- Add the following entry to the file /etc/hosts:
+  - ```127.0.0.1 dm-store```
+- Update the following property to the application.yaml file in the tribunal api service:  
+  - ```document_management.url=${DOCUMENT_MANAGEMENT_URL:http://dm-store:4506}```
+- Bring up the tribunal api service 
+- Now you should be able to submit appeals with a piece of evidence successfully.
+
 ## Variables
 Here are the important variables exposed in the compose files:
 
