@@ -19,11 +19,25 @@ if [ -z $HMCTS_EMAIL_ADDRESS ]; then
   read -p "Enter your hmcts.net email address: " HMCTS_EMAIL_ADDRESS
 fi
 
-read -p "Would you like to attempt to destroy all ALL Docker images and containers (not just SSCS ones) on your machine? [y/n] " FULL_CLEAN
+if [ -z $DESTROY_ALL_DOCKER_IMAGES_AND_CONTAINERS ]; then
+  read -p "Would you like to attempt to destroy all Docker images and containers on your machine? This will remove all images and containers (not just SSCS ones) and can be slow, so only do this if this is your first time running this setup, or you're having difficulties getting the setup working. [y/n] " DESTROY_ALL_DOCKER_IMAGES_AND_CONTAINERS
+fi
 
-if [ $FULL_CLEAN == "y" ]; then
-	docker rm $(docker ps -a -q)
-	docker rmi $(docker images -q)
+if [ -z $INCLUDE_DM_STORE ]; then
+  read -p "Include Document Store in new configuration? [y/n] " INCLUDE_DM_STORE
+fi
+
+if [ -z $INCLUDE_CASE_API ]; then
+  read -p "Tribunals Case API? [y/n] " INCLUDE_CASE_API
+fi
+
+if [ -z $INCLUDE_BULK_SCAN ]; then
+  read -p "Bulk Scanning API? [y/n] " INCLUDE_BULK_SCAN
+fi
+
+if [ $DESTROY_ALL_DOCKER_IMAGES_AND_CONTAINERS == "y" ]; then
+  docker container stop $(docker container ls -a -q)
+  docker system prune -a -f --volumes
 fi
 
 #####################################################################################
@@ -34,7 +48,21 @@ fi
 #####################################################################################
 # Pull the latest images
 #####################################################################################
-./ccd enable frontend backend dm-store
+rm .tags.env
+./ccd enable frontend backend 
+
+if [ $INCLUDE_DM_STORE == "y" ]; then
+  ./ccd enable dm-store
+fi
+
+if [ $INCLUDE_CASE_API == "y" ]; then
+  ./ccd enable case-api
+fi
+
+if [ $INCLUDE_BULK_SCAN == "y" ]; then
+  ./ccd enable bulk-scan
+fi
+
 ./ccd compose pull
 
 #####################################################################################
@@ -65,13 +93,14 @@ DB_USERNAME=$DB_USERNAME DB_PASSWORD=$DB_PASSWORD sh ./database/init-db.sh
 #####################################################################################
 roles=("caseworker-sscs" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge")
 
+TRY_AGAIN_SECONDS=15
 for role in "${roles[@]}"
 do
   echo "Creating role $role"
   until ./bin/ccd-add-role.sh $role
   do
-    echo "Failed to create role, trying again in a few seconds"
-    sleep 5
+    echo "Failed to create role. This is normal, trying again in $TRY_AGAIN_SECONDS seconds"
+    sleep $TRY_AGAIN_SECONDS
   done
 done
 

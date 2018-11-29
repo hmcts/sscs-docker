@@ -10,13 +10,13 @@ services:
 
   ccd-api-gateway:
     environment:
-      PROXY_DOCUMENT_MANAGEMENT: http://dm-store:8080
+      PROXY_DOCUMENT_MANAGEMENT: http://dm-store:4506
     depends_on:
     - dm-store
 
   ccd-data-store-api:
     environment:
-      CCD_DM_DOMAIN: http://dm-store:8080
+      CCD_DM_DOMAIN: http://dm-store:4506
 
   service-auth-provider-api:
     environment:
@@ -32,7 +32,7 @@ services:
     healthcheck:
       disable: true
     environment:
-      SERVER_PORT: 8080
+      SERVER_PORT: 4506
       IDAM_SUPERUSER_EMAIL:
       IDAM_SECRET_KEY: "${IDAM_KEY_DM_STORE}"
       GOV_NOTIFY_API_KEY:
@@ -79,7 +79,7 @@ services:
       - service-auth-provider-api
       - azure-storage-emulator-azurite
     ports:
-      - 4506:8080
+      - 4506:4506
     #   debug port exposed
     #   - 5006:5005
 
