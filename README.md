@@ -146,6 +146,7 @@ For SSCS:
 ./bin/ccd-add-role.sh caseworker-sscs-systemupdate
 ./bin/ccd-add-role.sh caseworker-sscs-anonymouscitizen
 ./bin/ccd-add-role.sh caseworker-sscs-callagent
+./bin/ccd-add-role.sh caseworker-sscs-judge
 ```
 
 ### 3. Import case definition
