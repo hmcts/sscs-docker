@@ -119,7 +119,7 @@ do
     echo "Failed to import definition, trying again in a few seconds"
 done
 
-if [ -n $CCD_BULK_SCANNING_DEFINITION_XLS ]; then
+if [ ! -z $CCD_BULK_SCANNING_DEFINITION_XLS ]; then
   until ./bin/ccd-import-definition.sh $CCD_BULK_SCANNING_DEFINITION_XLS
   do
     echo "Failed to import definition, trying again in a few seconds"
