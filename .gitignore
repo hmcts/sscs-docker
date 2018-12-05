@@ -8,3 +8,10 @@
 *.iml
 
 .env
+
+.DS_Store
+
+# Case definitions
+CCD_SSCSDefinition*.xlsx
+CCD_BulkScanningDefinition*.xlsx
+~$CCD*.xlsx
