@@ -86,7 +86,7 @@ done
 #####################################################################################
 # Initialise the database
 #####################################################################################
-DB_USERNAME=$DB_USERNAME DB_PASSWORD=$DB_PASSWORD sh ./database/init-db.sh
+docker exec -ti compose_ccd-shared-database_1 psql -U postgres -c "`cat ./database/init-db.sh`"
 
 #####################################################################################
 # Create the CCD roles
@@ -125,5 +125,9 @@ if [ ! -z $CCD_BULK_SCANNING_DEFINITION_XLS ]; then
     echo "Failed to import definition, trying again in a few seconds"
   done
 fi
+
+echo "Done\n"
+
+
 
 
