@@ -2,9 +2,6 @@
 
 set -e
 
-DB_USERNAME=ccd
-DB_PASSWORD=ccd
-
 if [ -z "$DB_USERNAME" ] || [ -z "$DB_PASSWORD" ]; then
   echo "ERROR: Missing environment variable. Set value for both 'DB_USERNAME' and 'DB_PASSWORD'."
   exit 1
