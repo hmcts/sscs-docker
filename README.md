@@ -412,7 +412,7 @@ Micro-services names and secret keys must be registered as part of `service-auth
 
 ```yml
 environment:
-  MICROSERVICE_KEYS_<SERVICE_NAME>: <SERVICE_SECRET>
+  MICROSERVICEKEYS_<SERVICE_NAME>: <SERVICE_SECRET>
 ```
 
 The `SERVICE_SECRET` must then also be provided to the container running the micro-service.

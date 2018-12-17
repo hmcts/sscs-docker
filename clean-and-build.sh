@@ -84,11 +84,6 @@ done
 ./bin/document-management-store-create-blob-store-container.sh
 
 #####################################################################################
-# Initialise the database
-#####################################################################################
-DB_USERNAME=$DB_USERNAME DB_PASSWORD=$DB_PASSWORD sh ./database/init-db.sh
-
-#####################################################################################
 # Create the CCD roles
 #####################################################################################
 roles=("caseworker-sscs" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge")
@@ -119,11 +114,15 @@ do
     echo "Failed to import definition, trying again in a few seconds"
 done
 
-if [ -n $CCD_BULK_SCANNING_DEFINITION_XLS ]; then
-  until ./bin/ccd-import-definition.sh $CCD_BULK_SCANNING_DEFINITION_XLS
-  do
-    echo "Failed to import definition, trying again in a few seconds"
-  done
+if [ ! -z $CCD_BULK_SCANNING_DEFINITION_XLS ]; then
+  if [ ! -f $CCD_BULK_SCANNING_DEFINITION_XLS ]; then
+    echo "$CCD_BULK_SCANNING_DEFINITION_XLS not found"
+  else
+    until ./bin/ccd-import-definition.sh $CCD_BULK_SCANNING_DEFINITION_XLS
+    do
+      echo "Failed to import definition, trying again in a few seconds"
+    done
+  fi
 fi
 
 
