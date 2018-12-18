@@ -22,6 +22,7 @@ services:
     environment:
       MICROSERVICEKEYS_EM_GW: "${IDAM_KEY_DM_STORE}"
       MICROSERVICEKEYS_SSCS: "${IDAM_KEY_SSCS}"
+      MICROSERVICEKEYS_SSCS_BULKSCAN: "${IDAM_KEY_SSCS_BULKSCAN}"
       MICROSERVICEKEYS_BULK_SCAN_PROCESSOR: "${IDAM_KEY_BULK_SCAN_PROCESSOR}"
       MICROSERVICEKEYS_BULK_SCAN_PROCESSOR_TESTS: "${IDAM_KEY_BULK_SCAN_PROCESSOR_TESTS}"
       MICROSERVICEKEYS_BULK_SCAN_ORCHESTRATOR: "${IDAM_KEY_BULK_SCAN_ORCHESTRATOR}"
@@ -50,7 +51,7 @@ services:
       LOGGING_LEVEL_UK_GOV_HMCTS_IDAM: DEBUG
       IDAM_USER_BASE_URI: http://idam-api:8080
       IDAM_S2S_BASE_URI: http://service-auth-provider-api:8080
-      S2S_NAMES_WHITELIST: sscs,divorce,ccd,em_gw,document-management-store,ccd_gw,idam-api,ccd_data
+      S2S_NAMES_WHITELIST: sscs,divorce,ccd,em_gw,document-management-store,ccd_gw,idam-api,ccd_data,sscs_bulkscan
       http_proxy:
       https_proxy:
       no_proxy:
