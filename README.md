@@ -54,6 +54,10 @@ Run the build script
 
 The script will pull the latest images and create the Docker environment. It will wait for the containers to be healthy and will keep attempting to create the CCD roles until it succeeds (even when the containers are healthy, it takes a while before they are ready).
 
+## Callbacks to host machine
+
+To reference the host machine from within a docker container, use http://dockerhost[:port]/ 
+
 ## Additional Information 
 
 The following information explains the process that the clean and build script goes through.
