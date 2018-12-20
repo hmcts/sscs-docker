@@ -2,6 +2,12 @@
 version: '3'
 
 services:
+
+  dockerhost:
+    image: qoomon/docker-host
+    cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
+    restart: on-failure
+
   ccd-user-profile-api:
     image: "hmcts/ccd-user-profile-api:${CCD_USER_PROFILE_API_TAG:-latest}"
     environment:
