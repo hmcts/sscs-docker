@@ -151,6 +151,7 @@ For SSCS:
 ./bin/ccd-add-role.sh caseworker-sscs-anonymouscitizen
 ./bin/ccd-add-role.sh caseworker-sscs-callagent
 ./bin/ccd-add-role.sh caseworker-sscs-judge
+./bin/ccd-add-role.sh caseworker-sscs-panelmember
 ```
 
 ### 3. Import case definition
