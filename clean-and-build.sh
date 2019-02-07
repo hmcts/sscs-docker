@@ -86,7 +86,7 @@ done
 #####################################################################################
 # Create the CCD roles
 #####################################################################################
-roles=("caseworker-sscs" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge")
+roles=("caseworker-sscs" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-panelmember")
 
 TRY_AGAIN_SECONDS=15
 for role in "${roles[@]}"
@@ -102,7 +102,7 @@ done
 #####################################################################################
 # Create a case worker with your email address
 #####################################################################################
-./bin/idam-create-caseworker.sh caseworker-sscs,caseworker-sscs-systemupdate,caseworker-sscs-anonymouscitizen,caseworker-sscs-callagent,caseworker-sscs-panelmember $HMCTS_EMAIL_ADDRESS
+./bin/idam-create-caseworker.sh caseworker-sscs,caseworker-sscs-systemupdate $HMCTS_EMAIL_ADDRESS
 
 #####################################################################################
 # Import the CCD definition files
