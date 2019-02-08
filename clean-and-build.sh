@@ -102,7 +102,7 @@ done
 #####################################################################################
 # Create a case worker with your email address
 #####################################################################################
-./bin/idam-create-caseworker.sh  ccaseworker-sscs,caseworker-sscs-callagent $HMCTS_EMAIL_ADDRESS
+./bin/idam-create-caseworker.sh caseworker-sscs,caseworker-sscs-callagent $HMCTS_EMAIL_ADDRESS
 
 #####################################################################################
 # Import the CCD definition files
