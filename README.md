@@ -509,6 +509,26 @@ Mainly, this means:
   - :warning: using the right key, as defined in `service-auth-provider-api` container
 - **URLs**: all URLs should be updated to point to the corresponding locally exposed port
 
+#### Azure Authentication for pulling latest docker images
+- ERROR: Get <docker_image_url>: unauthorized: authentication required
+    - If you see this above authentication issue while pulling images, please follow below commands,
+
+Install Azure-CLI locally,
+
+```brew update && brew install azure-cli```
+
+and to update a Azure-CLI locally,
+
+```brew update azure-cli```
+
+then, login to MS Azure,
+
+```az login```
+
+and finally, Login to the Azure Container registry:
+
+```./ccd login```
+
 #### Configure tribunal API to work with the sscs-docker containers
 - Bring Down the tribunal api container manually. 
 - Add the following entry to the file /etc/hosts:
