@@ -175,7 +175,7 @@ services:
       - ccd-docker-ccd-shared-database-data:/var/lib/postgresql/data
 
   pdf-service-api:
-    image: docker.artifactory.reform.hmcts.net/reform/pdf-service-api
+    image: hmcts.azurecr.io/hmcts/cmc-pdf-service:latest
     environment:
       - JAVA_OPTS=-Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
       - S2S_URL=http://service-auth-provider-api:8080
