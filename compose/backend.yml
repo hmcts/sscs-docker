@@ -8,6 +8,11 @@ services:
     cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
     restart: on-failure
 
+  sscs-ccd-callback-orchestrator:
+    image: "hmcts/sscs-ccd-callback-orchestrator:${SSCS_CCD_CALLBACK_ORCHESTRATOR_TAG:-latest}"
+    ports:
+      - 8070:8070
+
   ccd-user-profile-api:
     image: "hmcts/ccd-user-profile-api:${CCD_USER_PROFILE_API_TAG:-latest}"
     environment:
@@ -158,7 +163,6 @@ services:
     image: mailhog/mailhog
     ports:
       - 1025:1025
-      - 8025:8025
 
   ccd-shared-database:
     build: ../database

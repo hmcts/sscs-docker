@@ -1,8 +1,28 @@
-
 #####################################################################################
 # DB_USERNAME and DB_PASSWORD should be set in the .env file
 #####################################################################################
 source .env
+
+command -v az >/dev/null 2>&1 || { 
+    echo "################################################################################################"
+    echo >&2 "Please install Azure CLI - instructions in README.md"
+    echo "################################################################################################"
+    exit 1 
+}
+
+#####################################################################################
+# Login to Azure
+#####################################################################################
+
+if az account show | grep -i "hmcts.net"; then
+  echo "You are logged into HMCTS Azure Portal"
+else
+  echo "Logging into the HMCTS Azure Portal. Please check your web browser."
+  az login
+fi
+
+echo "Logging into the HMCTS Azure Container Registry"
+./ccd login
 
 #####################################################################################
 # Get the user's email address
@@ -89,13 +109,19 @@ done
 roles=("caseworker-sscs" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-panelmember")
 
 TRY_AGAIN_SECONDS=15
+ATTEMPTS=0
 for role in "${roles[@]}"
 do
   echo "Creating role $role"
   until ./bin/ccd-add-role.sh $role
   do
-    echo "Failed to create role. This is normal, trying again in $TRY_AGAIN_SECONDS seconds"
+    echo "Failed to create role. This might be ok - trying again in $TRY_AGAIN_SECONDS seconds"
     sleep $TRY_AGAIN_SECONDS
+    ATTEMPTS=$((ATTEMPTS+1))
+    if [ $ATTEMPTS = 10 ]; then
+       echo "Giving up."
+       exit;
+    fi
   done
 done
 
@@ -108,19 +134,32 @@ done
 # Import the CCD definition files
 # Modify these commands to point to your local definition files
 #####################################################################################
-
+ATTEMPTS=0
 until ./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION_XLS
 do
     echo "Failed to import definition, trying again in a few seconds"
+    sleep $TRY_AGAIN_SECONDS
+    ATTEMPTS=$((ATTEMPTS+1))
+    if [ $ATTEMPTS = 10 ]; then
+       echo "Giving up."
+       exit;
+    fi
 done
 
 if [ ! -z $CCD_BULK_SCANNING_DEFINITION_XLS ]; then
   if [ ! -f $CCD_BULK_SCANNING_DEFINITION_XLS ]; then
     echo "$CCD_BULK_SCANNING_DEFINITION_XLS not found"
   else
+    ATTEMPTS=0
     until ./bin/ccd-import-definition.sh $CCD_BULK_SCANNING_DEFINITION_XLS
     do
       echo "Failed to import definition, trying again in a few seconds"
+      sleep $TRY_AGAIN_SECONDS
+      ATTEMPTS=$((ATTEMPTS+1))
+      if [ $ATTEMPTS = 10 ]; then
+         echo "Giving up."
+         exit;
+      fi
     done
   fi
 fi
