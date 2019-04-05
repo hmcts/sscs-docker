@@ -153,6 +153,9 @@ services:
       MICROSERVICEKEYS_CCD_DEFINITION: "${IDAM_KEY_CCD_DEFINITION_STORE}"
       MICROSERVICEKEYS_CCD_ADMIN: "${IDAM_KEY_CCD_ADMIN}"
       TESTING_SUPPORT_ENABLED: "true"
+      MICROSERVICEKEYS_EM_GW: "${IDAM_KEY_EM_GW}"
+      MICROSERVICEKEYS_EM_STITCHING_API: "${IDAM_KEY_EM_STITCHING_API}"
+      MICROSERVICEKEYS_EM_CCD_ORCHESTRATOR: "${IDAM_KEY_EM_CCD_ORCHESTRATOR}"
 
   smtp-server:
     image: mailhog/mailhog
@@ -228,11 +231,11 @@ services:
     image: hmcts/rpa-em-ccd-orchestrator:latest
     environment:
       - SERVER_PORT=8060
-      - IDAM_USER_BASE_URI=http://betadevaccidamapplb.reform.hmcts.net
-      - IDAM_S2S_BASE_URI=http://service-auth-provider-api:8080
+      - IDAM_API_BASE_URI=http://idam-api:8080
+      - S2S_BASE_URI=http://service-auth-provider-api:8080
       - APPINSIGHTS_INSTRUMENTATIONKEY=test_app
+      - EM_STITCHING_API_URL=http://stitching-api:8080
       # these environment variables are used by java-logging library
-      - ROOT_APPENDER=JSON_CONSOLE
       - JSON_CONSOLE_PRETTY_PRINT=false
       - ROOT_LOGGING_LEVEL
       - REFORM_SERVICE_TYPE=java
