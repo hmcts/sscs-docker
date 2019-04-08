@@ -118,7 +118,7 @@ do
     echo "Failed to create role. This might be ok - trying again in $TRY_AGAIN_SECONDS seconds"
     sleep $TRY_AGAIN_SECONDS
     ATTEMPTS=$((ATTEMPTS+1))
-    if [ $ATTEMPTS = 20 ]; then
+    if [ $ATTEMPTS = 200 ]; then
        echo "Giving up."
        exit;
     fi
@@ -141,7 +141,7 @@ do
     echo "Failed to import definition, trying again in a few seconds"
     sleep $TRY_AGAIN_SECONDS
     ATTEMPTS=$((ATTEMPTS+1))
-    if [ $ATTEMPTS = 10 ]; then
+    if [ $ATTEMPTS = 200 ]; then
        echo "Giving up."
        exit;
     fi
@@ -157,7 +157,7 @@ if [ ! -z $CCD_BULK_SCANNING_DEFINITION_XLS ]; then
       echo "Failed to import definition, trying again in a few seconds"
       sleep $TRY_AGAIN_SECONDS
       ATTEMPTS=$((ATTEMPTS+1))
-      if [ $ATTEMPTS = 10 ]; then
+      if [ $ATTEMPTS = 200 ]; then
          echo "Giving up."
          exit;
       fi

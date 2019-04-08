@@ -12,6 +12,6 @@ userToken="$(${binFolder}/idam-user-token.sh ccd-import 1)"
 serviceToken="$(${binFolder}/idam-service-token.sh ccd_gw)"
 
 curl --verbose \
-  http://localhost:4603/documents/${documentId} \
+  http://localhost:4506/documents/${documentId}/binary \
   -H "Authorization: Bearer ${userToken}" \
   -H "ServiceAuthorization: Bearer ${serviceToken}"
