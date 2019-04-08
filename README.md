@@ -543,19 +543,20 @@ and finally, Login to the Azure Container registry:
 You can get a list of saved documents by one of the following methods.
 
 A request to 
-
+```
   http://127.0.0.1:10000/devstoreaccount1/hmctstestcontainer?restype=container&comp=list
-
+```
 Or a call to
 
-  docker exec -ti compose_azure-storage-emulator-azurite_1 sh -c "ls -la folder/__blobstorage__"
-
+```
+docker exec -ti compose_azure-storage-emulator-azurite_1 sh -c "ls -la folder/__blobstorage__"
+```
 The first method will give you more information to identify which document is the one you are interested in.
 
 Once you have the ID of the document you want - e.g. **BeJEPk_duYpK64E2KhpboF0nL40=**, you can grab the file to your local machine using:
-
+```
 docker cp compose_azure-storage-emulator-azurite_1:/opt/azurite/folder/__blobstorage__/BeJEPk_duYpK64E2KhpboF0nL40= filename.xlsx
-
+```
 
 ## Variables
 Here are the important variables exposed in the compose files:
