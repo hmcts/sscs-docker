@@ -549,13 +549,13 @@ A request to
 Or a call to
 
 ```
-docker exec -ti compose_azure-storage-emulator-azurite_1 sh -c "ls -la folder/&#x5f;&#x5f;blobstorage&#x5f;&#x5f;"
+docker exec -ti compose_azure-storage-emulator-azurite_1 sh -c "ls -la folder/\__blobstorage__"
 ```
 The first method will give you more information to identify which document is the one you are interested in.
 
 Once you have the ID of the document you want - e.g. **BeJEPk_duYpK64E2KhpboF0nL40=**, you can grab the file to your local machine using:
 ```
-docker cp compose_azure-storage-emulator-azurite_1:/opt/azurite/folder/\_\_blobstorage\_\_/BeJEPk_duYpK64E2KhpboF0nL40= filename.xlsx
+docker cp compose_azure-storage-emulator-azurite_1:/opt/azurite/folder/\__blobstorage__/BeJEPk_duYpK64E2KhpboF0nL40= filename.xlsx
 ```
 
 ## Variables
