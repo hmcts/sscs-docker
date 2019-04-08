@@ -158,6 +158,9 @@ services:
       MICROSERVICEKEYS_CCD_DEFINITION: "${IDAM_KEY_CCD_DEFINITION_STORE}"
       MICROSERVICEKEYS_CCD_ADMIN: "${IDAM_KEY_CCD_ADMIN}"
       TESTING_SUPPORT_ENABLED: "true"
+      MICROSERVICEKEYS_EM_GW: "${IDAM_KEY_EM_GW}"
+      MICROSERVICEKEYS_EM_STITCHING_API: "${IDAM_KEY_EM_STITCHING_API}"
+      MICROSERVICEKEYS_EM_CCD_ORCHESTRATOR: "${IDAM_KEY_EM_CCD_ORCHESTRATOR}"
 
   smtp-server:
     image: mailhog/mailhog
@@ -193,6 +196,59 @@ services:
       - 5500:5500
     healthcheck:
       retries: 40
+
+  stitching-api:
+    image: hmcts.azurecr.io/hmcts/em-stitching:latest
+    healthcheck:
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stitching-db:5432/emstitch
+      - SPRING_DATASOURCE_USERNAME=emstitch
+      - SPRING_DATASOURCE_PASSWORD=emstitch
+      - S2S_BASE_URI=http://service-auth-provider-api:8080
+      - IDAM_API_BASE_URI=http://idam-api:8080
+      - ENABLE_LIQUIBASE=true
+      - APPINSIGHTS_INSTRUMENTATIONKEY=test-key
+      - DM_STORE_APP_URL=http://dm-store:4506
+      - DOCMOSIS_ACCESS_KEY=${DOCMOSIS_ACCESS_KEY}
+      - S2S_NAMES_WHITELIST:jui_webapp,em_ccd_orchestrator,em_gw,sscs
+    depends_on:
+      - stitching-db
+      - dm-store
+    links:
+      - stitching-db
+      - dm-store
+    ports:
+      - 4630:8080
+
+  stitching-db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=emstitch
+      - POSTGRES_USER=emstitch
+      - POSTGRES_PASSWORD=emstitch
+
+  rpa-em-ccd-orchestrator:
+    image: hmcts/rpa-em-ccd-orchestrator:latest
+    environment:
+      - SERVER_PORT=8060
+      - IDAM_API_BASE_URI=http://idam-api:8080
+      - S2S_BASE_URI=http://service-auth-provider-api:8080
+      - APPINSIGHTS_INSTRUMENTATIONKEY=test_app
+      - EM_STITCHING_API_URL=http://stitching-api:8080
+      # these environment variables are used by java-logging library
+      - JSON_CONSOLE_PRETTY_PRINT=false
+      - ROOT_LOGGING_LEVEL
+      - REFORM_SERVICE_TYPE=java
+      - REFORM_SERVICE_NAME=rpa-em-ccd-orchestrator
+      - REFORM_TEAM=em-ccd-orchestrator
+      - REFORM_ENVIRONMENT=docker
+    ports:
+      - 4623:8060
+
 
 volumes:
   ccd-docker-ccd-shared-database-data:
