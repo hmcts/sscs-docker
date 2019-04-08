@@ -549,7 +549,7 @@ A request to
 Or a call to
 
 ```
-docker exec -ti compose_azure-storage-emulator-azurite_1 sh -c "ls -la folder/__blobstorage__"
+docker exec -ti compose_azure-storage-emulator-azurite_1 sh -c "ls -la folder/&#x5f;&#x5f;blobstorage&#x5f;&#x5f;"
 ```
 The first method will give you more information to identify which document is the one you are interested in.
 
