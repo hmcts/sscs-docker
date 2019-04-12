@@ -232,7 +232,7 @@ services:
       - POSTGRES_PASSWORD=emstitch
 
   rpa-em-ccd-orchestrator:
-    image: hmcts/rpa-em-ccd-orchestrator:latest
+    image: hmcts.azurecr.io/hmcts/em-ccd-orchestrator:latest
     environment:
       - SERVER_PORT=8060
       - IDAM_API_BASE_URI=http://idam-api:8080
