@@ -20,14 +20,14 @@ services:
     image: "hmcts/ccd-api-gateway:${CCD_API_GATEWAY_TAG:-latest}"
     container_name: ccd-api-gateway
     environment:
-      IDAM_BASE_URL: http://idam-api:8080
-      IDAM_USER_URL: http://idam-api:8080
+      IDAM_BASE_URL: http://idam-api:5000
+      IDAM_USER_URL: http://idam-api:5000
       IDAM_S2S_URL: http://service-auth-provider-api:8080
       IDAM_SERVICE_KEY: "${IDAM_KEY_CCD_GATEWAY}"
-      IDAM_OAUTH2_LOGOUT_ENDPOINT: http://idam-api:8080/session/:token
+      IDAM_OAUTH2_LOGOUT_ENDPOINT: http://idam-api:5000/session/:token
       IDAM_OAUTH2_CLIENT_ID: ccd_gateway
       IDAM_OAUTH2_CLIENT_SECRET: "${OAUTH2_CLIENT_CCD_GATEWAY}"
-      IDAM_OAUTH2_TOKEN_ENDPOINT: http://idam-api:8080/oauth2/token
+      IDAM_OAUTH2_TOKEN_ENDPOINT: http://idam-api:5000/oauth2/token
       PROXY_AGGREGATED: http://ccd-data-store-api:4452
       PROXY_DATA: http://ccd-data-store-api:4452
       PROXY_DEFINITION_IMPORT: http://ccd-definition-store-api:4451
@@ -41,17 +41,30 @@ services:
       - ccd-definition-store-api
       - ccd-data-store-api
 
-  authentication-web:
-    image: hmcts.azurecr.io/hmcts/tidam-authentication-web:latest
+  idam-web-admin:
+    image: hmcts.azurecr.io/hmcts/sidam/idam-web-admin:latest
     environment:
-     IDAM_API_URL: http://idam-api:8080
-     IDAM_CONTINUE_URL_VALIDATOR_ENFORCE_TLS: "false"
-     REFORM_SERVICE_NAME: idam-api
-     REFORM_TEAM: idam
-     REFORM_ENVIRONMENT: local
+      JAVA_OPTS: -Xms128m -Xms512m
+      STRATEGIC_SERVICE_URL: http://idam-api:5000
     ports:
-      - 3501:8000
+    - 8082:8080
     links:
-      - idam-api
+    - idam-api
     depends_on:
-      - idam-api
+    - idam-api
+
+  idam-web-public:
+    image: hmcts.azurecr.io/hmcts/sidam/idam-web-public:latest
+    environment:
+      STRATEGIC_SERVICE_URL: http://idam-api:5000
+      IDAM_CONTINUE_URL_VALIDATOR_ENFORCE_TLS: "false"
+      REFORM_SERVICE_NAME: idam-api
+      REFORM_TEAM: idam
+      REFORM_ENVIRONMENT: local
+    ports:
+    - 3501:8080
+    links:
+    - idam-api
+    depends_on:
+    - idam-api
+

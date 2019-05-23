@@ -275,7 +275,8 @@ By default, `ccd-docker` runs the most commonly used backend and frontend projec
   * **ccd-definition-store-api**: CCD's dynamic case definition repository
   * **ccd-data-store-api**: CCD's cases repository
 * Front-end:
-  * **authentication-web**: IDAM's login UI
+  * **idam-web-public**: IDAM's login UI
+  * **idam-web-admin**: IDAM's admin UI
   * **ccd-api-gateway**: Proxy with IDAM and S2S integration
   * **ccd-case-management-web**: Caseworker UI
 
