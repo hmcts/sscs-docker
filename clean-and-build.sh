@@ -1,7 +1,10 @@
+#@IgnoreInspection BashAddShebang
 #####################################################################################
 # DB_USERNAME and DB_PASSWORD should be set in the .env file
 #####################################################################################
 source .env
+
+set -e
 
 command -v az >/dev/null 2>&1 || { 
     echo "################################################################################################"
@@ -10,18 +13,23 @@ command -v az >/dev/null 2>&1 || {
     exit 1 
 }
 
+command -v docker-compose >/dev/null 2>&1 || {
+    echo "################################################################################################"
+    echo >&2 "Please install Docker Compose - instructions in README.md"
+    echo "################################################################################################"
+    exit 1
+}
+
 #####################################################################################
 # Login to Azure
 #####################################################################################
 
-if az account show | grep -i "hmcts.net"; then
-  echo "You are logged into HMCTS Azure Portal"
-else
-  echo "Logging into the HMCTS Azure Portal. Please check your web browser."
-  az login
-fi
+az login
 
-echo "Logging into the HMCTS Azure Container Registry"
+#####################################################################################
+# Login to Azure Container Registry
+#####################################################################################
+
 ./ccd login
 
 #####################################################################################

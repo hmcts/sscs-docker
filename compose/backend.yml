@@ -14,7 +14,7 @@ services:
       - 8070:8070
 
   ccd-user-profile-api:
-    image: "hmcts/ccd-user-profile-api:${CCD_USER_PROFILE_API_TAG:-latest}"
+    image: "${CCD_USER_PROFILE_API_USE_LOCAL-hmcts.azurecr.io/}hmcts/ccd-user-profile-api:${CCD_USER_PROFILE_API_TAG:-latest}"
     environment:
       USER_PROFILE_DB_HOST: ccd-shared-database
       USER_PROFILE_DB_PORT: 5432
@@ -36,7 +36,7 @@ services:
       - service-auth-provider-api
 
   ccd-definition-store-api:
-    image: "hmcts/ccd-definition-store-api:${CCD_DEFINITION_STORE_API_TAG:-latest}"
+    image: "${CCD_DEFINITION_STORE_API_USE_LOCAL-hmcts.azurecr.io/}hmcts/ccd-definition-store-api:${CCD_DEFINITION_STORE_API_TAG:-latest}"
     environment:
       DEFINITION_STORE_DB_HOST: ccd-shared-database
       DEFINITION_STORE_DB_PORT: 5432
@@ -52,6 +52,9 @@ services:
       REFORM_TEAM: ccd
       REFORM_ENVIRONMENT: local
       APPINSIGHTS_INSTRUMENTATIONKEY: key
+      ELASTIC_SEARCH_ENABLED: "${ES_ENABLED_DOCKER}"
+      ELASTIC_SEARCH_HOST: "ccd-elasticsearch"
+      ELASTIC_SEARCH_FAIL_ON_IMPORT: "true"
     ports:
       - 4451:4451
     depends_on:
@@ -64,7 +67,7 @@ services:
       - service-auth-provider-api
 
   ccd-data-store-api:
-    image: "hmcts/ccd-data-store-api:${CCD_DATA_STORE_API_TAG:-latest}"
+    image: "${CCD_DATA_STORE_API_USE_LOCAL-hmcts.azurecr.io/}hmcts/ccd-data-store-api:${CCD_DATA_STORE_API_TAG:-latest}"
     environment:
       DATA_STORE_DB_HOST: ccd-shared-database
       DATA_STORE_DB_PORT: 5432
@@ -82,6 +85,9 @@ services:
       REFORM_TEAM: ccd
       REFORM_ENVIRONMENT: local
       APPINSIGHTS_INSTRUMENTATIONKEY: key
+      ELASTIC_SEARCH_ENABLED: "${ES_ENABLED_DOCKER}"
+      ELASTIC_SEARCH_HOSTS: ccd-elasticsearch:9200
+      ELASTIC_SEARCH_DATA_NODES_HOSTS: "http://ccd-elasticsearch:9200"
     ports:
       - 4452:4452
     depends_on:
@@ -116,7 +122,7 @@ services:
       IDAM_CCD_WHITELIST: http://localhost:3451/oauth2redirect
       IDAM_CCD_ADMIN_WHITELIST: https://localhost:3100/oauth2redirect
       IDAM_SSCS_WHITELIST: https://localhost:3000/authenticated
-      NOTIFY: "true"
+      NOTIFY: "false"
       NOTIFY_API_KEY: ${NOTIFICATION_API_KEY}
       NOTIFY_SSCS_ACTIVATE_USER_TEMPLATE: f4120f4e-cbd2-45bb-b520-e480ce80a5f4
       NOTIFY_RESET_PASSWORD_TEMPLATE: fake
@@ -148,7 +154,7 @@ services:
       - smtp-server
 
   service-auth-provider-api:
-    image: hmcts/service-auth-provider-app
+    image: hmcts.azurecr.io/hmcts/rpe-service-auth-provider:latest
     healthcheck:
       interval: 10s
       timeout: 10s

@@ -15,6 +15,7 @@
 ## Prerequisites
 
 - [Docker](https://www.docker.com)
+- [Docker Compose](https://docs.docker.com/compose/)
 
 *The following documentation assumes that the current directory is `sscs-docker`.*
 
