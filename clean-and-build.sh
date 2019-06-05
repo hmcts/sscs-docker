@@ -106,7 +106,7 @@ done
 #####################################################################################
 # Create the CCD roles
 #####################################################################################
-roles=("caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-panelmember")
+roles=("caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-panelmember" "citizen" "caseworker-sscs-clerk" "caseworker-sscs-dwpresponsewriter")
 
 TRY_AGAIN_SECONDS=15
 ATTEMPTS=0
