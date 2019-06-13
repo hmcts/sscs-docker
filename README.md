@@ -57,9 +57,9 @@ The script will pull the latest images and create the Docker environment. It wil
 
 ## Callbacks to host machine
 
-To reference the host machine from within a docker container, use http://dockerhost[:port]/ 
+To reference the host machine from within a docker container, use http://dockerhost[:port]/
 
-## Additional Information 
+## Additional Information
 
 The following information explains the process that the clean and build script goes through.
 
@@ -152,10 +152,13 @@ For SSCS:
 ./bin/ccd-add-role.sh caseworker-sscs-anonymouscitizen
 ./bin/ccd-add-role.sh caseworker-sscs-callagent
 ./bin/ccd-add-role.sh caseworker-sscs-judge
-./bin/ccd-add-role.sh caseworker-sscs-panelmember
+./bin/ccd-add-role.sh caseworker-sscs-panelmember PRIVATE
 ./bin/ccd-add-role.sh citizen
 ./bin/ccd-add-role.sh caseworker-sscs-clerk
 ./bin/ccd-add-role.sh caseworker-sscs-dwpresponsewriter
+./bin/ccd-add-role.sh caseworker-sscs-registrar
+./bin/ccd-add-role.sh caseworker-sscs-superuser
+./bin/ccd-add-role.sh caseworker-sscs-teamleader
 ```
 
 ### 3. Import case definition
@@ -534,19 +537,19 @@ and finally, Login to the Azure Container registry:
 ```./ccd login```
 
 #### Configure tribunal API to work with the sscs-docker containers
-- Bring Down the tribunal api container manually. 
+- Bring Down the tribunal api container manually.
 - Add the following entry to the file /etc/hosts:
   - ```127.0.0.1 dm-store```
 - Update the following property to the application.yaml file in the tribunal api service:  
   - ```document_management.url=${DOCUMENT_MANAGEMENT_URL:http://dm-store:4506}```
-- Bring up the tribunal api service 
+- Bring up the tribunal api service
 - Now you should be able to submit appeals with a piece of evidence successfully.
 
 ## Accessing documents saved to Azurite Emulator
 
 You can get a list of saved documents by one of the following methods.
 
-A request to 
+A request to
 ```
   http://127.0.0.1:10000/devstoreaccount1/hmctstestcontainer?restype=container&comp=list
 ```
