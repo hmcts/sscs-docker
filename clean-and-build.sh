@@ -6,11 +6,11 @@ source .env
 
 set -e
 
-command -v az >/dev/null 2>&1 || { 
+command -v az >/dev/null 2>&1 || {
     echo "################################################################################################"
     echo >&2 "Please install Azure CLI - instructions in README.md"
     echo "################################################################################################"
-    exit 1 
+    exit 1
 }
 
 command -v docker-compose >/dev/null 2>&1 || {
@@ -77,7 +77,7 @@ fi
 # Pull the latest images
 #####################################################################################
 rm .tags.env
-./ccd enable frontend backend 
+./ccd enable frontend backend
 
 if [ $INCLUDE_DM_STORE == "y" ]; then
   ./ccd enable dm-store
@@ -114,7 +114,7 @@ done
 #####################################################################################
 # Create the CCD roles
 #####################################################################################
-roles=("caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-panelmember" "caseworker-sscs-clerk" "caseworker-sscs-dwpresponsewriter")
+roles=("caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-clerk" "caseworker-sscs-dwpresponsewriter" "caseworker-sscs-registrar" "caseworker-sscs-superuser" "caseworker-sscs-teamleader")
 
 TRY_AGAIN_SECONDS=15
 ATTEMPTS=0
@@ -132,6 +132,9 @@ do
     fi
   done
 done
+
+./bin/ccd-add-role.sh "caseworker-sscs-panelmember PRIVATE"
+echo "Created private role for caseworker-sscs-panelmember"
 
 #####################################################################################
 # Create a case worker with your email address
@@ -172,5 +175,3 @@ if [ ! -z $CCD_BULK_SCANNING_DEFINITION_XLS ]; then
     done
   fi
 fi
-
-
