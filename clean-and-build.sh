@@ -114,7 +114,7 @@ done
 #####################################################################################
 # Create the CCD roles
 #####################################################################################
-roles=("caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-clerk" "caseworker-sscs-dwpresponsewriter" "caseworker-sscs-registrar" "caseworker-sscs-superuser" "caseworker-sscs-teamleader")
+roles=("caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-clerk" "caseworker-sscs-dwpresponsewriter" "caseworker-sscs-registrar" "caseworker-sscs-superuser" "caseworker-sscs-teamleader" "caseworker-sscs-panelmember")
 
 TRY_AGAIN_SECONDS=15
 ATTEMPTS=0
@@ -132,9 +132,6 @@ do
     fi
   done
 done
-
-./bin/ccd-add-role.sh "caseworker-sscs-panelmember PRIVATE"
-echo "Created private role for caseworker-sscs-panelmember"
 
 #####################################################################################
 # Create a case worker with your email address
