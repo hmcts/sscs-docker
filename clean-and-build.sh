@@ -63,6 +63,10 @@ if [ -z $INCLUDE_BULK_SCAN ]; then
   read -p "Bulk Scanning API? [y/n] " INCLUDE_BULK_SCAN
 fi
 
+if [ -z $INCLUDE_STITCHING_API ]; then
+  read -p "Stitching API? [y/n] " INCLUDE_STITCHING
+fi
+
 if [ $DESTROY_ALL_DOCKER_IMAGES_AND_CONTAINERS == "y" ]; then
   docker container stop $(docker container ls -a -q)
   docker system prune -a -f --volumes
@@ -91,6 +95,10 @@ if [ $INCLUDE_BULK_SCAN == "y" ]; then
   ./ccd enable bulk-scan
 fi
 
+if [ $INCLUDE_STITCHING_API == "y" ]; then
+  ./ccd enable stitching-api
+fi
+
 ./ccd compose pull
 
 #####################################################################################
@@ -114,7 +122,7 @@ done
 #####################################################################################
 # Create the CCD roles
 #####################################################################################
-roles=("caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-clerk" "caseworker-sscs-dwpresponsewriter" "caseworker-sscs-registrar" "caseworker-sscs-superuser" "caseworker-sscs-teamleader"  "caseworker-sscs-panelmember")
+roles=("caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-clerk" "caseworker-sscs-dwpresponsewriter" "caseworker-sscs-registrar" "caseworker-sscs-superuser" "caseworker-sscs-teamleader"  "caseworker-sscs-panelmember" "caseworker-sscs-bulkscan")
 
 TRY_AGAIN_SECONDS=15
 ATTEMPTS=0
