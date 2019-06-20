@@ -129,7 +129,7 @@ Parameters:
 For SSCS, use the following command:
 
 ```bash
-./bin/idam-create-caseworker.sh caseworker-sscs,caseworker-sscs-systemupdate,caseworker-sscs-anonymouscitizen,caseworker-sscs-callagent,caseworker-sscs-judge,citizen,caseworker-sscs-clerk,caseworker-sscs-dwpresponsewriter <your.email@hmcts.net>
+./bin/idam-create-caseworker.sh caseworker-sscs,caseworker-sscs-systemupdate,caseworker-sscs-anonymouscitizen,caseworker-sscs-callagent,caseworker-sscs-judge,citizen,caseworker-sscs-clerk,caseworker-sscs-dwpresponsewriter,caseworker-sscs-bulkscan <your.email@hmcts.net>
 ```
 
 ### 2. Add roles
@@ -159,6 +159,7 @@ For SSCS:
 ./bin/ccd-add-role.sh caseworker-sscs-registrar
 ./bin/ccd-add-role.sh caseworker-sscs-superuser
 ./bin/ccd-add-role.sh caseworker-sscs-teamleader
+./bin/ccd-add-role.sh caseworker-sscs-bulkscan
 ```
 
 ### 3. Import case definition
