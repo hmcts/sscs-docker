@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 #####################################################################################
 # DB_USERNAME and DB_PASSWORD should be set in the .env file
 #####################################################################################
@@ -103,27 +104,11 @@ done
 
 ./bin/document-management-store-create-blob-store-container.sh
 
+exit
 #####################################################################################
 # Create the CCD roles
 #####################################################################################
-roles=("caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-panelmember")
-
-TRY_AGAIN_SECONDS=15
-ATTEMPTS=0
-for role in "${roles[@]}"
-do
-  echo "Creating role $role"
-  until ./bin/ccd-add-role.sh $role
-  do
-    echo "Failed to create role. This might be ok - trying again in $TRY_AGAIN_SECONDS seconds"
-    sleep $TRY_AGAIN_SECONDS
-    ATTEMPTS=$((ATTEMPTS+1))
-    if [ $ATTEMPTS = 200 ]; then
-       echo "Giving up."
-       exit;
-    fi
-  done
-done
+bin/create-ccd-roles.sh
 
 #####################################################################################
 # Create a case worker with your email address
