@@ -285,6 +285,8 @@ By default, `ccd-docker` runs the most commonly used backend and frontend projec
   * **authentication-web**: IDAM's login UI
   * **ccd-api-gateway**: Proxy with IDAM and S2S integration
   * **ccd-case-management-web**: Caseworker UI
+* Others:
+  * **smtp-server**: You can get Robotics and other emails sent when an appeal is submitted here: http://localhost:8025
 
 In the future, optional compose files will allow other projects to be enabled on demand using the `enable` and `disable` commands.
 
