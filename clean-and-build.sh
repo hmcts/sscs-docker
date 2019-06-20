@@ -104,7 +104,40 @@ done
 
 ./bin/document-management-store-create-blob-store-container.sh
 
-exit
+IDAM_WEB=http://localhost:8082
+xdg-open ${IDAM_WEB}
+echo "
+Please create the sscs service in IDAM. Opening IDAM (${IDAM_WEB}) in browser.
+
+Login to ${IDAM_WEB} - I've opened it in a browser window for you.
+
+=====================================================================================
+Username: idamOwner@hmcts.net
+Password:  Ref0rmIsFun
+=====================================================================================
+
+Create a service with the following attributes:
+
+=====================================================================================
+label: sscs
+description: sscs
+client_id : sscs
+client_secret : QM5RQQ53LZFOSIXJ
+client_scope: *
+redirect_uri : http://localhost:3000/receiver
+=====================================================================================
+
+Create a role for the sscs service called:
+
+=====================================================================================
+ccd-import
+=====================================================================================
+
+Then hit RETURN to continue.
+"
+
+read
+
 #####################################################################################
 # Create the CCD roles
 #####################################################################################
@@ -115,6 +148,8 @@ bin/create-ccd-roles.sh
 #####################################################################################
 ./bin/idam-create-caseworker.sh caseworker-sscs,caseworker-sscs-callagent $HMCTS_EMAIL_ADDRESS
 ./bin/idam-create-caseworker.sh citizen sscs-citizen@hmcts.net
+
+./bin/create-import-user.sh
 
 #####################################################################################
 # Import the CCD definition files
