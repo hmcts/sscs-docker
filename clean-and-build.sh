@@ -63,7 +63,7 @@ if [ -z $INCLUDE_BULK_SCAN ]; then
   read -p "Bulk Scanning API? [y/n] " INCLUDE_BULK_SCAN
 fi
 
-if [ -z $INCLUDE_STITCHING_API ]; then
+if [ -z $INCLUDE_STITCHING ]; then
   read -p "Stitching API? [y/n] " INCLUDE_STITCHING
 fi
 
