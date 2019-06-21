@@ -95,7 +95,7 @@ if [ $INCLUDE_BULK_SCAN == "y" ]; then
   ./ccd enable bulk-scan
 fi
 
-if [ $INCLUDE_STITCHING_API == "y" ]; then
+if [ $INCLUDE_STITCHING == "y" ]; then
   ./ccd enable stitching-api
 fi
 
