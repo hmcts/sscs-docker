@@ -28,10 +28,10 @@ services:
     ports:
       - 4630:8080
 
-    stitching-db:
-      image: postgres
-      restart: always
-      environment:
-        - POSTGRES_DB=emstitch
-        - POSTGRES_USER=emstitch
-        - POSTGRES_PASSWORD=emstitch
+  stitching-db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=emstitch
+      - POSTGRES_USER=emstitch
+      - POSTGRES_PASSWORD=emstitch
