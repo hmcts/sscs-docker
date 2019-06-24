@@ -147,7 +147,7 @@ echo "Created private role for caseworker-sscs-panelmember"
 #####################################################################################
 # Create a case worker with your email address
 #####################################################################################
-./bin/idam-create-caseworker.sh caseworker-sscs,caseworker-sscs-callagent $HMCTS_EMAIL_ADDRESS
+./bin/idam-create-caseworker.sh caseworker-sscs-systemupdate,caseworker-sscs,caseworker-sscs-callagent $HMCTS_EMAIL_ADDRESS
 ./bin/idam-create-caseworker.sh citizen sscs-citizen@hmcts.net
 
 #####################################################################################
