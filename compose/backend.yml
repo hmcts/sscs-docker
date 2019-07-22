@@ -178,7 +178,6 @@ services:
     image: mailhog/mailhog
     ports:
       - 1025:1025
-      - 8025:8025
 
   ccd-shared-database:
     build: ../database
@@ -205,6 +204,7 @@ services:
       - REFORM_SERVICE_NAME=pdf-service
       - REFORM_TEAM
       - REFORM_ENVIRONMENT
+      - AZURE_APPLICATIONINSIGHTS_INSTRUMENTATIONKEY=SomeRandomValue
     ports:
       - 5500:5500
     healthcheck:
