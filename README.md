@@ -15,6 +15,7 @@
 ## Prerequisites
 
 - [Docker](https://www.docker.com)
+- [Docker Compose](https://docs.docker.com/compose/)
 
 *The following documentation assumes that the current directory is `sscs-docker`.*
 
@@ -56,9 +57,9 @@ The script will pull the latest images and create the Docker environment. It wil
 
 ## Callbacks to host machine
 
-To reference the host machine from within a docker container, use http://dockerhost[:port]/ 
+To reference the host machine from within a docker container, use http://dockerhost[:port]/
 
-## Additional Information 
+## Additional Information
 
 The following information explains the process that the clean and build script goes through.
 
@@ -128,7 +129,7 @@ Parameters:
 For SSCS, use the following command:
 
 ```bash
-./bin/idam-create-caseworker.sh caseworker-sscs,caseworker-sscs-systemupdate,caseworker-sscs-anonymouscitizen,caseworker-sscs-callagent <your.email@hmcts.net>
+./bin/idam-create-caseworker.sh caseworker-sscs,caseworker-sscs-systemupdate,caseworker-sscs-anonymouscitizen,caseworker-sscs-callagent,caseworker-sscs-judge,citizen,caseworker-sscs-clerk,caseworker-sscs-dwpresponsewriter,caseworker-sscs-bulkscan <your.email@hmcts.net>
 ```
 
 ### 2. Add roles
@@ -151,7 +152,14 @@ For SSCS:
 ./bin/ccd-add-role.sh caseworker-sscs-anonymouscitizen
 ./bin/ccd-add-role.sh caseworker-sscs-callagent
 ./bin/ccd-add-role.sh caseworker-sscs-judge
-./bin/ccd-add-role.sh caseworker-sscs-panelmember
+./bin/ccd-add-role.sh caseworker-sscs-panelmember PRIVATE
+./bin/ccd-add-role.sh citizen
+./bin/ccd-add-role.sh caseworker-sscs-clerk
+./bin/ccd-add-role.sh caseworker-sscs-dwpresponsewriter
+./bin/ccd-add-role.sh caseworker-sscs-registrar
+./bin/ccd-add-role.sh caseworker-sscs-superuser
+./bin/ccd-add-role.sh caseworker-sscs-teamleader
+./bin/ccd-add-role.sh caseworker-sscs-bulkscan
 ```
 
 ### 3. Import case definition
@@ -279,6 +287,8 @@ By default, `ccd-docker` runs the most commonly used backend and frontend projec
   * **idam-web-admin**: IDAM's admin UI
   * **ccd-api-gateway**: Proxy with IDAM and S2S integration
   * **ccd-case-management-web**: Caseworker UI
+* Others:
+  * **smtp-server**: You can get Robotics and other emails sent when an appeal is submitted here: http://localhost:8025
 
 In the future, optional compose files will allow other projects to be enabled on demand using the `enable` and `disable` commands.
 
@@ -531,19 +541,19 @@ and finally, Login to the Azure Container registry:
 ```./ccd login```
 
 #### Configure tribunal API to work with the sscs-docker containers
-- Bring Down the tribunal api container manually. 
+- Bring Down the tribunal api container manually.
 - Add the following entry to the file /etc/hosts:
   - ```127.0.0.1 dm-store```
 - Update the following property to the application.yaml file in the tribunal api service:  
   - ```document_management.url=${DOCUMENT_MANAGEMENT_URL:http://dm-store:4506}```
-- Bring up the tribunal api service 
+- Bring up the tribunal api service
 - Now you should be able to submit appeals with a piece of evidence successfully.
 
 ## Accessing documents saved to Azurite Emulator
 
 You can get a list of saved documents by one of the following methods.
 
-A request to 
+A request to
 ```
   http://127.0.0.1:10000/devstoreaccount1/hmctstestcontainer?restype=container&comp=list
 ```

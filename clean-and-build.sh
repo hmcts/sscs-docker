@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 #!/usr/bin/env bash
+#@IgnoreInspection BashAddShebang
 #####################################################################################
 # DB_USERNAME and DB_PASSWORD should be set in the .env file
 #####################################################################################
 source .env
+
+set -e
 
 command -v az >/dev/null 2>&1 || {
     echo "################################################################################################"
@@ -11,18 +15,23 @@ command -v az >/dev/null 2>&1 || {
     exit 1
 }
 
+command -v docker-compose >/dev/null 2>&1 || {
+    echo "################################################################################################"
+    echo >&2 "Please install Docker Compose - instructions in README.md"
+    echo "################################################################################################"
+    exit 1
+}
+
 #####################################################################################
 # Login to Azure
 #####################################################################################
 
-if az account show | grep -i "hmcts.net"; then
-  echo "You are logged into HMCTS Azure Portal"
-else
-  echo "Logging into the HMCTS Azure Portal. Please check your web browser."
-  az login
-fi
+az login
 
-echo "Logging into the HMCTS Azure Container Registry"
+#####################################################################################
+# Login to Azure Container Registry
+#####################################################################################
+
 ./ccd login
 
 #####################################################################################
@@ -56,6 +65,10 @@ if [ -z $INCLUDE_BULK_SCAN ]; then
   read -p "Bulk Scanning API? [y/n] " INCLUDE_BULK_SCAN
 fi
 
+if [ -z $INCLUDE_STITCHING ]; then
+  read -p "Stitching API? [y/n] " INCLUDE_STITCHING
+fi
+
 if [ $DESTROY_ALL_DOCKER_IMAGES_AND_CONTAINERS == "y" ]; then
   docker container stop $(docker container ls -a -q)
   docker system prune -a -f --volumes
@@ -69,7 +82,8 @@ fi
 #####################################################################################
 # Pull the latest images
 #####################################################################################
-rm .tags.env
+
+rm .tags.env || true
 ./ccd enable frontend backend
 
 if [ $INCLUDE_DM_STORE == "y" ]; then
@@ -82,6 +96,10 @@ fi
 
 if [ $INCLUDE_BULK_SCAN == "y" ]; then
   ./ccd enable bulk-scan
+fi
+
+if [ $INCLUDE_STITCHING == "y" ]; then
+  ./ccd enable stitching-api
 fi
 
 ./ccd compose pull
@@ -138,15 +156,15 @@ Then hit RETURN to continue.
 
 read
 
-#####################################################################################
-# Create the CCD roles
-#####################################################################################
 bin/create-ccd-roles.sh
+
+./bin/ccd-add-role.sh "caseworker-sscs-panelmember" PRIVATE
+echo "Created private role for caseworker-sscs-panelmember"
 
 #####################################################################################
 # Create a case worker with your email address
 #####################################################################################
-./bin/idam-create-caseworker.sh caseworker-sscs,caseworker-sscs-callagent $HMCTS_EMAIL_ADDRESS
+./bin/idam-create-caseworker.sh caseworker-sscs-systemupdate,caseworker-sscs,caseworker-sscs-callagent $HMCTS_EMAIL_ADDRESS
 ./bin/idam-create-caseworker.sh citizen sscs-citizen@hmcts.net
 
 ./bin/create-import-user.sh
@@ -184,5 +202,3 @@ if [ ! -z $CCD_BULK_SCANNING_DEFINITION_XLS ]; then
     done
   fi
 fi
-
-

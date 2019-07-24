@@ -14,7 +14,7 @@ services:
       - 8070:8070
 
   ccd-user-profile-api:
-    image: "hmcts/ccd-user-profile-api:${CCD_USER_PROFILE_API_TAG:-latest}"
+    image: "${CCD_USER_PROFILE_API_USE_LOCAL-hmcts.azurecr.io/}hmcts/ccd-user-profile-api:${CCD_USER_PROFILE_API_TAG:-latest}"
     environment:
       USER_PROFILE_DB_HOST: ccd-shared-database
       USER_PROFILE_DB_PORT: 5432
@@ -36,7 +36,7 @@ services:
       - service-auth-provider-api
 
   ccd-definition-store-api:
-    image: "hmcts/ccd-definition-store-api:${CCD_DEFINITION_STORE_API_TAG:-latest}"
+    image: "${CCD_DEFINITION_STORE_API_USE_LOCAL-hmcts.azurecr.io/}hmcts/ccd-definition-store-api:${CCD_DEFINITION_STORE_API_TAG:-latest}"
     environment:
       DEFINITION_STORE_DB_HOST: ccd-shared-database
       DEFINITION_STORE_DB_PORT: 5432
@@ -52,6 +52,9 @@ services:
       REFORM_TEAM: ccd
       REFORM_ENVIRONMENT: local
       APPINSIGHTS_INSTRUMENTATIONKEY: key
+      ELASTIC_SEARCH_ENABLED: "${ES_ENABLED_DOCKER}"
+      ELASTIC_SEARCH_HOST: "ccd-elasticsearch"
+      ELASTIC_SEARCH_FAIL_ON_IMPORT: "true"
     ports:
       - 4451:4451
     depends_on:
@@ -64,7 +67,7 @@ services:
       - service-auth-provider-api
 
   ccd-data-store-api:
-    image: "hmcts/ccd-data-store-api:${CCD_DATA_STORE_API_TAG:-latest}"
+    image: "${CCD_DATA_STORE_API_USE_LOCAL-hmcts.azurecr.io/}hmcts/ccd-data-store-api:${CCD_DATA_STORE_API_TAG:-latest}"
     environment:
       DATA_STORE_DB_HOST: ccd-shared-database
       DATA_STORE_DB_PORT: 5432
@@ -82,6 +85,9 @@ services:
       REFORM_TEAM: ccd
       REFORM_ENVIRONMENT: local
       APPINSIGHTS_INSTRUMENTATIONKEY: key
+      ELASTIC_SEARCH_ENABLED: "${ES_ENABLED_DOCKER}"
+      ELASTIC_SEARCH_HOSTS: ccd-elasticsearch:9200
+      ELASTIC_SEARCH_DATA_NODES_HOSTS: "http://ccd-elasticsearch:9200"
     ports:
       - 4452:4452
     depends_on:
@@ -104,6 +110,36 @@ services:
       IDAM_TESTING_SUPPORT_ENABLED: "true"
       ENDPOINTS_ENABLED: "true"
       STRATEGIC_ADMIN_URL: http://idam-web-admin:8080
+      IDAM_SECRET: idam_test_secret
+      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_GATEWAY: "${OAUTH2_CLIENT_CCD_GATEWAY}"
+      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_ADMIN: "${OAUTH2_CLIENT_CCD_ADMIN}"
+      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_SSCS: QM5RQQ53LZFOSIXJ
+      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_DATA: QM5RQQ53LZFOSIXJ
+      IDAM_CCD_WHITELIST: http://localhost:3451/oauth2redirect
+      IDAM_CCD_ADMIN_WHITELIST: https://localhost:3100/oauth2redirect
+      IDAM_SSCS_WHITELIST: https://localhost:3000/authenticated
+      NOTIFY: "false"
+      NOTIFY_API_KEY: ${NOTIFICATION_API_KEY}
+      NOTIFY_SSCS_ACTIVATE_USER_TEMPLATE: f4120f4e-cbd2-45bb-b520-e480ce80a5f4
+      NOTIFY_RESET_PASSWORD_TEMPLATE: fake
+      NOTIFY_CMC_WELCOME_USER_TEMPLATE: fake
+      NOTIFY_DIVORCE_WELCOME_USER_TEMPLATE: fake
+      NOTIFY_SSCS_WELCOME_USER_TEMPLATE: fake
+      NOTIFY_CMC_ACTIVATE_USER_TEMPLATE: f4120f4e-cbd2-45bb-b520-e480ce80a5f4
+      NOTIFY_CMC_SOLICITOR_ACTIVATE_USER_TEMPLATE: f4120f4e-cbd2-45bb-b520-e480ce80a5f4
+      NOTIFY_PROBATE_ACTIVATE_USER_TEMPLATE: fake
+      NOTIFY_DIVORCE_ACTIVATE_USER_TEMPLATE: fake
+      NOTIFY_CCD_ACTIVATE_USER_TEMPLATE: fake
+      NOTIFY_BAR_ACTIVATE_USER_TEMPLATE: fake
+      NOTIFY_JUIWEBAPP_ACTIVATE_USER_TEMPLATE: fake
+      NOTIFY_FREG_ACTIVATE_USER_TEMPLATE: fake
+      NOTIFY_IDAM_ACTIVATE_USER_TEMPLATE: fake
+      REFORM_SERVICE_NAME: idam-api
+      REFORM_TEAM: idam
+      REFORM_ENVIRONMENT: local
+      http_proxy:
+      https_proxy:
+      no_proxy:
     ports:
       - 5000:5000
     depends_on:
@@ -112,7 +148,7 @@ services:
       - shared-db
 
   service-auth-provider-api:
-    image: hmcts/service-auth-provider-app
+    image: hmcts.azurecr.io/hmcts/rpe-service-auth-provider:latest
     healthcheck:
       interval: 10s
       timeout: 10s
@@ -162,11 +198,13 @@ services:
       - REFORM_SERVICE_NAME=pdf-service
       - REFORM_TEAM
       - REFORM_ENVIRONMENT
+      - AZURE_APPLICATIONINSIGHTS_INSTRUMENTATIONKEY=SomeRandomValue
     ports:
       - 5500:5500
     healthcheck:
       retries: 40
 
+<<<<<<< HEAD
   stitching-api:
     image: hmcts.azurecr.io/hmcts/em-stitching:latest
     healthcheck:
@@ -201,6 +239,8 @@ services:
       - POSTGRES_USER=emstitch
       - POSTGRES_PASSWORD=emstitch
 
+=======
+>>>>>>> master
   rpa-em-ccd-orchestrator:
     image: hmcts.azurecr.io/hmcts/em-ccd-orchestrator:latest
     environment:
