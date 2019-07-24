@@ -21,10 +21,11 @@ client_scope: *
 redirect_uri : http://localhost:3000/receiver
 =====================================================================================
 
-Create a role (Manage Roles from http://localhost:8082) for the sscs service called:
+Create a role (Manage Roles from http://localhost:8082) for the sscs service:
 
 =====================================================================================
-ccd-import
+Role label: ccd-import
+Description: ccd-import
 =====================================================================================
 
 Then hit RETURN to continue.
