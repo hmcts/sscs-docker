@@ -204,7 +204,6 @@ services:
     healthcheck:
       retries: 40
 
-<<<<<<< HEAD
   stitching-api:
     image: hmcts.azurecr.io/hmcts/em-stitching:latest
     healthcheck:
@@ -239,8 +238,6 @@ services:
       - POSTGRES_USER=emstitch
       - POSTGRES_PASSWORD=emstitch
 
-=======
->>>>>>> master
   rpa-em-ccd-orchestrator:
     image: hmcts.azurecr.io/hmcts/em-ccd-orchestrator:latest
     environment:
@@ -262,7 +259,7 @@ services:
   fr-am:
     image: hmcts.azurecr.io/hmcts/sidam/sidam-fr-am:1.0.0
     ports:
-    - 8080:8080
+    - 7070:8080
     - 1389:1389
     depends_on:
     - shared-db
