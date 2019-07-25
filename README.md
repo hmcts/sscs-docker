@@ -56,7 +56,8 @@ Creating and starting the containers:
 ./ccd compose up -d
 ```
 
-Wait for containers to be ready:
+It takes a few minutes for the containers to be in a ready-to-use state. The following script will monitor their progress
+and let you know when they are ready:
 
 ```bash
 ./bin/wait-for-containers-to-be-ready.sh
