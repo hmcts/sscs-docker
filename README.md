@@ -31,10 +31,10 @@
 ./bin/docker-clean.sh
 ```
 
-Checkout `ccd-docker` project:
+Checkout `sscs-docker` project:
 
 ```bash
-git clone git@github.com:hmcts/ccd-docker.git
+git clone git@github.com:hmcts/sscs-docker.git
 ```
 
 Login to the Azure Container registry:
