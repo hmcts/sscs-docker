@@ -134,22 +134,21 @@ Parameters:
 
 ### 5. Add Initial Case Worker Users
 
-A caseworker user can be created in IDAM using the following command:
-
-```bash
-./bin/idam-create-caseworker.sh <roles> <email> [password] [surname] [forename]
-```
+    A caseworker user can be created in IDAM using the following command:
+    
+    ```bash
+    ./bin/idam-create-caseworker.sh <roles> <email> [password] [surname] [forename]
+    ```
 
 Parameters:
 - `roles`: a comma-separated list of roles. Roles must be existing IDAM roles for the CCD domain. Every caseworker requires at least it's coarse-grained jurisdiction role (`caseworker-<jurisdiction>`).
 - `email`: Email address used for logging in.
 - `password`: Optional. Password for logging in. Defaults to `Pa55word11`. Weak passwords that do not match the password criteria by SIDAM will cause use creation to fail, and such failure may not be expressly communicated to the user. 
 
-For example:
+For SSCS, run the following commands, replacing example@hmcts.net with your HMCTS email address:
 
-```bash
-./bin/idam-create-caseworker.sh caseworker-probate,caseworker-probate-solicitor probate@hmcts.net
-```
+    ./bin/idam-create-caseworker.sh caseworker-sscs-systemupdate,caseworker-sscs,caseworker-sscs-callagent example@hmcts.net
+    ./bin/idam-create-caseworker.sh citizen sscs-citizen@hmcts.net
 
 ### Note:
 For running functional test cases,
