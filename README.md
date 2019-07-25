@@ -94,7 +94,7 @@ Add the vars to ~/.bashrc, each one preceeded with an export statement. Start a 
 
 Once the containers are running, CCD's frontend can be accessed at [http://localhost:3451](http://localhost:3451).
 
-However, 6 more steps are required to correctly configure SIDAM and CCD before it can be used:
+However, seven more steps are required to correctly configure SIDAM and CCD before it can be used for SSCS services.
 
 ### 1. Configure Oauth2 Client of CCD Gateway on SIDAM
 
@@ -181,7 +181,13 @@ For running functional test cases,
 
           For ccd-data-store-api functional tests set TEST_URL=http://localhost:4452
 
-### 6. Import case definition
+#### 6. Update Notification Callbacks
+
+On the CaseEvent tab of the definition spreadsheet, modify the TYA Notification callback URLs to be
+
+    http://dockerhost:8081/send
+    
+### 7. Import case definition
 
 To reduce impact on performances, case definitions are imported via the command line rather than using CCD's dedicated UI:
 
@@ -193,12 +199,6 @@ Parameters:
 - `path_to_definition`: Path to `.xlsx` file containing the case definition.
 
 **Note:** For CCD to work, the definition must contain the caseworker's email address created at [step 1](#1-create-a-caseworker-user).
-
-#### 6.1 Update Notification Callbacks
-
-On the CaseEvent tab of the definition spreadsheet, modify the TYA Notification callback URLs to be
-
-    http://dockerhost:8081/send
 
 If the import fails with an error of the form:
 
