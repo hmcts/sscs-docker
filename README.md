@@ -63,10 +63,7 @@ Define "ccd-import" role (Home > Manage Roles > select your service).
  
 ### 2. Create Users and SSCS Roles
 
-    ./bin/idam-create-caseworker.sh ccd-import ccd.docker.default@hmcts.net Pa55word11 Default CCD_Docker
-    ./bin/add-sscs-ccd-roles.sh
-    ./bin/idam-create-caseworker.sh caseworker-sscs-systemupdate,caseworker-sscs,caseworker-sscs-callagent example@hmcts.net
-    ./bin/idam-create-caseworker.sh citizen sscs-citizen@hmcts.net
+    ./bin/create-users-and-roles.sh
 
 ### 3. Import case definition
 
@@ -80,7 +77,7 @@ Then run the following command:
 ./bin/ccd-import-definition.sh <path_to_definition>
 ```
 
-**Note:** For CCD to work, the definition must contain the caseworker's email address created at [step 1](#1-create-a-caseworker-user).
+**Note:** For CCD to work, the definition must contain the caseworker's email address created at step 2.
 
 If the import fails with an error of the form:
 
