@@ -12,11 +12,7 @@ psql -v ON_ERROR_STOP=1 --username postgres --set USERNAME=$DB_USERNAME --set PA
   CREATE USER :USERNAME WITH PASSWORD ':PASSWORD';
 EOSQL
 
-psql -v ON_ERROR_STOP=1 --username postgres --set USERNAME=sscsjobscheduler --set PASSWORD=sscsjobscheduler <<-EOSQL
-  CREATE USER :USERNAME WITH PASSWORD ':PASSWORD';
-EOSQL
-
-for service in idam ccd_user_profile ccd_definition ccd_data evidence; do
+for service in idam ccd_user_profile ccd_definition ccd_data evidence ccd_definition_designer; do
   echo "Database $service: Creating..."
 psql -v ON_ERROR_STOP=1 --username postgres --set USERNAME=$DB_USERNAME --set PASSWORD=$DB_PASSWORD --set DATABASE=$service <<-EOSQL
   CREATE DATABASE :DATABASE
@@ -26,11 +22,3 @@ psql -v ON_ERROR_STOP=1 --username postgres --set USERNAME=$DB_USERNAME --set PA
 EOSQL
   echo "Database $service: Created"
 done
-
-psql -v ON_ERROR_STOP=1 --username postgres --set USERNAME=sscsjobscheduler --set PASSWORD=sscsjobsceduler --set DATABASE=sscsjobscheduler <<-EOSQL
-  CREATE DATABASE :DATABASE
-    WITH OWNER = :USERNAME
-    ENCODING = 'UTF-8'
-    CONNECTION LIMIT = -1;
-EOSQL
-echo "Database sscsjobsceduler: Created"

@@ -15,84 +15,39 @@
 ## Prerequisites
 
 - [Docker](https://www.docker.com)
-- [Docker Compose](https://docs.docker.com/compose/)
 
-*The following documentation assumes that the current directory is `sscs-docker`.*
+*Memory and CPU allocations may need to be increased for successful execution of ccd applications altogether. (On Preferences / Advanced)*
+
+- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) - minimum version 2.0.57 
+- [jq Json Processor] (https://stedolan.github.io/jq)
+
+*The following documentation assumes that the current directory is `ccd-docker`.*
 
 ## Quick start
 
-Checkout `sscs-docker` project:
+Checkout `ccd-docker` project:
 
 ```bash
-git clone git@github.com:hmcts/sscs-docker.git
+git clone git@github.com:hmcts/ccd-docker.git
 ```
 
-Create the .env file
+Login to the Azure Container registry:
 
 ```bash
-cd sscs-docker
-cp .env.example .env
+./ccd login
 ```
-
-Populate the following keys in the .env file
-
-```
-HMCTS_EMAIL_ADDRESS=
-CCD_CASE_DEFINITION_XLS=
-```
-
-There are also some optional keys that can be populated.
-
-The case definition file can be found on Confluence at [https://tools.hmcts.net/confluence/display/SSCS/Case+Definitions](https://tools.hmcts.net/confluence/display/SSCS/Case+Definitions)
-
-You will need to add your email address to the UserProfile tab.
-
-Run the build script
-
-```bash
-./clean-and-build.sh
-```
-
-The script will pull the latest images and create the Docker environment. It will wait for the containers to be healthy and will keep attempting to create the CCD roles until it succeeds (even when the containers are healthy, it takes a while before they are ready).
-
-## Callbacks to host machine
-
-To reference the host machine from within a docker container, use http://dockerhost[:port]/
-
-## Additional Information
-
-The following information explains the process that the clean and build script goes through.
+For [Azure Authentication for pulling latest docker images](#azure-authentication-for-pulling-latest-docker-images)
 
 Pulling latest Docker images:
 
 ```bash
-./ccd enable frontend backend dm-store
 ./ccd compose pull
 ```
 
 Creating and starting the containers:
 
-NOTE: Include the --build argument only the first time you run the command. It should be omitted on subsequent runs.
-
 ```bash
-./ccd compose up --build -d
-```
-
-Create Blob Store in Azurite:
-
-```bash
-./bin/document-management-store-create-blob-store-container.sh
-```
-
-Initialise the DB
-```bash
-sh ./database/init-db.sh
-```
-
-If necessary, you can create the evidence database manually by entering the Postgres command line of the container:
-
-```bash
-docker exec -ti compose_ccd-shared-database_1 psql -U postgres -c "CREATE DATABASE evidence;"
+./ccd compose up -d
 ```
 
 Usage and commands available:
@@ -101,38 +56,63 @@ Usage and commands available:
 ./ccd
 ```
 
-You can check the status of the containers with:
+## Setting up environment variables
+Environment variables for CCD Data Store API and CCD Definition Store API can be done by executing the following script.
 
-```
-./ccd compose ps
-```
+Windows : `./bin/set-environment-variables.sh`
+
+Mac : `source ./bin/set-environment-variables.sh`
+
+To persist the environment variables in Mac, copy the contents of `env_variables_all.txt` file into ~/.bash_profile.
+A prefix 'export' will be required for each of environment variable.
 
 ## Using CCD
 
 Once the containers are running, CCD's frontend can be accessed at [http://localhost:3451](http://localhost:3451).
 
-However, 3 more steps are required to correctly configure IDAM and CCD before it can be used:
+However, 6 more steps are required to correctly configure SIDAM and CCD before it can be used:
 
-### 1. Create a caseworker user
+### 1. Configure Oauth2 Client of CCD Gateway on SIDAM
 
-A caseworker user can be created in IDAM using the following command:
+An oauth2 client should be configured for ccd-gateway application, on SIDAM Web Admin.
+You need to login to the SIDAM Web Admin with the URL and logic credentials here: https://tools.hmcts.net/confluence/x/eQP3P
+
+Navigate to Home > Manage Services > Add a new Service
+
+On the **Add Service** screen the following fields are required:
+```
+label : <any>
+description : <any>
+client_id : ccd_gateway
+client_secret : ccd_gateway_secret
+redirect_uri : http://localhost:3451/oauth2redirect
+```
+### 2. Create ccd-import role
+After defining the above client/service, a role with "ccd-import" label must be defined under this client/service (Home > Manage Roles > select your service).
+For use in the automated functional test runs, the following roles are also needed:
+
+    * caseworker
+    * caseworker-autotest1
+    * caseworker-autotest2
+
+Don't worry about the *Assignable roles* section when adding roles
+
+Once the roles are defined under the client/service, go to the service configuration for the service you created in Step 1 (Home > Manage Services > select your service) and select `ccd-import` role radio option under **Private Beta Role** section
+ 
+**Any business-related roles like `caseworker`,`caseworker-<jurisdiction>` etc to be used in CCD later must also be defined under the client configuration at this stage.**
+
+### 3. Create a Default User with "ccd-import" Role
+
+A user with import role should be created using the following command:
 
 ```bash
-./bin/idam-create-caseworker.sh <roles> <email> [password] [surname] [forename]
+./bin/idam-create-caseworker.sh ccd-import ccd.docker.default@hmcts.net Pa55word11 Default CCD_Docker
 ```
 
-Parameters:
-- `roles`: a comma-separated list of roles. Roles must be existing IDAM roles for the CCD domain. Every caseworker requires at least it's coarse-grained jurisdiction role (`caseworker-<jurisdiction>`).
-- `email`: Email address used for logging in.
-- `password`: Optional. Password for logging in. Defaults to `password`.
+This call will create a user in SIDAM with ccd-import role. This user will be used to acquire a user token with "ccd-import" role.
 
-For SSCS, use the following command:
 
-```bash
-./bin/idam-create-caseworker.sh caseworker-sscs,caseworker-sscs-systemupdate,caseworker-sscs-anonymouscitizen,caseworker-sscs-callagent,caseworker-sscs-judge,citizen,caseworker-sscs-clerk,caseworker-sscs-dwpresponsewriter,caseworker-sscs-bulkscan <your.email@hmcts.net>
-```
-
-### 2. Add roles
+### 4. Add Initial Roles
 
 Before a definition can be imported, roles referenced in a case definition Authorisation tabs must be defined in CCD using:
 
@@ -144,25 +124,43 @@ Parameters:
 - `role`: Name of the role, e.g: `caseworker-divorce`.
 - `classification`: Optional. One of `PUBLIC`, `PRIVATE` or `RESTRICTED`. Defaults to `PUBLIC`.
 
-For SSCS:
+### 5. Add Initial Case Worker Users
+
+A caseworker user can be created in IDAM using the following command:
 
 ```bash
-./bin/ccd-add-role.sh caseworker-sscs
-./bin/ccd-add-role.sh caseworker-sscs-systemupdate
-./bin/ccd-add-role.sh caseworker-sscs-anonymouscitizen
-./bin/ccd-add-role.sh caseworker-sscs-callagent
-./bin/ccd-add-role.sh caseworker-sscs-judge
-./bin/ccd-add-role.sh caseworker-sscs-panelmember PRIVATE
-./bin/ccd-add-role.sh citizen
-./bin/ccd-add-role.sh caseworker-sscs-clerk
-./bin/ccd-add-role.sh caseworker-sscs-dwpresponsewriter
-./bin/ccd-add-role.sh caseworker-sscs-registrar
-./bin/ccd-add-role.sh caseworker-sscs-superuser
-./bin/ccd-add-role.sh caseworker-sscs-teamleader
-./bin/ccd-add-role.sh caseworker-sscs-bulkscan
+./bin/idam-create-caseworker.sh <roles> <email> [password] [surname] [forename]
 ```
 
-### 3. Import case definition
+Parameters:
+- `roles`: a comma-separated list of roles. Roles must be existing IDAM roles for the CCD domain. Every caseworker requires at least it's coarse-grained jurisdiction role (`caseworker-<jurisdiction>`).
+- `email`: Email address used for logging in.
+- `password`: Optional. Password for logging in. Defaults to `Pa55word11`. Weak passwords that do not match the password criteria by SIDAM will cause use creation to fail, and such failure may not be expressly communicated to the user. 
+
+For example:
+
+```bash
+./bin/idam-create-caseworker.sh caseworker-probate,caseworker-probate-solicitor probate@hmcts.net
+```
+
+### Note:
+For running functional test cases,
+
+- A. Initial user and role creation can be done by executing the following script:
+
+```bash
+./bin/create-initial-roles-and-users.sh
+```
+
+- B. Before running CCD Data Store tests, execute the CCD Definition store test cases first so that case definitions are loaded from CCD_CNP_27.xlsx.
+
+- C. Set the TEST_URL environment variable to match the service the functional tests should executed against:
+
+          For ccd-definition-store-api functional tests the set TEST_URL=http://localhost:4451
+
+          For ccd-data-store-api functional tests set TEST_URL=http://localhost:4452
+
+### 6. Import case definition
 
 To reduce impact on performances, case definitions are imported via the command line rather than using CCD's dedicated UI:
 
@@ -188,7 +186,7 @@ Then the indicated role, here `caseworker-cmc-loa1`, must be added to CCD (See [
 ### Ready for take-off 🛫
 
 Back to [http://localhost:3451](http://localhost:3451), you can now log in with the email and password defined at [step 1](#1-create-a-caseworker-user).
-If you left the password out when creating the caseworker, by default it's set to: `password`.
+If you left the password out when creating the caseworker, by default it's set to: `Pa55word11`.
 
 ## Compose branches
 
@@ -201,7 +199,7 @@ Using the `set` command, branches can be changed per project.
 Usage of the command is:
 
 ```bash
-./ccd set <project> <branch>
+./ccd set <project> <branch> [file://local_repository_path]
 ```
 
 * `<project>` must be one of:
@@ -211,6 +209,7 @@ Usage of the command is:
   * ccd-api-gateway
   * ccd-case-management-web
 * `<branch>` must be an existing **remote** branch for the selected project.
+* `[file://local_repository_path]` path of the local repository in case you want to switch to a local branch 
 
 Branches for a project can be listed using:
 
@@ -277,24 +276,34 @@ when branches are in use.
 By default, `ccd-docker` runs the most commonly used backend and frontend projects required:
 
 * Back-end:
-  * **idam-api**: Identity and access control
+  * **sidam-api**: Strategic identity and access control
   * **service-auth-provider-api**: Service-to-service security layer
   * **ccd-user-profile-api**: Users/jurisdictions association and usage preferences
   * **ccd-definition-store-api**: CCD's dynamic case definition repository
   * **ccd-data-store-api**: CCD's cases repository
 * Front-end:
-  * **authentication-web**: IDAM's login UI
-  * **ccd-api-gateway**: Proxy with IDAM and S2S integration
+  * **idam-web-public**: SIDAM's login UI
+  * **ccd-api-gateway**: Proxy with SIDAM and S2S integration
   * **ccd-case-management-web**: Caseworker UI
-* Others:
-  * **smtp-server**: You can get Robotics and other emails sent when an appeal is submitted here: http://localhost:8025
 
-In the future, optional compose files will allow other projects to be enabled on demand using the `enable` and `disable` commands.
+Optional compose files will allow other projects to be enabled on demand using the `enable` and `disable` commands.
 
 * To enable **document-management-store-app**
   * `./ccd enable backend frontend dm-store`
   * run docker-compose `./ccd compose up -d`
   * create Blob Store in Azurite `./bin/document-management-store-create-blob-store-container.sh`
+
+* To enable **elastic search**
+  * NOTE: we recommend at lest 6GB of memory for Docker when enabling elasticsearch 
+  * `./ccd enable elasticsearch` (assuming `backend` is already enabled, otherwise enable it)
+  * export ES_ENABLED_DOCKER=true
+  * verify that Data Store is able to connect to elasticsearch: `curl localhost:4452/health` 
+
+* To enable **ccd-definition-designer-api**
+  * `./ccd enable backend ccd-definition-designer-api`
+  * run docker-compose `./ccd compose up -d`
+  * verify that ccd-definition-designer-api is up and running by `curl localhost:4544/health`
+
 
 ## Under the hood :speedboat:
 
@@ -408,7 +417,7 @@ Fetch the latest version of an image from its source. For the new version to be 
 
 #### OAuth 2
 
-OAuth 2 clients must be explicitly declared in service `idam-api` with their ID and secret.
+OAuth 2 clients must be explicitly declared in service `sidam-api` with their ID and secret.
 
 A client is defined as an environment variable complying to the pattern:
 
@@ -427,12 +436,16 @@ Micro-services names and secret keys must be registered as part of `service-auth
 
 ```yml
 environment:
-  MICROSERVICEKEYS_<SERVICE_NAME>: <SERVICE_SECRET>
+  MICROSERVICE_KEYS_<SERVICE_NAME>: <SERVICE_SECRET>
 ```
 
 The `SERVICE_SECRET` must then also be provided to the container running the micro-service.
 
 :information_source: *To prevent duplication, the client secret should be defined in the `.env` file and then used in the compose files using string interpolation `"${<VARIABLE_NAME>}"`.*
+
+#### Address lookup
+
+To use UK address lookup feature an API key for https://postcodeinfo.service.justice.gov.uk is required. When API key is available it needs to be set on host side under `ADDRESS_LOOKUP_TOKEN` variable name.
 
 ## Containers
 
@@ -512,61 +525,52 @@ Once the compose files have been updated, the new configuration can be applied b
 The local project properties must be reviewed to use the containers and comply to their configuration.
 
 Mainly, this means:
-- **Database**: pointing to the locally exposed port for the associated DB
-- **IDAM**: pointing to the locally exposed port for IDAM
+- **Database**: pointing to the locally exposed port for the associated DB. This port used to be 5000 but has been changed to 5050 after SIDAM integration, which came to use 5000 for sidam-api application.
+- **SIDAM**: pointing to the locally exposed port for SIDAM
 - **S2S**:
   - pointing to the locally exposed port for `service-auth-provider-api`
   - :warning: using the right key, as defined in `service-auth-provider-api` container
 - **URLs**: all URLs should be updated to point to the corresponding locally exposed port
 
-#### Azure Authentication for pulling latest docker images
-- ERROR: Get <docker_image_url>: unauthorized: authentication required
-    - If you see this above authentication issue while pulling images, please follow below commands,
+### Azure Authentication for pulling latest docker images
+
+```bash
+ERROR: Get <docker_image_url>: unauthorized: authentication required
+```
+
+If you see this above authentication issue while pulling images, please follow below commands,
 
 Install Azure-CLI locally,
 
-```brew update && brew install azure-cli```
+```bash
+brew update && brew install azure-cli
+```
 
 and to update a Azure-CLI locally,
 
-```brew update azure-cli```
+```bash
+brew update azure-cli
+```
 
-then, login to MS Azure,
+then,
+login to MS Azure,
 
-```az login```
-
+```bash
+az login
+```
 and finally, Login to the Azure Container registry:
 
-```./ccd login```
-
-#### Configure tribunal API to work with the sscs-docker containers
-- Bring Down the tribunal api container manually.
-- Add the following entry to the file /etc/hosts:
-  - ```127.0.0.1 dm-store```
-- Update the following property to the application.yaml file in the tribunal api service:  
-  - ```document_management.url=${DOCUMENT_MANAGEMENT_URL:http://dm-store:4506}```
-- Bring up the tribunal api service
-- Now you should be able to submit appeals with a piece of evidence successfully.
-
-## Accessing documents saved to Azurite Emulator
-
-You can get a list of saved documents by one of the following methods.
-
-A request to
+```bash
+./ccd login
 ```
-  http://127.0.0.1:10000/devstoreaccount1/hmctstestcontainer?restype=container&comp=list
-```
-Or a call to
 
-```
-docker exec -ti compose_azure-storage-emulator-azurite_1 sh -c "ls -la folder/__blobstorage__"
-```
-The first method will give you more information to identify which document is the one you are interested in.
-
-Once you have the ID of the document you want - e.g. **BeJEPk_duYpK64E2KhpboF0nL40=**, you can grab the file to your local machine using:
-```
-docker cp compose_azure-storage-emulator-azurite_1:/opt/azurite/folder/__blobstorage__/BeJEPk_duYpK64E2KhpboF0nL40= filename.xlsx
-```
+On windows platform, we are installing the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) using executable .msi file.
+If "az login" command throws an error like "Access Denied", please follow these steps.
+We will need to install the az cli using Python PIP.
+1. If Microsoft Azure CLI is already installed, uninstall it from control panel.
+2. Setup the Python(version 2.x/3.x) on windows machine. PIP is bundled with Python.
+3. Execute the command "pip install azure-cli" using command line. It takes about 20 minutes to install the azure cli.
+4. Verify the installation using the command az --version.
 
 ## Variables
 Here are the important variables exposed in the compose files:
@@ -584,7 +588,9 @@ Here are the important variables exposed in the compose files:
 | APPINSIGHTS_INSTRUMENTATIONKEY | Secret for Microsoft Insights logging, can be a dummy string in local |
 | STORAGEACCOUNT_PRIMARY_CONNECTION_STRING | (If dm-store is enabled) Secret for Azure Blob Storage. It is pointing to dockerized Azure Blob Storage emulator. |
 | STORAGE_CONTAINER_DOCUMENT_CONTAINER_NAME | (If dm-store is enabled) Container name for Azure Blob Storage |
-
+| AM_DB | Access Management database name |
+| AM_DB_USERNAME | Access Management database username |
+| AM_DB_PASSWORD | Access Management database password |
 ## Remarks
 
 - A container can be configured to call a localhost host resource with the localhost shortcut added for docker containers recently. However the shortcut must be set according the docker host operating system.

@@ -4,37 +4,31 @@ version: '3'
 services:
   ccd-case-management-web:
     environment:
-      DM_GATEWAY_BASE_URL: http://ccd-api-gateway:3453
+      DM_URL: http://localhost:3453/documents
+      DM_URL_REMOTE: http://dm-store:8080/documents
     depends_on:
-    - dm-store
+      - dm-store
 
   ccd-api-gateway:
     environment:
-      PROXY_DOCUMENT_MANAGEMENT: http://dm-store:4506
+      PROXY_DOCUMENT_MANAGEMENT: http://dm-store:8080
     depends_on:
-    - dm-store
+      - dm-store
 
   ccd-data-store-api:
     environment:
-      CCD_DM_DOMAIN: http://dm-store:4506
+      CCD_DM_DOMAIN: http://dm-store:8080
 
   service-auth-provider-api:
     environment:
-      MICROSERVICEKEYS_EM_GW: "${IDAM_KEY_EM_GW}"
-      MICROSERVICEKEYS_DM_STORE: "${IDAM_KEY_DM_STORE}"
-      MICROSERVICEKEYS_SSCS: "${IDAM_KEY_SSCS}"
-      MICROSERVICEKEYS_SSCS_BULKSCAN: "${IDAM_KEY_SSCS_BULKSCAN}"
-      MICROSERVICEKEYS_BULK_SCAN_PROCESSOR: "${IDAM_KEY_BULK_SCAN_PROCESSOR}"
-      MICROSERVICEKEYS_BULK_SCAN_PROCESSOR_TESTS: "${IDAM_KEY_BULK_SCAN_PROCESSOR_TESTS}"
-      MICROSERVICEKEYS_BULK_SCAN_ORCHESTRATOR: "${IDAM_KEY_BULK_SCAN_ORCHESTRATOR}"
+      MICROSERVICE_KEYS_EM_GW: "${IDAM_KEY_DM_STORE}"
 
   dm-store:
-    image: "hmcts/dm-store:${DM_STORE_TAG:-latest}"
-    command: --wait-for-database 30
+    image: "${DM_STORE_USE_LOCAL-hmcts.azurecr.io/}hmcts/dm-store:${DM_STORE_TAG:-latest}"
     healthcheck:
       disable: true
     environment:
-      SERVER_PORT: 4506
+      SERVER_PORT: 8080
       IDAM_SUPERUSER_EMAIL:
       IDAM_SECRET_KEY: "${IDAM_KEY_DM_STORE}"
       GOV_NOTIFY_API_KEY:
@@ -50,9 +44,9 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       IDAM_TESTING_SUPPORT_ENABLED: "true"
       LOGGING_LEVEL_UK_GOV_HMCTS_IDAM: DEBUG
-      IDAM_USER_BASE_URI: http://idam-api:8080
+      IDAM_USER_BASE_URI: http://sidam-api:5000
       IDAM_S2S_BASE_URI: http://service-auth-provider-api:8080
-      S2S_NAMES_WHITELIST: sscs,divorce,ccd,em_gw,document-management-store,ccd_gw,idam-api,ccd_data,sscs_bulkscan,em_stitching_api
+      S2S_NAMES_WHITELIST: sscs,divorce,ccd,em_gw,document-management-store,ccd_gw,idam-api,fpl_case_service
       http_proxy:
       https_proxy:
       no_proxy:
@@ -68,20 +62,19 @@ services:
       PACKAGES_PROJECT: evidence
       PACKAGES_NAME: document-management-store
       PACKAGES_VERSION: unknown
-      CASE_WORKER_ROLES: caseworker-sscs
     #      debug mode
     #    JAVA_OPTS: -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
     links:
       - ccd-shared-database
-      - idam-api
+      - sidam-api
       - service-auth-provider-api
     depends_on:
       - ccd-shared-database
-      - idam-api
+      - sidam-api
       - service-auth-provider-api
       - azure-storage-emulator-azurite
     ports:
-      - 4506:4506
+      - 4506:8080
     #   debug port exposed
     #   - 5006:5005
 

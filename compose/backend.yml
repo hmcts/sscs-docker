@@ -2,26 +2,15 @@
 version: '3'
 
 services:
-
-  dockerhost:
-    image: qoomon/docker-host
-    cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
-    restart: on-failure
-
-  sscs-ccd-callback-orchestrator:
-    image: "hmcts/sscs-ccd-callback-orchestrator:${SSCS_CCD_CALLBACK_ORCHESTRATOR_TAG:-latest}"
-    ports:
-      - 8070:8070
-
   ccd-user-profile-api:
-    image: "${CCD_USER_PROFILE_API_USE_LOCAL-hmcts.azurecr.io/}hmcts/ccd-user-profile-api:${CCD_USER_PROFILE_API_TAG:-latest}"
+    image: "${CCD_USER_PROFILE_API_USE_LOCAL-hmctspublic.azurecr.io/}ccd/user-profile-api:${CCD_USER_PROFILE_API_TAG:-latest}"
     environment:
       USER_PROFILE_DB_HOST: ccd-shared-database
       USER_PROFILE_DB_PORT: 5432
       USER_PROFILE_DB_USERNAME: "${DB_USERNAME}"
       USER_PROFILE_DB_PASSWORD: "${DB_PASSWORD}"
       USER_PROFILE_DB_USE_SSL: "${DB_USE_SSL}"
-      USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,sscs,ccd_admin
+      USER_PROFILE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_definition,ccd_admin
       IDAM_S2S_URL: http://service-auth-provider-api:8080
       REFORM_SERVICE_NAME: ccd-user-profile-api
       REFORM_TEAM: ccd
@@ -36,7 +25,7 @@ services:
       - service-auth-provider-api
 
   ccd-definition-store-api:
-    image: "${CCD_DEFINITION_STORE_API_USE_LOCAL-hmcts.azurecr.io/}hmcts/ccd-definition-store-api:${CCD_DEFINITION_STORE_API_TAG:-latest}"
+    image: "${CCD_DEFINITION_STORE_API_USE_LOCAL-hmctspublic.azurecr.io/}ccd/definition-store-api:${CCD_DEFINITION_STORE_API_TAG:-latest}"
     environment:
       DEFINITION_STORE_DB_HOST: ccd-shared-database
       DEFINITION_STORE_DB_PORT: 5432
@@ -44,9 +33,9 @@ services:
       DEFINITION_STORE_DB_PASSWORD: "${DB_PASSWORD}"
       DEFINITION_STORE_DB_USE_SSL: "${DB_USE_SSL}"
       DEFINITION_STORE_IDAM_KEY: "${IDAM_KEY_CCD_DEFINITION_STORE}"
-      DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,sscs,ccd_admin
+      DEFINITION_STORE_S2S_AUTHORISED_SERVICES: ccd_data,ccd_gw,ccd_admin
       USER_PROFILE_HOST: http://ccd-user-profile-api:4453
-      IDAM_USER_URL: http://idam-api:8080
+      IDAM_USER_URL: http://sidam-api:5000
       IDAM_S2S_URL: http://service-auth-provider-api:8080
       REFORM_SERVICE_NAME: ccd-definition-store-api
       REFORM_TEAM: ccd
@@ -63,11 +52,11 @@ services:
     links:
       - ccd-shared-database
       - ccd-user-profile-api
-      - idam-api
+      - sidam-api
       - service-auth-provider-api
 
   ccd-data-store-api:
-    image: "${CCD_DATA_STORE_API_USE_LOCAL-hmcts.azurecr.io/}hmcts/ccd-data-store-api:${CCD_DATA_STORE_API_TAG:-latest}"
+    image: "${CCD_DATA_STORE_API_USE_LOCAL-hmctspublic.azurecr.io/}ccd/data-store-api:${CCD_DATA_STORE_API_TAG:-latest}"
     environment:
       DATA_STORE_DB_HOST: ccd-shared-database
       DATA_STORE_DB_PORT: 5432
@@ -76,10 +65,10 @@ services:
       DATA_STORE_DB_USE_SSL: "${DB_USE_SSL}"
       DATA_STORE_IDAM_KEY: "${IDAM_KEY_CCD_DATA_STORE}"
       DATA_STORE_TOKEN_SECRET: iuasbcuasdcbasdgcasdgcuysachjsacyasdgjcgasdj
-      DATA_STORE_S2S_AUTHORISED_SERVICES: ccd_gw,sscs,ccd_data,sscs_bulkscan
+      DATA_STORE_S2S_AUTHORISED_SERVICES: ccd_gw,fpl_case_service,ccd_data,ccd_ps
       DEFINITION_STORE_HOST: http://ccd-definition-store-api:4451
       USER_PROFILE_HOST: http://ccd-user-profile-api:4453
-      IDAM_USER_URL: http://idam-api:8080
+      IDAM_USER_URL: http://sidam-api:5000
       IDAM_S2S_URL: http://service-auth-provider-api:8080
       REFORM_SERVICE_NAME: ccd-data-store-api
       REFORM_TEAM: ccd
@@ -98,60 +87,25 @@ services:
       - ccd-shared-database
       - ccd-user-profile-api
       - ccd-definition-store-api
-      - idam-api
+      - sidam-api
       - service-auth-provider-api
 
-  idam-api:
-    image: hmcts.azurecr.io/hmcts/tidam-api:latest
-    healthcheck:
-      interval: 10s
-      timeout: 10s
-      retries: 10
+  sidam-api:
+    image: hmcts.azurecr.io/hmcts/sidam/idam-api:1.0.0
     environment:
-      IDAM_SUPERUSER_EMAIL:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://ccd-shared-database:5432/idam
-      SPRING_DATASOURCE_USERNAME: "${DB_USERNAME}"
-      SPRING_DATASOURCE_PASSWORD: "${DB_PASSWORD}"
-      SPRING_MAIL_HOST: smtp-server
-      IDAM_TESTING_SUPPORT_ENABLED: "true"
-      IDAM_SECRET: idam_test_secret
-      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_GATEWAY: "${OAUTH2_CLIENT_CCD_GATEWAY}"
-      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_ADMIN: "${OAUTH2_CLIENT_CCD_ADMIN}"
-      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_SSCS: QM5RQQ53LZFOSIXJ
-      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_DATA: QM5RQQ53LZFOSIXJ
-      IDAM_CCD_WHITELIST: http://localhost:3451/oauth2redirect
-      IDAM_CCD_ADMIN_WHITELIST: https://localhost:3100/oauth2redirect
-      IDAM_SSCS_WHITELIST: https://localhost:3000/authenticated
-      NOTIFY: "false"
-      NOTIFY_API_KEY: ${NOTIFICATION_API_KEY}
-      NOTIFY_SSCS_ACTIVATE_USER_TEMPLATE: f4120f4e-cbd2-45bb-b520-e480ce80a5f4
-      NOTIFY_RESET_PASSWORD_TEMPLATE: fake
-      NOTIFY_CMC_WELCOME_USER_TEMPLATE: fake
-      NOTIFY_DIVORCE_WELCOME_USER_TEMPLATE: fake
-      NOTIFY_SSCS_WELCOME_USER_TEMPLATE: fake
-      NOTIFY_CMC_ACTIVATE_USER_TEMPLATE: f4120f4e-cbd2-45bb-b520-e480ce80a5f4
-      NOTIFY_CMC_SOLICITOR_ACTIVATE_USER_TEMPLATE: f4120f4e-cbd2-45bb-b520-e480ce80a5f4
-      NOTIFY_PROBATE_ACTIVATE_USER_TEMPLATE: fake
-      NOTIFY_DIVORCE_ACTIVATE_USER_TEMPLATE: fake
-      NOTIFY_CCD_ACTIVATE_USER_TEMPLATE: fake
-      NOTIFY_BAR_ACTIVATE_USER_TEMPLATE: fake
-      NOTIFY_JUIWEBAPP_ACTIVATE_USER_TEMPLATE: fake
-      NOTIFY_FREG_ACTIVATE_USER_TEMPLATE: fake
-      NOTIFY_IDAM_ACTIVATE_USER_TEMPLATE: fake
-      REFORM_SERVICE_NAME: idam-api
-      REFORM_TEAM: idam
-      REFORM_ENVIRONMENT: local
-      http_proxy:
-      https_proxy:
-      no_proxy:
+      JAVA_OPTS: -Xms128m -Xms512m -Dlogging.level.uk.gov.hmcts=DEBUG
+      SPRING_DATASOURCE_URL: jdbc:postgresql://shared-db:5432/openidm?currentSchema=fridam
+      TESTING_SUPPORT_ENABLED: "true"
     ports:
-      - 4501:8080
+      - 5000:5000
     links:
-      - smtp-server
-      - ccd-shared-database
+      - fr-am
+      - fr-idm
+      - shared-db
     depends_on:
-      - ccd-shared-database
-      - smtp-server
+      - fr-am
+      - fr-idm
+      - shared-db
 
   service-auth-provider-api:
     image: hmcts.azurecr.io/hmcts/rpe-service-auth-provider:latest
@@ -165,19 +119,33 @@ services:
       SERVER_PORT: 8080
       JWT_KEY: wThK0f0/lh3FlxFcL4xUWDMI5C1J9KyQBgXV4wseh1e5J1uYJIjvTvArHxQDrYoHJ23xFxjHkOnvNbR5dXRoxA==
       MICROSERVICEKEYS_CCD_DATA: "${IDAM_KEY_CCD_DATA_STORE}"
-      MICROSERVICEKEYS_SSCS_BULKSCAN: "${IDAM_KEY_SSCS_BULKSCAN}"
       MICROSERVICEKEYS_CCD_GW: "${IDAM_KEY_CCD_GATEWAY}"
       MICROSERVICEKEYS_CCD_DEFINITION: "${IDAM_KEY_CCD_DEFINITION_STORE}"
       MICROSERVICEKEYS_CCD_ADMIN: "${IDAM_KEY_CCD_ADMIN}"
+      MICROSERVICEKEYS_FPL_CASE_SERVICE: "${IDAM_KEY_FPL_CASE_SERVICE}"
       TESTING_SUPPORT_ENABLED: "true"
-      MICROSERVICEKEYS_EM_GW: "${IDAM_KEY_EM_GW}"
-      MICROSERVICEKEYS_EM_STITCHING_API: "${IDAM_KEY_EM_STITCHING_API}"
-      MICROSERVICEKEYS_EM_CCD_ORCHESTRATOR: "${IDAM_KEY_EM_CCD_ORCHESTRATOR}"
+
+  fr-am:
+    image: hmcts.azurecr.io/hmcts/sidam/sidam-fr-am:1.0.0
+    ports:
+      - 8080:8080
+      - 1389:1389
+    depends_on:
+      - shared-db
+
+  fr-idm:
+    image: hmcts.azurecr.io/hmcts/sidam/sidam-fr-idm:1.0.0
+    ports:
+      - 18080:18080
+      - 9010:9010
+    environment:
+      JAVA_TOOL_OPTIONS: -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=vm-ubuntu16 -Dcom.sun.management.jmxremote.rmi.port=9010
+    depends_on:
+      - fr-am
+      - shared-db
 
   smtp-server:
     image: mailhog/mailhog
-    ports:
-      - 1025:1025
 
   ccd-shared-database:
     build: ../database
@@ -189,45 +157,28 @@ services:
       DB_USERNAME:
       DB_PASSWORD:
     ports:
-      - 5000:5432
+      - 5050:5432
     volumes:
       - ccd-docker-ccd-shared-database-data:/var/lib/postgresql/data
 
-  pdf-service-api:
-    image: hmcts.azurecr.io/hmcts/cmc-pdf-service:latest
-    environment:
-      - JAVA_OPTS=-Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
-      - S2S_URL=http://service-auth-provider-api:8080
-      - ROOT_APPENDER
-      - JSON_CONSOLE_PRETTY_PRINT
-      - ROOT_LOGGING_LEVEL
-      - REFORM_SERVICE_NAME=pdf-service
-      - REFORM_TEAM
-      - REFORM_ENVIRONMENT
-      - AZURE_APPLICATIONINSIGHTS_INSTRUMENTATIONKEY=SomeRandomValue
+  shared-db:
+    image: hmcts.azurecr.io/hmcts/sidam/sidam-idm-pg:1.0.0
     ports:
-      - 5500:5500
+      - 5051:5432
+
+  am-database:
+    image: hmcts.azurecr.io/am-db
+    container_name: access_management_db
+    environment:
+      AM_DB:
+      AM_DB_USERNAME:
+      AM_DB_PASSWORD:
     healthcheck:
-      retries: 40
-
-  rpa-em-ccd-orchestrator:
-    image: hmcts.azurecr.io/hmcts/em-ccd-orchestrator:latest
-    environment:
-      - SERVER_PORT=8060
-      - IDAM_API_BASE_URI=http://idam-api:8080
-      - S2S_BASE_URI=http://service-auth-provider-api:8080
-      - APPINSIGHTS_INSTRUMENTATIONKEY=test_app
-      - EM_STITCHING_API_URL=http://stitching-api:8080
-      # these environment variables are used by java-logging library
-      - JSON_CONSOLE_PRETTY_PRINT=false
-      - ROOT_LOGGING_LEVEL
-      - REFORM_SERVICE_TYPE=java
-      - REFORM_SERVICE_NAME=rpa-em-ccd-orchestrator
-      - REFORM_TEAM=em-ccd-orchestrator
-      - REFORM_ENVIRONMENT=docker
+      interval: 10s
+      timeout: 10s
+      retries: 10
     ports:
-      - 4623:8060
-
+      - 5600:5432
 
 volumes:
   ccd-docker-ccd-shared-database-data:
