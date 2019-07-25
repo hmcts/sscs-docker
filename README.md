@@ -86,28 +86,21 @@ You need to login to the SIDAM Web Admin with the URL and logic credentials here
 
 Navigate to Home > Manage Services > Add a new Service
 
-On the **Add Service** screen the following fields are required:
+On the **Add Service** screen the following fields are required for the following two services:
 ```
-label : <any>
-description : <any>
-client_id : sscs
+label : ccd_gateway
+description : ccd_gateway
+client_id : ccd_gateway
 client_secret : ccd_gateway_secret
 redirect_uri : http://localhost:3451/oauth2redirect
 ```
-### 2. Create ccd-import role
-After defining the above client/service, a role with "ccd-import" label must be defined under this client/service (Home > Manage Roles > select your service).
-For use in the automated functional test runs, the following roles are also needed:
 
-    * caseworker
-    * caseworker-autotest1
-    * caseworker-autotest2
+### 2. Create and Assign Roles
 
-Don't worry about the *Assignable roles* section when adding roles
+#### CCD Gateway import role
 
-Once the roles are defined under the client/service, go to the service configuration for the service you created in Step 1 (Home > Manage Services > select your service) and select `ccd-import` role radio option under **Private Beta Role** section
+Define "ccd-import" role (Home > Manage Roles > select your service).
  
-**Any business-related roles like `caseworker`,`caseworker-<jurisdiction>` etc to be used in CCD later must also be defined under the client configuration at this stage.**
-
 ### 3. Create a Default User with "ccd-import" Role
 
 A user with import role should be created using the following command:
@@ -117,7 +110,6 @@ A user with import role should be created using the following command:
 ```
 
 This call will create a user in SIDAM with ccd-import role. This user will be used to acquire a user token with "ccd-import" role.
-
 
 ### 4. Add Initial Roles
 
