@@ -34,7 +34,6 @@ Login to the Azure Container registry:
 ```bash
 ./ccd login
 ```
-For [Azure Authentication for pulling latest docker images](#azure-authentication-for-pulling-latest-docker-images)
 
 Pulling latest Docker images:
 
