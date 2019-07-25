@@ -126,9 +126,7 @@ This call will create a user in SIDAM with ccd-import role. This user will be us
 
 Before a definition can be imported, roles referenced in a case definition Authorisation tabs must be defined in CCD using:
 
-```bash
-./bin/ccd-add-role.sh <role> [classification]
-```
+    ./bin/add-sscs-ccd-roles.sh
 
 Parameters:
 - `role`: Name of the role, e.g: `caseworker-divorce`.
