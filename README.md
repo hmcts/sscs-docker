@@ -17,31 +17,7 @@
 ./bin/docker-clean.sh
 ```
 
-Checkout `sscs-docker` project:
-
-```bash
-git clone git@github.com:hmcts/sscs-docker.git
-```
-
-Get into the root of the repo:
-
-```bash
-cd sscs-docker
-```
-
-Login to the Azure Container registry:
-
-```bash
-./ccd login
-```
-
-Pulling latest Docker images:
-
-```bash
-./ccd compose pull
-```
-
-Creating and starting the containers:
+To bring up the containers, run the following from the root directory of the cloned repository:
 
 ```bash
 ./bin/compose-up.sh

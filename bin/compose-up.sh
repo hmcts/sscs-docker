@@ -1,3 +1,7 @@
+./ccd login
+
+./ccd compose pull
+
 ./ccd compose up -d
 
 while [ `./ccd compose ps | grep starting | wc -l` != "0" ]
