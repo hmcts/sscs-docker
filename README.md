@@ -25,6 +25,12 @@
 
 ## Quick start
 
+**Note** If you find yourself in a real mess, you can run the following script to clean up all docker images and containers:
+
+```bash
+./bin/docker-clean.sh
+```
+
 Checkout `ccd-docker` project:
 
 ```bash
