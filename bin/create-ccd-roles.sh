@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-roles=("ccd-import" "caseworker-sscs-clerk" "caseworker-sscs-dwpresponsewriter" "caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-panelmember")
+roles=("ccd-import" "caseworker-sscs-clerk" "caseworker-sscs-dwpresponsewriter" "caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-judge" "caseworker-sscs-panelmember" "caseworker-sscs-bulkscan" "caseworker-sscs-superuser" "caseworker-sscs-registrar" "caseworker-sscs-teamleader")
 
 TRY_AGAIN_SECONDS=15
 ATTEMPTS=0
