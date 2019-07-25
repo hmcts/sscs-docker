@@ -50,6 +50,13 @@ Creating and starting the containers:
 ./ccd compose up -d
 ```
 
+Wait for containers to be ready:
+
+```bash
+./bin/wait-for-containers-to-be-ready.sh
+```
+
+
 Usage and commands available:
 
 ```bash
@@ -261,7 +268,6 @@ In both cases, like with the `set` command, for the reset to be effective it req
 ```bash
 ./ccd compose up -d
 ```
-
 ### Current branches
 
 To know which branches are currently used, the `status` command can be used:
@@ -326,6 +332,11 @@ These are enabled by default for SSCS:
 * rpa-em-ccd-orchestrator
 * sscs-bulk-scan
 * sscs-ccd-callback-orchestrator
+
+These are disabled by default for SSCS:
+
+* sscs-tribunals-case-api
+* stitching-api
 
 You can see, and modify these in the .tags.env file if you prefer that to using the ./ccd enable and disable commands.
 
