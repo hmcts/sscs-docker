@@ -69,19 +69,10 @@ Environment variables for CCD Data Store API and CCD Definition Store API can be
 
     ./bin/set-environment-variables.sh
 
-#### Mac
+#### Mac or Linux
 
     source ./bin/set-environment-variables.sh
     
-To persist the environment variables in Mac, copy the contents of `env_variables_all.txt` file into ~/.bash_profile.
-A prefix 'export' will be required for each of environment variable.
-
-#### Linux 
-
-Add the vars to ~/.bashrc, each one preceeded with an export statement. Start a new terminal session, or run
-
-    source ~/.bashrc
-
 ## Using CCD
 
 Once the containers are running, CCD's frontend can be accessed at [http://localhost:3451](http://localhost:3451).
@@ -99,7 +90,7 @@ On the **Add Service** screen the following fields are required:
 ```
 label : <any>
 description : <any>
-client_id : ccd_gateway
+client_id : sscs
 client_secret : ccd_gateway_secret
 redirect_uri : http://localhost:3451/oauth2redirect
 ```
