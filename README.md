@@ -23,7 +23,7 @@ Checkout `sscs-docker` project:
 git clone git@github.com:hmcts/sscs-docker.git
 ```
 
-Get into the root of the repor:
+Get into the root of the repo:
 
 ```bash
 ccd sscs-docker
@@ -45,12 +45,6 @@ Creating and starting the containers:
 
 ```bash
 ./bin/compose-up.sh
-```
-
-Usage and commands available:
-
-```bash
-./ccd
 ```
 
 ## Setting up environment variables
