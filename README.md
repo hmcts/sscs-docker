@@ -59,12 +59,22 @@ Usage and commands available:
 ## Setting up environment variables
 Environment variables for CCD Data Store API and CCD Definition Store API can be done by executing the following script.
 
-Windows : `./bin/set-environment-variables.sh`
+#### Windows
 
-Mac : `source ./bin/set-environment-variables.sh`
+    ./bin/set-environment-variables.sh
 
+#### Mac
+
+    source ./bin/set-environment-variables.sh
+    
 To persist the environment variables in Mac, copy the contents of `env_variables_all.txt` file into ~/.bash_profile.
 A prefix 'export' will be required for each of environment variable.
+
+#### Linux 
+
+Add the vars to ~/.bashrc, each one preceeded with an export statement. Start a new terminal session, or run
+
+    source ~/.bashrc
 
 ## Using CCD
 
