@@ -37,6 +37,8 @@ for i in "${roles[@]}"; do
 done
 rolesJson="${rolesJson}]"
 
+echo "Creating caseworker $email"
+
 curl -XPOST \
   http://localhost:5000/testing-support/accounts \
   -H "Content-Type: application/json" \

@@ -22,20 +22,6 @@ To bring up the containers, run the following from the root directory of the clo
 ```bash
 ./bin/compose-up.sh
 ```
-
-## Setting up environment variables
-Environment variables for CCD Data Store API and CCD Definition Store API can be done by executing the following script.
-
-#### Mac or Linux
-
-    source ./bin/set-environment-variables.sh
-    
-#### Windows
-
-***Note*** This command may appear to work on a Mac/Linux machine, but it won't set the env vars in the current shell, so please use
-the above "source" command for Mac and Linux.
-
-    ./bin/set-environment-variables.sh
     
 ## Using CCD
 
@@ -79,20 +65,9 @@ Then run the following command:
 
 **Note:** For CCD to work, the definition must contain the caseworker's email address created at step 2.
 
-If the import fails with an error of the form:
-
-```
-Validation errors occurred importing the spreadsheet.
-
-- Invalid IdamRole 'caseworker-cmc-loa1' in AuthorisationCaseField tab, case type 'MoneyClaimCase', case field 'submitterId', crud 'CRUD'
-```
-
-Then the indicated role, here `caseworker-cmc-loa1`, must be added to CCD (See [2. Add roles](#2-add-roles)).
-
 ### Ready for take-off 🛫
 
-Back to [http://localhost:3451](http://localhost:3451), you can now log in with the email and password defined at [step 1](#1-create-a-caseworker-user).
-If you left the password out when creating the caseworker, by default it's set to: `Pa55word11`.
+Back to [http://localhost:3451](http://localhost:3451), you can now log in using your email and password `Pa55word11`.
 
 ## Enabling and Disabling Services
 

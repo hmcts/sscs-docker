@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./bin/set-environment-variables.sh
+
 echo -n "Enter your HMCTS email address: "
 read EMAIL
 

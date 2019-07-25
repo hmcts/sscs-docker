@@ -1,3 +1,7 @@
+#!/bin/bash
+
+source ./bin/set-environment-variables.sh
+
 ./ccd login
 
 ./ccd compose pull
