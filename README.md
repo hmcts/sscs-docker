@@ -1,4 +1,4 @@
-# CCD Docker :whale:
+# CCD/SSCS Docker :whale:
 
 ## Prerequisites
 
