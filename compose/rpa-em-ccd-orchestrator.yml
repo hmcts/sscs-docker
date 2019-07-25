@@ -6,7 +6,7 @@ services:
     image: hmcts.azurecr.io/hmcts/em-ccd-orchestrator:latest
     environment:
       - SERVER_PORT=8060
-      - IDAM_API_BASE_URI=http://idam-api:8080
+      - IDAM_API_BASE_URI=http://sidam-api:8080
       - S2S_BASE_URI=http://service-auth-provider-api:8080
       - APPINSIGHTS_INSTRUMENTATIONKEY=test_app
       - EM_STITCHING_API_URL=http://stitching-api:8080
