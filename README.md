@@ -65,7 +65,7 @@ the above "source" command for Mac and Linux.
 
 Once the containers are running, CCD's frontend can be accessed at [http://localhost:3451](http://localhost:3451).
 
-However, seven more steps are required to correctly configure SIDAM and CCD before it can be used for SSCS services.
+However, some more steps are required to correctly configure SIDAM and CCD before it can be used for SSCS services.
 
 ### 1. Configure Oauth2 Client of CCD Gateway on SIDAM
 
