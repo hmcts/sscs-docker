@@ -35,7 +35,7 @@ az login
 ./bin/create-idam-service-and-role.sh
 ./bin/create-ccd-roles.sh
 ./bin/ccd-add-role.sh "caseworker-sscs-panelmember" PRIVATE
-./bin/idam-create-caseworker.sh caseworker-sscs-systemupdate,caseworker-sscs,caseworker-sscs-callagent $HMCTS_EMAIL_ADDRESS
+./bin/idam-create-caseworker.sh caseworker-sscs-systemupvdate,caseworker-sscs,caseworker-sscs-callagent $HMCTS_EMAIL_ADDRESS
 ./bin/idam-create-caseworker.sh citizen sscs-citizen@hmcts.net
 
 ###########################################################################

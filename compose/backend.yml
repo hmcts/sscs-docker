@@ -107,41 +107,12 @@ services:
       JAVA_OPTS: -Xms128m -Xms512m -Dlogging.level.uk.gov.hmcts=DEBUG
       SPRING_DATASOURCE_URL: jdbc:postgresql://shared-db:5432/openidm?currentSchema=fridam
       TESTING_SUPPORT_ENABLED: "true"
-      IDAM_TESTING_SUPPORT_ENABLED: "true"
-      ENDPOINTS_ENABLED: "true"
-      STRATEGIC_ADMIN_URL: http://idam-web-admin:8080
-      IDAM_SECRET: idam_test_secret
-      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_GATEWAY: "${OAUTH2_CLIENT_CCD_GATEWAY}"
-      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_ADMIN: "${OAUTH2_CLIENT_CCD_ADMIN}"
-      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_SSCS: QM5RQQ53LZFOSIXJ
-      IDAM_API_OAUTH2_CLIENT_CLIENT_SECRETS_CCD_DATA: QM5RQQ53LZFOSIXJ
-      IDAM_CCD_WHITELIST: http://localhost:3451/oauth2redirect
-      IDAM_CCD_ADMIN_WHITELIST: https://localhost:3100/oauth2redirect
-      IDAM_SSCS_WHITELIST: https://localhost:3000/authenticated
-      NOTIFY: "false"
-      NOTIFY_API_KEY: ${NOTIFICATION_API_KEY}
-      NOTIFY_SSCS_ACTIVATE_USER_TEMPLATE: f4120f4e-cbd2-45bb-b520-e480ce80a5f4
-      NOTIFY_RESET_PASSWORD_TEMPLATE: fake
-      NOTIFY_CMC_WELCOME_USER_TEMPLATE: fake
-      NOTIFY_DIVORCE_WELCOME_USER_TEMPLATE: fake
-      NOTIFY_SSCS_WELCOME_USER_TEMPLATE: fake
-      NOTIFY_CMC_ACTIVATE_USER_TEMPLATE: f4120f4e-cbd2-45bb-b520-e480ce80a5f4
-      NOTIFY_CMC_SOLICITOR_ACTIVATE_USER_TEMPLATE: f4120f4e-cbd2-45bb-b520-e480ce80a5f4
-      NOTIFY_PROBATE_ACTIVATE_USER_TEMPLATE: fake
-      NOTIFY_DIVORCE_ACTIVATE_USER_TEMPLATE: fake
-      NOTIFY_CCD_ACTIVATE_USER_TEMPLATE: fake
-      NOTIFY_BAR_ACTIVATE_USER_TEMPLATE: fake
-      NOTIFY_JUIWEBAPP_ACTIVATE_USER_TEMPLATE: fake
-      NOTIFY_FREG_ACTIVATE_USER_TEMPLATE: fake
-      NOTIFY_IDAM_ACTIVATE_USER_TEMPLATE: fake
-      REFORM_SERVICE_NAME: idam-api
-      REFORM_TEAM: idam
-      REFORM_ENVIRONMENT: local
-      http_proxy:
-      https_proxy:
-      no_proxy:
     ports:
       - 5000:5000
+    links:
+      - fr-am
+      - fr-idm
+      - shared-db
     depends_on:
       - fr-am
       - fr-idm
