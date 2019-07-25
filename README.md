@@ -26,7 +26,7 @@ git clone git@github.com:hmcts/sscs-docker.git
 Get into the root of the repo:
 
 ```bash
-ccd sscs-docker
+cd sscs-docker
 ```
 
 Login to the Azure Container registry:
