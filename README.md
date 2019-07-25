@@ -65,13 +65,16 @@ Usage and commands available:
 ## Setting up environment variables
 Environment variables for CCD Data Store API and CCD Definition Store API can be done by executing the following script.
 
-#### Windows
-
-    ./bin/set-environment-variables.sh
-
 #### Mac or Linux
 
     source ./bin/set-environment-variables.sh
+    
+#### Windows
+
+***Note*** This command may appear to work on a Mac/Linux machine, but it won't set the env vars in the current shell, so please use
+the above "source" command for Mac and Linux.
+
+    ./bin/set-environment-variables.sh
     
 ## Using CCD
 
