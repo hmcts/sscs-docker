@@ -98,83 +98,26 @@ client_secret : ccd_gateway_secret
 redirect_uri : http://localhost:3451/oauth2redirect
 ```
 
-### 2. Create and Assign Roles
-
-#### CCD Gateway import role
-
 Define "ccd-import" role (Home > Manage Roles > select your service).
  
-### 3. Create a Default User with "ccd-import" Role
+### 2. Create Users and SSCS Roles
 
-A user with import role should be created using the following command:
-
-```bash
-./bin/idam-create-caseworker.sh ccd-import ccd.docker.default@hmcts.net Pa55word11 Default CCD_Docker
-```
-
-This call will create a user in SIDAM with ccd-import role. This user will be used to acquire a user token with "ccd-import" role.
-
-### 4. Add Initial Roles
-
-Before a definition can be imported, roles referenced in a case definition Authorisation tabs must be defined in CCD using:
-
+    ./bin/idam-create-caseworker.sh ccd-import ccd.docker.default@hmcts.net Pa55word11 Default CCD_Docker
     ./bin/add-sscs-ccd-roles.sh
-
-Parameters:
-- `role`: Name of the role, e.g: `caseworker-divorce`.
-- `classification`: Optional. One of `PUBLIC`, `PRIVATE` or `RESTRICTED`. Defaults to `PUBLIC`.
-
-### 5. Add Initial Case Worker Users
-
-A caseworker user can be created in IDAM using the following command:
-    
-    ```bash
-    ./bin/idam-create-caseworker.sh <roles> <email> [password] [surname] [forename]
-    ```
-
-Parameters:
-- `roles`: a comma-separated list of roles. Roles must be existing IDAM roles for the CCD domain. Every caseworker requires at least it's coarse-grained jurisdiction role (`caseworker-<jurisdiction>`).
-- `email`: Email address used for logging in.
-- `password`: Optional. Password for logging in. Defaults to `Pa55word11`. Weak passwords that do not match the password criteria by SIDAM will cause use creation to fail, and such failure may not be expressly communicated to the user. 
-
-For SSCS, run the following commands, replacing example@hmcts.net with your HMCTS email address:
-
     ./bin/idam-create-caseworker.sh caseworker-sscs-systemupdate,caseworker-sscs,caseworker-sscs-callagent example@hmcts.net
     ./bin/idam-create-caseworker.sh citizen sscs-citizen@hmcts.net
 
-### Note:
-For running functional test cases,
-
-- A. Initial user and role creation can be done by executing the following script:
-
-```bash
-./bin/create-initial-roles-and-users.sh
-```
-
-- B. Before running CCD Data Store tests, execute the CCD Definition store test cases first so that case definitions are loaded from CCD_CNP_27.xlsx.
-
-- C. Set the TEST_URL environment variable to match the service the functional tests should executed against:
-
-          For ccd-definition-store-api functional tests the set TEST_URL=http://localhost:4451
-
-          For ccd-data-store-api functional tests set TEST_URL=http://localhost:4452
-
-#### 6. Update Notification Callbacks
+### 3. Import case definition
 
 On the CaseEvent tab of the definition spreadsheet, modify the TYA Notification callback URLs to be
 
     http://dockerhost:8081/send
+
+Then run the following command:
     
-### 7. Import case definition
-
-To reduce impact on performances, case definitions are imported via the command line rather than using CCD's dedicated UI:
-
 ```bash
 ./bin/ccd-import-definition.sh <path_to_definition>
 ```
-
-Parameters:
-- `path_to_definition`: Path to `.xlsx` file containing the case definition.
 
 **Note:** For CCD to work, the definition must contain the caseworker's email address created at [step 1](#1-create-a-caseworker-user).
 
