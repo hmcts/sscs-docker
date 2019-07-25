@@ -53,16 +53,8 @@ Pulling latest Docker images:
 Creating and starting the containers:
 
 ```bash
-./ccd compose up -d
+./bin/compose-up.sh
 ```
-
-It takes a few minutes for the containers to be in a ready-to-use state. The following script will monitor their progress
-and let you know when they are ready:
-
-```bash
-./bin/wait-for-containers-to-be-ready.sh
-```
-
 
 Usage and commands available:
 
