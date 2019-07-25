@@ -134,7 +134,7 @@ Parameters:
 
 ### 5. Add Initial Case Worker Users
 
-    A caseworker user can be created in IDAM using the following command:
+A caseworker user can be created in IDAM using the following command:
     
     ```bash
     ./bin/idam-create-caseworker.sh <roles> <email> [password] [surname] [forename]
@@ -179,6 +179,12 @@ Parameters:
 - `path_to_definition`: Path to `.xlsx` file containing the case definition.
 
 **Note:** For CCD to work, the definition must contain the caseworker's email address created at [step 1](#1-create-a-caseworker-user).
+
+#### 6.1 Update Notification Callbacks
+
+On the CaseEvent tab of the definition spreadsheet, modify the TYA Notification callback URLs to be
+
+    http://dockerhost:8081/send
 
 If the import fails with an error of the form:
 
@@ -311,6 +317,17 @@ Optional compose files will allow other projects to be enabled on demand using t
   * run docker-compose `./ccd compose up -d`
   * verify that ccd-definition-designer-api is up and running by `curl localhost:4544/health`
 
+### SSCS Optional Compose Files
+
+These are enabled by default for SSCS:
+
+* dm-store
+* pdf-service-api
+* rpa-em-ccd-orchestrator
+* sscs-bulk-scan
+* sscs-ccd-callback-orchestrator
+
+You can see, and modify these in the .tags.env file if you prefer that to using the ./ccd enable and disable commands.
 
 ## Under the hood :speedboat:
 

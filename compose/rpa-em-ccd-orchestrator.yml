@@ -1,0 +1,21 @@
+---
+version: '3'
+
+services:
+  rpa-em-ccd-orchestrator:
+    image: hmcts.azurecr.io/hmcts/em-ccd-orchestrator:latest
+    environment:
+      - SERVER_PORT=8060
+      - IDAM_API_BASE_URI=http://idam-api:8080
+      - S2S_BASE_URI=http://service-auth-provider-api:8080
+      - APPINSIGHTS_INSTRUMENTATIONKEY=test_app
+      - EM_STITCHING_API_URL=http://stitching-api:8080
+      # these environment variables are used by java-logging library
+      - JSON_CONSOLE_PRETTY_PRINT=false
+      - ROOT_LOGGING_LEVEL
+      - REFORM_SERVICE_TYPE=java
+      - REFORM_SERVICE_NAME=rpa-em-ccd-orchestrator
+      - REFORM_TEAM=em-ccd-orchestrator
+      - REFORM_ENVIRONMENT=docker
+    ports:
+      - 4623:8060

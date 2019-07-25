@@ -454,7 +454,7 @@ function ccd_enable_compose_file() {
         else
             touch $TAGS_FILE
             source $TAGS_FILE
-            sed -i '' "/CCD_ENABLED_COMPOSE_FILES/d" $TAGS_FILE
+            sed -i "/CCD_ENABLED_COMPOSE_FILES/d" $TAGS_FILE
             existing=0
             for enabled_file in $CCD_ENABLED_COMPOSE_FILES
             do
@@ -496,7 +496,7 @@ function ccd_disable() {
         do
             touch $TAGS_FILE
             source $TAGS_FILE
-            sed -i '' "/CCD_ENABLED_COMPOSE_FILES/d" $TAGS_FILE
+            sed -i "/CCD_ENABLED_COMPOSE_FILES/d" $TAGS_FILE
             existing=0
             for enabled_file in $CCD_ENABLED_COMPOSE_FILES
             do

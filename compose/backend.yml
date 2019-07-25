@@ -2,6 +2,12 @@
 version: '3'
 
 services:
+
+  dockerhost:
+    image: qoomon/docker-host
+    cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
+    restart: on-failure
+
   ccd-user-profile-api:
     image: "${CCD_USER_PROFILE_API_USE_LOCAL-hmctspublic.azurecr.io/}ccd/user-profile-api:${CCD_USER_PROFILE_API_TAG:-latest}"
     environment:
@@ -146,6 +152,9 @@ services:
 
   smtp-server:
     image: mailhog/mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025
 
   ccd-shared-database:
     build: ../database
