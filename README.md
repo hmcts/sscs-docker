@@ -59,7 +59,9 @@ Define the following role for ccd_gateway service (Home > Manage Roles > ccd_gat
 
 * ccd-import
 
-![Adding the ccd-import role](https://github.com/hmcts/sscs-docker/img/create-ccd-import-role.png "Example")
+
+
+![Adding the ccd-import role](img/create-ccd-import-role.png "Example")
 
 Define the following roles for sscs service (Home > Manage Roles > sscs):
 
