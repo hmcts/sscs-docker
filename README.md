@@ -29,6 +29,8 @@ Once the containers are running, CCD's frontend can be accessed at [http://local
 
 However, some more steps are required to correctly configure SIDAM and CCD before it can be used for SSCS services.
 
+TODO: What is the url for this? on the confluence link is it clear you need to go to the Idam Api section?
+
 ### 1. Configure Oauth2 Client of CCD Gateway on SIDAM
 
 An oauth2 client should be configured for ccd-gateway application, on SIDAM Web Admin.
@@ -44,15 +46,16 @@ client_id : ccd_gateway
 client_secret : ccd_gateway_secret
 redirect_uri : http://localhost:3451/oauth2redirect
 ```
-
 Define "ccd-import" role (Home > Manage Roles > select your service).
  
 ### 2. Create Users and SSCS Roles
 
+TODO: This script doesn't seem to add the correct roles
     ./bin/create-users-and-roles.sh
 
 ### 3. Import case definition
 
+TODO: This is not correct anymore. Can be multiple callback services
 On the CaseEvent tab of the definition spreadsheet, modify the TYA Notification callback URLs to be
 
     http://dockerhost:8081/send
