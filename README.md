@@ -29,12 +29,12 @@ Once the containers are running, CCD's frontend can be accessed at [http://local
 
 However, some more steps are required to correctly configure SIDAM and CCD before it can be used for SSCS services.
 
-TODO: What is the url for this? on the confluence link is it clear you need to go to the Idam Api section?
-
 ### 1. Configure Oauth2 Client of CCD Gateway on SIDAM
 
-An oauth2 client should be configured for ccd-gateway application, on SIDAM Web Admin.
-You need to login to the SIDAM Web Admin with the URL and logic credentials here: https://tools.hmcts.net/confluence/x/eQP3P
+Login to the IDAM web admin at [http://localhost:8082/login](http://localhost:8082/login) with the following credentials:
+
+    Username: idamOwner@hmcts.net
+    Password:  Ref0rmIsFun
 
 Navigate to Home > Manage Services > Add a new Service
 
@@ -50,7 +50,6 @@ Define "ccd-import" role (Home > Manage Roles > select your service).
  
 ### 2. Create Users and SSCS Roles
 
-TODO: This script doesn't seem to add the correct roles
     ./bin/create-users-and-roles.sh
 
 ### 3. Import case definition
