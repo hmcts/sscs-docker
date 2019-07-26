@@ -70,6 +70,7 @@ Define the following roles for sscs service (Home > Manage Roles > sscs):
 * caseworker-sscs
 * caseworker-sscs-systemupdate
 * caseworker-sscs-clerk
+* caseworker
 
 ### 2. Create Users and SSCS Roles
 
