@@ -34,7 +34,7 @@ However, some more steps are required to correctly configure SIDAM and CCD befor
 Login to the IDAM web admin at [http://localhost:8082/login](http://localhost:8082/login) with the following credentials:
 
     Username: idamOwner@hmcts.net
-    Password:  Ref0rmIsFun
+    Password: Ref0rmIsFun
 
 Navigate to Home > Manage Services > Add a new Service
 
@@ -46,8 +46,27 @@ client_id : ccd_gateway
 client_secret : ccd_gateway_secret
 redirect_uri : http://localhost:3451/oauth2redirect
 ```
-Define "ccd-import" role (Home > Manage Roles > select your service).
- 
+
+```
+label : sscs
+description : sscs
+client_id : sscs
+client_secret : QM5RQQ53LZFOSIXJ
+redirect_uri : http://localhost:3000/receiver
+```
+
+Define the following role for ccd_gateway service (Home > Manage Roles > ccd_gateway):
+
+* ccd-import
+
+![Adding the ccd-import role](https://github.com/hmcts/sscs-docker/img/create-ccd-import-role.png "Example")
+
+Define the following roles for sscs service (Home > Manage Roles > sscs):
+
+* caseworker-sscs
+* caseworker-sscs-systemupdate
+* caseworker-sscs-clerk
+
 ### 2. Create Users and SSCS Roles
 
     ./bin/create-users-and-roles.sh
