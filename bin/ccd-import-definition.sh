@@ -6,6 +6,8 @@
 ## Prerequisites:
 ##  - Microservice `ccd_gw` must be authorised to call service `ccd-definition-store-api`
 
+source ./bin/set-environment-variables.sh
+
 if [ -z "$1" ]
   then
     echo "Usage: ./ccd-import-definition.sh path_to_definition"
