@@ -78,12 +78,7 @@ Define the following roles for sscs service (Home > Manage Roles > sscs):
 
 ### 3. Import case definition
 
-TODO: This is not correct anymore. Can be multiple callback services
-On the CaseEvent tab of the definition spreadsheet, modify the TYA Notification callback URLs to be
-
-    http://dockerhost:8081/send
-
-Then run the following command:
+Run the following command for your SSCS and Bulk Scan definition spreadsheets.
     
 ```bash
 ./bin/ccd-import-definition.sh <path_to_definition>
