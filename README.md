@@ -60,7 +60,7 @@ Define the following role for ccd_gateway service (Home > Manage Roles > ccd_gat
 * ccd-import
 
 
-<img src="/media/2018/08/kitten.jpg" alt="Adding the ccd-import role"
+<img src="/img/create-ccd-import-role.png" alt="Adding the ccd-import role"
 	title="Adding the ccd-import role" width="200" style="width:200px; border:1px solid" />
 
 Define the following roles for sscs service (Home > Manage Roles > sscs):
