@@ -52,7 +52,7 @@ label : sscs
 description : sscs
 client_id : sscs
 client_secret : QM5RQQ53LZFOSIXJ
-redirect_uri : http://localhost:3000/receiver
+redirect_uri : http://localhost:3000/authenticated
 ```
 
 Define the following role for ccd_gateway service (Home > Manage Roles > ccd_gateway):
