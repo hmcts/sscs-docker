@@ -31,6 +31,9 @@ However, some more steps are required to correctly configure SIDAM and CCD befor
 
 ### 1. Configure Oauth2 Client of CCD Gateway on SIDAM
 
+***Note*** There is a Selenium script in the ***tools*** folder which can be run on a Selenium client such as [Qualys Browser Recorder](https://chrome.google.com/webstore/detail/qualys-browser-recorder/abnnemjpaacaimkkepphpkaiomnafldi).
+Using that script will perform all the actions in this section. We hope to automate automate this via the command line in a future update.
+ 
 Login to the IDAM web admin at [http://localhost:8082/login](http://localhost:8082/login) with the following credentials:
 
     Username: idamOwner@hmcts.net
@@ -52,7 +55,7 @@ label : sscs
 description : sscs
 client_id : sscs
 client_secret : QM5RQQ53LZFOSIXJ
-redirect_uri : http://localhost:3000/authenticated
+redirect_uri : https://localhost:3000/authenticated
 ```
 
 Define the following role for ccd_gateway service (Home > Manage Roles > ccd_gateway):
@@ -71,6 +74,15 @@ Define the following roles for sscs service (Home > Manage Roles > sscs):
 * caseworker-sscs-systemupdate
 * caseworker-sscs-clerk
 * caseworker
+* caseworker-sscs-anonymouscitizen
+* caseworker-sscs-callagent
+* caseworker-sscs-judge
+* caseworker-sscs-dwpresponsewriter
+* caseworker-sscs-registrar
+* caseworker-sscs-superuser
+* caseworker-sscs-panelmember
+* caseworker-sscs-bulkscan
+
 
 ### 2. Create Users and SSCS Roles
 
