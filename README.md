@@ -11,7 +11,7 @@
 
 ## Before you start
 
-In order to authenticate successfully with the local SIDAM, I needed to change the SYSTEM_UPDATE_USER and password in the sscs-tribunals-case-api local defaults to be:
+In order to authenticate successfully with the local SIDAM, I needed to change the oauth2 username and password from in the sscs-tribunals-case-api local defaults from SSCS_SYSTEM_UPDATE to:
 
     idam.oauth2.user.email=christopher.moreton@hmcts.net
     idam.oauth2.user.password=Pa55word11
