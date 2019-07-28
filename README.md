@@ -9,6 +9,16 @@
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) - minimum version 2.0.57 
 - [jq Json Processor] (https://stedolan.github.io/jq)
 
+## Before you start
+
+In order to authenticate successfully with the local SIDAM, I needed to change the SYSTEM_UPDATE_USER and password in the sscs-tribunals-case-api local defaults to be:
+
+    idam.oauth2.user.email=christopher.moreton@hmcts.net
+    idam.oauth2.user.password=Pa55word11
+    
+You will need to do the same for your email address. I think a better solution here is to add a system update user email address to the CCD definition
+so that we use the committed defaults in the application.properties file.
+
 ## Quick start
 
 **Note** If you find yourself in a real mess, you can run the following script to clean up all docker images and containers:
@@ -31,8 +41,8 @@ However, some more steps are required to correctly configure SIDAM and CCD befor
 
 ### 1. Configure Oauth2 Client of CCD Gateway on SIDAM
 
-***Note*** There is a Selenium script in the ***tools*** folder which can be run on a Selenium client such as [Qualys Browser Recorder](https://chrome.google.com/webstore/detail/qualys-browser-recorder/abnnemjpaacaimkkepphpkaiomnafldi).
-Using that script will perform all the actions in this section. We hope to automate automate this via the command line in a future update.
+***Note*** If you're feeling ambitious, there is a Selenium script in the ***tools*** folder which can be run on a Selenium client such as [Qualys Browser Recorder](https://chrome.google.com/webstore/detail/qualys-browser-recorder/abnnemjpaacaimkkepphpkaiomnafldi).
+Using that script will perform all the actions in this section. This should be updated to run on from the command line using Selenium RC in a future update.
  
 Login to the IDAM web admin at [http://localhost:8082/login](http://localhost:8082/login) with the following credentials:
 
