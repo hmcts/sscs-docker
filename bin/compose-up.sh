@@ -77,7 +77,7 @@ echo "Updating CCD defintion with local callback URLs"
 
 cd tools/ReplaceCallbackUrls
 echo "Changed directory to $(pwd)"
-./run.sh
+#./gradlew run
 cd -
 echo "Changed directory to $(pwd)"
 
