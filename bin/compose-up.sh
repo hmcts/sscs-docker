@@ -16,6 +16,13 @@ command -v docker-compose >/dev/null 2>&1 || {
     exit 1
 }
 
+command -v jq >/dev/null 2>&1 || {
+    echo "=========================================================================================="
+    echo >&2 "Please install jq - instructions in README.md"
+    echo "=========================================================================================="
+    exit 1
+}
+
 if [ ! -f $CCD_CASE_DEFINITION_XLS ]; then
   echo "=========================================================================================="
   echo "CCD definition not found - please check your .env file"
@@ -64,8 +71,8 @@ bin/create-users-and-roles.sh
 
 echo "Importing CCD definition..."
 
-./bin/ccd-import-definition.sh $SSCS_CCD_DEFINITION_XLS
+./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION_XLS
 
 echo "Importing CCD Bulk Scan definition..."
 
-./bin/ccd-import-definition.sh $SSCS_CCD_BULK_SCAN_DEFINITION_XLS
+./bin/ccd-import-definition.sh $CCD_BULK_SCAN_CASE_DEFINITION_XLS
