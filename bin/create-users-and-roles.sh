@@ -1,6 +1,7 @@
 #!/bin/bash
 
 source ./bin/set-environment-variables.sh
+source .env
 
 ./bin/idam-create-caseworker.sh ccd-import ccd.docker.default@hmcts.net Pa55word11 Default CCD_Docker
 ./bin/add-sscs-ccd-roles.sh
