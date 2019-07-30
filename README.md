@@ -43,7 +43,7 @@ If all went well, the above script will have performed the following tasks:
 * Pulled the latest docker images
 * Bring up the docker containers using docker-compose
 * Created the SIDAM services and roles using a Selenium script against SIDAM admin frontend.
-* Create the import user and the caseworker user specified in the .env file
+* Created the import user and the caseworker user specified in the .env file
 * Imported the CCD defintions specified in the .env file
 
 You can now visit [http://localhost:3451](http://localhost:3451), you can now log in using the email address defined in the .env file (HMCTS_EMAIL_ADDRESS) along with the password `Pa55word11`.
