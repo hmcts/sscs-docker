@@ -35,17 +35,7 @@ To bring up the containers, run the following from the root directory of the clo
 
 ### Ready for take-off 🛫
 
-Back to [http://localhost:3451](http://localhost:3451), you can now log in using your email and password `Pa55word11`.
-
-## Enabling and Disabling Services
-
-You can enable and disable containers using a command such as:
-
-```bash
-./ccd enable sscs-tribunals-case-api
-```
-
-You can see, and modify these in the .tags.env file if you prefer that to using the ./ccd enable and disable commands.
+Back to [http://localhost:3451](http://localhost:3451), you can now log in using the email address defined in the .env file (HMCTS_EMAIL_ADDRESS) along with the password `Pa55word11`.
 
 ## LICENSE
 
