@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+mainClassName = 'ReplaceCallbackUrls'
+
+repositories {
+
+    maven {
+        url "https://dl.bintray.com/hmcts/hmcts-maven"
+    }
+
+    jcenter()
+    mavenCentral()
+
+    // jitpack should be last resort
+    // see: https://github.com/jitpack/jitpack.io/issues/1939
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    compile group: 'org.apache.poi', name: 'poi', version: '4.1.0'
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.0'
+}
