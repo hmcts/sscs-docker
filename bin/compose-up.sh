@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 source .env
 
 command -v az >/dev/null 2>&1 || {
