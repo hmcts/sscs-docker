@@ -11,11 +11,24 @@
 
 ## Quick start
 
-**Note** If you find yourself in a real mess, you can run the following script to clean up all docker images and containers:
+### Bringing down an existing setup
+
+#### 1. The Regular Way
+
+```bash
+./ccd compose down
+```
+
+#### 2. The Brute Force Option
+
+If you find yourself in a bit of a mess, you may want to destroy all your containers and images with the following command. This will make bringing it all up again
+slower as it will need to download the images again.
 
 ```bash
 ./bin/docker-clean.sh
 ```
+
+### Bringing it up
 
 To bring up the containers, run the following from the root directory of the cloned repository:
 
