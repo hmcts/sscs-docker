@@ -17,8 +17,17 @@ done
 echo
 echo "Everything looks ready."
 
-#docker cp tools/sscs-sidam.sql compose_shared-db_1:/sscs-sidam.sql
-#docker exec -ti compose_shared-db_1 psql -U openidm -d openidm -c "\i /sscs-sidam.sql"
+echo "Creating SIDAM services and roles. This will take around a minute..."
 
-#docker cp tools/test_createccdgatewayandsscsservices.py compose_selenium_1:/test_createccdgatewayandsscsservices.py
-#docker exec -t -i compose_selenium_1 python /test_createccdgatewayandsscsservices.py
+npm install -g selenium-side-runner
+
+cd tools
+selenium-side-runner SSCS_SIDAM.side
+cd ..
+
+echo "Creating CCD users and roles..."
+
+bin/create-users-and-roles.sh
+
+
+

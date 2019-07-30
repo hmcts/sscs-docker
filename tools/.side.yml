@@ -1,0 +1,4 @@
+capabilities:
+  browserName: "chrome"
+baseUrl: "http://dockerhost:8082"
+server: "http://localhost:4444/wd/hub"
