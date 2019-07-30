@@ -25,14 +25,18 @@ command -v jq >/dev/null 2>&1 || {
 
 if [ ! -f $CCD_CASE_DEFINITION_XLS ]; then
   echo "=========================================================================================="
-  echo "CCD definition not found - please check your .env file"
+  echo "CCD definition not found."
+  echo "Please check the CCD_CASE_DEFINITION_XLS value in  your .env file"
+  echo "Location is currently set to $CCD_CASE_DEFINITION_XLS"
   echo "=========================================================================================="
   exit
 fi
 
 if [ ! -f $CCD_BULK_SCAN_CASE_DEFINITION_XLS ]; then
   echo "=========================================================================================="
-  echo "CCD Bulk Scan definition not found - please check your .env file"
+  echo "CCD Bulk Scan definition not found."
+  echo "Please check the CCD_BULK_SCAN_CASE_DEFINITION_XLS value in  your .env file"
+  echo "Location is currently set to $CCD_BULK_SCAN_CASE_DEFINITION_XLS"
   echo "=========================================================================================="
   exit
 fi
