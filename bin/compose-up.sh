@@ -84,6 +84,7 @@ cd tools/ReplaceCallbackUrls
 echo "Changed directory to $(pwd)"
 ./gradlew run --args="$CCD_CASE_DEFINITION_XLS url-swaps.yml"
 ./gradlew run --args="$CCD_BULK_SCAN_CASE_DEFINITION_XLS url-swaps.yml"
+cd -
 
 echo "Changed directory to $(pwd)"
 
