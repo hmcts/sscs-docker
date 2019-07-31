@@ -2,12 +2,18 @@
 
 ## Prerequisites
 
-- [Docker](https://www.docker.com)
-
-*Memory and CPU allocations may need to be increased for successful execution of ccd applications altogether. (On Preferences / Advanced)*
-
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) - minimum version 2.0.57 
 - [jq Json Processor] (https://stedolan.github.io/jq)
+- [Docker](https://www.docker.com)
+
+You can increase the memory available to Docker from the Preferences|Advanced options on your Docker installation.
+
+Tested on
+
+| Operating System | Processor | RAM | Allocated to Docker  | 
+|---|---|---|---|
+| OSX | 2.6Ghz i7  | 16g | 8g |
+| Ubuntu  | i7-8750H | 32g | 32g |
 
 ## Quick start
 
