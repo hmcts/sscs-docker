@@ -1,41 +1,25 @@
-package uk.gov.hmcts.reform.sscs.docker;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 import java.util.*;
+import java.io.*;
 
-import org.apache.poi.EncryptedDocumentException;
-import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
-/**
- * This program illustrates how to update an existing Microsoft Excel document.
- * Append new rows to an existing sheet.
- *
- * @author www.codejava.net
- *
- */
-public class ReplaceCallbackUrls {
+import org.yaml.snakeyaml.*;
+
+class ReplaceCallbackUrls {
 
     private final static String sheetName = "CaseEvent";
 
     public static void main(String[] args) throws Exception {
-
-        Map<String, String> env = System.getenv();
-        for (String envName : env.keySet()) {
-            System.out.format("%s=%s%n",
-                    envName,
-                    env.get(envName));
-        }
-
-        System.exit(0);
 
         String excelFilePath = args[0];
 
@@ -50,13 +34,35 @@ public class ReplaceCallbackUrls {
 
         int rowCount = sheet.getLastRowNum();
 
+        Yaml yaml = new Yaml();
+        InputStream yamlInputStream = new FileInputStream(new File(args[1]));
+        LinkedHashMap<String, Object> linkedHashMap = yaml.load(yamlInputStream);
+        ArrayList urls = (ArrayList)linkedHashMap.get("urls");
+
         for (int i=1; i<=rowCount; i++) {
             Row row = sheet.getRow(i);
             int cellCount = row.getLastCellNum();
             for (int j=0; j<cellCount; j++) {
                 Cell cell = row.getCell(j);
-                String value = cell.getStringCellValue();
-
+                if (cell != null) {
+                    CellType cellType = cell.getCellType();
+                    if (cellType == CellType.STRING) {
+                        String value = cell.getStringCellValue();
+                        if (value.contains("http")) {
+                            for (int k=0; k<urls.size(); k++) {
+                                LinkedHashMap<String, Object> url = (LinkedHashMap)urls.get(k);
+                                String from = (String) url.get("from");
+                                String to = (String) url.get("to");
+                                if (value.contains(from)) {
+                                    String replaced = value.replace(from, to);
+                                    System.out.println("Replacing " + value + " with " + replaced);
+                                    cell.setCellValue(replaced);
+                                }
+                            }
+                            System.out.println(value);
+                        }
+                    }
+                }
             }
         }
 

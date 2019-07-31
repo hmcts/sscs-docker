@@ -14,7 +14,7 @@ tasks.classes.enabled = false
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
-mainClassName = 'uk.gov.hmcts.reform.sscs.docker.ReplaceCallbackUrls'
+mainClassName = 'ReplaceCallbackUrls'
 
 repositories {
 
@@ -29,4 +29,5 @@ repositories {
 dependencies {
     compile group: 'org.apache.poi', name: 'poi', version: '4.1.0'
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.0'
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.21'
 }
