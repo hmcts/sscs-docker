@@ -11,8 +11,15 @@ You can increase the memory available to Docker from the Preferences|Advanced op
 
 ## Quick start
 
-***Note*** If you find yourself in a bit of a mess, you may want to destroy all your containers and images with the following command. This will make bringing it all up again
-slower as it will need to download the images again.
+***Note*** If you find yourself in a bit of a mess, you may want to destroy all your containers and images with the following command. This will make bringing it all up again slower as it will need to download the images again.
+
+First...
+
+	cp .env.example .env
+
+Then make the necessary changes at the top of the file.
+
+Then:
 
 ```bash
 ./bin/docker-clean.sh
