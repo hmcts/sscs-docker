@@ -112,6 +112,10 @@ echo "Importing CCD definition..."
 
 ./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION_XLS
 
+echo
+
 echo "Importing CCD Bulk Scan definition..."
 
 ./bin/ccd-import-definition.sh $CCD_BULK_SCAN_CASE_DEFINITION_XLS
+
+echo
