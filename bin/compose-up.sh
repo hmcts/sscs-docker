@@ -54,6 +54,11 @@ source ./bin/set-environment-variables.sh
 
 ./ccd login
 
+echo "Forcing re-creation of shared-db container to ensure SIDAM roles are cleared"
+
+./ccd compose stop shared-db
+docker rm compose_shared-db_1
+
 ./ccd compose pull
 
 ./ccd compose up -d
