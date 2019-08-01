@@ -5,22 +5,13 @@
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) - minimum version 2.0.57 
 - [jq Json Processor] (https://stedolan.github.io/jq)
 - [Docker](https://www.docker.com)
+- [Java 8](https://www.java.com)
 
 You can increase the memory available to Docker from the Preferences|Advanced options on your Docker installation. 8g is recommended.
 
 ## Quick start
 
-### Bringing down an existing setup
-
-#### 1. The Regular Way
-
-```bash
-./ccd compose down
-```
-
-#### 2. The Brute Force Option
-
-If you find yourself in a bit of a mess, you may want to destroy all your containers and images with the following command. This will make bringing it all up again
+***Note*** If you find yourself in a bit of a mess, you may want to destroy all your containers and images with the following command. This will make bringing it all up again
 slower as it will need to download the images again.
 
 ```bash

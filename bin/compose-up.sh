@@ -25,6 +25,13 @@ command -v jq >/dev/null 2>&1 || {
     exit 1
 }
 
+command -v java >/dev/null 2>&1 || {
+    echo "=========================================================================================="
+    echo >&2 "Please install java - instructions in README.md"
+    echo "=========================================================================================="
+    exit 1
+}
+
 if [ ! -f $CCD_CASE_DEFINITION_XLS ]; then
   echo "=========================================================================================="
   echo "CCD definition not found."
@@ -56,8 +63,10 @@ source ./bin/set-environment-variables.sh
 
 echo "Forcing re-creation of shared-db container to ensure SIDAM roles are cleared"
 
-./ccd compose stop shared-db
-docker rm compose_shared-db_1
+./ccd compose down
+
+docker rm compose_shared-db_1 || true
+docker rm compose_ccd-shared-database_1 || true
 
 ./ccd compose pull
 
@@ -76,12 +85,12 @@ echo "Everything looks ready."
 
 echo "Creating SIDAM services and roles. This will take around a minute..."
 
-echo "Please install the Selenium IDE browser extension, then load the tools/SSCS_SIDAM.side script against http://localhost:8082"
-echo "Press ENTER when done..."
-read
+sleep 10
+docker exec -t -i compose_selenium-runner_1 sh -c "selenium-side-runner --base-url http://dockerhost:8082 --server http://selenium-server:4444/wd/hub -c \"browserName=chrome\" /SSCS_SIDAM.side"
 
-#sleep 10
-#docker exec -t -i compose_selenium-runner_1 sh -c "selenium-side-runner --base-url http://dockerhost:8082 --server http://selenium-server:4444/wd/hub -c \"browserName=chrome\" /SSCS_SIDAM.side"
+#echo "Please install the Selenium IDE browser extension, then load the tools/SSCS_SIDAM.side script against http://localhost:8082"
+#echo "Press ENTER when done..."
+#read
 
 echo "Creating CCD users and roles..."
 
