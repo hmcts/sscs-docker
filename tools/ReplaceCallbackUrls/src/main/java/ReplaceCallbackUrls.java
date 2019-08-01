@@ -59,7 +59,6 @@ class ReplaceCallbackUrls {
                                     cell.setCellValue(replaced);
                                 }
                             }
-                            System.out.println(value);
                         }
                     }
                 }
