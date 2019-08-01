@@ -6,14 +6,7 @@
 - [jq Json Processor] (https://stedolan.github.io/jq)
 - [Docker](https://www.docker.com)
 
-You can increase the memory available to Docker from the Preferences|Advanced options on your Docker installation.
-
-Tested on
-
-| Operating System | Processor | RAM | Allocated to Docker  | 
-|---|---|---|---|
-| OSX | 2.6Ghz i7  | 16g | 8g |
-| Ubuntu  | i7-8750H | 32g | 32g |
+You can increase the memory available to Docker from the Preferences|Advanced options on your Docker installation. 8g is recommended.
 
 ## Quick start
 
