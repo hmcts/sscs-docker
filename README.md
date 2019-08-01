@@ -55,6 +55,16 @@ If all went well, the above script will have performed the following tasks:
 
 You can now visit [http://localhost:3451](http://localhost:3451), you can now log in using the email address defined in the .env file (HMCTS_EMAIL_ADDRESS) along with the password `Pa55word11`.
 
+### Optional Compose Containers
+
+Optional compose files can be found in the /compose directory. You can enable any of the optional container setups with a command such as:
+
+    ./ccd enable pdf-service-api
+    
+And then run the following command:
+
+    ./ccd compose up -d
+    
 ## LICENSE
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
