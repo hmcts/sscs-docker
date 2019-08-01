@@ -76,8 +76,12 @@ echo "Everything looks ready."
 
 echo "Creating SIDAM services and roles. This will take around a minute..."
 
-sleep 10
-docker exec -t -i compose_selenium-runner_1 sh -c "selenium-side-runner --base-url http://dockerhost:8082 --server http://selenium-server:4444/wd/hub -c \"browserName=chrome\" /SSCS_SIDAM.side"
+echo "Please install the Selenium IDE browser extension, then load the tools/SSCS_SIDAM.side script against http://localhost:8082"
+echo "Press ENTER when done..."
+read
+
+#sleep 10
+#docker exec -t -i compose_selenium-runner_1 sh -c "selenium-side-runner --base-url http://dockerhost:8082 --server http://selenium-server:4444/wd/hub -c \"browserName=chrome\" /SSCS_SIDAM.side"
 
 echo "Creating CCD users and roles..."
 

@@ -2,6 +2,7 @@
   "id": "58b1dc7b-39ed-40fa-be25-976c934f5747",
   "version": "2.0",
   "name": "SSCS_SIDAM",
+  "url": "http://localhost:8082",
   "tests": [{
     "id": "db3135cb-2d56-4295-aa18-b7c0fdb9e245",
     "name": "All Roles",
