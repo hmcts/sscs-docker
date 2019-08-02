@@ -1,0 +1,11 @@
+urls:
+- from: http://sscs-ccd-callback-orchestrator-aat.service.core-compute-aat.internal
+  to: http://dockerhost:8070
+- from: http://sscs-tribunals-api-aat.service.core-compute-aat.internal
+  to: http://dockerhost:8080
+- from: http://sscs-tya-notif-aat.service.core-compute-aat.internal
+  to: http://dockerhost:8081
+- from: http://sscs-bulk-scan-aat.service.core-compute-aat.internal
+  to: http://dockerhost:8090
+- from: http://em-ccd-orchestrator-aat.service.core-compute-aat.internal
+  to: http://dockerhost:4623

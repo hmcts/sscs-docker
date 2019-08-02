@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+tasks.distZip.enabled = false
+tasks.distTar.enabled = false
+tasks.installDist.enabled = false
+tasks.assembleDist.enabled = false
+tasks.testClasses.enabled = false
+tasks.classes.enabled = false
+
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+mainClassName = 'ReplaceCallbackUrls'
+
+repositories {
+
+    maven {
+        url "https://dl.bintray.com/hmcts/hmcts-maven"
+    }
+
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.apache.poi', name: 'poi', version: '4.1.0'
+    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.0'
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.21'
+}

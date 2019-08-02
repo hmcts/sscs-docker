@@ -6,6 +6,8 @@
 ## Prerequisites:
 ##  - Microservice `ccd_gw` must be authorised to call service `ccd-definition-store-api`
 
+source ./bin/set-environment-variables.sh
+
 if [ -z "$1" ]
   then
     echo "Usage: ./ccd-import-definition.sh path_to_definition"
@@ -18,7 +20,7 @@ fi
 
 binFolder=$(dirname "$0")
 
-userToken="$(${binFolder}/idam-user-token.sh ccd-import 1)"
+userToken="$(${binFolder}/idam-user-token.sh)"
 serviceToken="$(${binFolder}/idam-service-token.sh ccd_gw)"
 
 curl --silent \
