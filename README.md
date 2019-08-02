@@ -7,7 +7,8 @@
 - [Docker](https://www.docker.com)
 - [Java 8](https://www.java.com)
 
-You can increase the memory available to Docker from the Preferences|Advanced options on your Docker installation. 8g is recommended.
+You can increase the memory available to Docker from the Preferences|Advanced options on your Docker installation. We recommend allocating 12G. The SIDAM containers
+are quite hungry.
 
 ## Quick start
 
