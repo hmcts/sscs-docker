@@ -56,6 +56,18 @@ Optional compose files can be found in the /compose directory. You can enable an
 And then run the following command:
 
     ./ccd compose up -d
+
+### Replace Callback Urls
+
+To manually replace the callback URLs you can run this script:
+
+    ./gradlew run --args="~/defintions/CCD_SSCSDefinition_v5.1.01_AAT.xlsx url-swaps.yml"
+
+### Import Case Definition
+
+To manually import the case definition you can run this script:
+
+    ./bin/ccd-import-definition.sh ~/defintions/CCD_SSCSDefinition_v5.1.01_AAT.xlsx
     
 ## LICENSE
 
