@@ -6,15 +6,23 @@ plugins {
 tasks.distZip.enabled = false
 tasks.distTar.enabled = false
 tasks.installDist.enabled = false
-tasks.assembleDist.enabled = false
+tasks.assembleDist.enabled = true
 tasks.testClasses.enabled = false
 tasks.classes.enabled = false
-
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
 mainClassName = 'ReplaceCallbackUrls'
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': mainClassName
+        )
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
 
 repositories {
 
