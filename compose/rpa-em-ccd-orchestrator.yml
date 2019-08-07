@@ -3,7 +3,7 @@ version: '3'
 
 services:
   rpa-em-ccd-orchestrator:
-    image: hmcts.azurecr.io/hmcts/em-ccd-orchestrator:latest
+    image: hmctspublic.azurecr.io/em/ccd-orchestrator:latest
     environment:
       - SERVER_PORT=8060
       - IDAM_API_BASE_URI=http://sidam-api:8080

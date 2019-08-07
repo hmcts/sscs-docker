@@ -1,0 +1,11 @@
+urls:
+  - from: http://sscs-ccd-callback-orchestrator-aat.service.core-compute-aat.internal
+    to: http://sscs-ccd-callback-orchestrator-ithc.service.core-compute-ithc.internal
+  - from: http://sscs-tribunals-api-aat.service.core-compute-aat.internal
+    to: http://sscs-tribunals-api-ithc.service.core-compute-ithc.internal
+  - from: http://sscs-tya-notif-aat.service.core-compute-aat.internal
+    to: http://sscs-tya-notif-ithc.service.core-compute-ithc.internal
+  - from: http://sscs-bulk-scan-aat.service.core-compute-aat.internal
+    to: http://sscs-bulk-scan-ithc.service.core-compute-ithc.internal
+  - from: http://em-ccd-orchestrator-aat.service.core-compute-aat.internal
+    to: http://em-ccd-orchestrator-ithc.service.core-compute-ithc.internal

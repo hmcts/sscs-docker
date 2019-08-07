@@ -105,7 +105,7 @@ services:
       - service-auth-provider-api
 
   sidam-api:
-    image: hmcts.azurecr.io/hmcts/sidam/idam-api:1.0.0
+    image: hmctspublic.azurecr.io/idam/api:latest
     environment:
       JAVA_OPTS: -Xms128m -Xms512m -Dlogging.level.uk.gov.hmcts=DEBUG
       SPRING_DATASOURCE_URL: jdbc:postgresql://shared-db:5432/openidm?currentSchema=fridam
@@ -122,7 +122,7 @@ services:
       - shared-db
 
   service-auth-provider-api:
-    image: hmcts.azurecr.io/hmcts/rpe-service-auth-provider:latest
+    image: hmctspublic.azurecr.io/rpe/service-auth-provider:latest
     healthcheck:
       interval: 10s
       timeout: 10s
@@ -145,7 +145,9 @@ services:
       TESTING_SUPPORT_ENABLED: "true"
 
   fr-am:
-    image: hmcts.azurecr.io/hmcts/sidam/sidam-fr-am:1.0.0
+    image: hmctsprivate.azurecr.io/idam/idam-fr-am:latest
+    environment:
+      JAVA_OPTS: -Xms128m -Xmx512m
     ports:
       - 8097:8080
       - 1389:1389
@@ -153,12 +155,13 @@ services:
     - shared-db
 
   fr-idm:
-    image: hmcts.azurecr.io/hmcts/sidam/sidam-fr-idm:1.0.0
+    image: hmctsprivate.azurecr.io/idam/idam-fr-idm:latest
     ports:
       - 18080:18080
       - 9010:9010
     environment:
       JAVA_TOOL_OPTIONS: -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=vm-ubuntu16 -Dcom.sun.management.jmxremote.rmi.port=9010
+      JAVA_OPTS: -Xms128m -Xmx512m
     depends_on:
       - fr-am
       - shared-db
@@ -184,12 +187,14 @@ services:
       - ccd-docker-ccd-shared-database-data:/var/lib/postgresql/data
 
   shared-db:
-    image: hmcts.azurecr.io/hmcts/sidam/sidam-idm-pg:1.0.0
+    image: hmctsprivate.azurecr.io/idam/shared-db:latest
     ports:
       - 5051:5432
+    volumes:
+      - ccd-docker-idam-shared-database-data:/var/lib/postgresql/data      -
 
   am-database:
-    image: hmcts.azurecr.io/am-db
+    image: hmctspublic.azurecr.io/hmcts/idam/utils:db23
     container_name: access_management_db
     environment:
       AM_DB:
@@ -204,3 +209,4 @@ services:
 
 volumes:
   ccd-docker-ccd-shared-database-data:
+  ccd-docker-idam-shared-database-data:
