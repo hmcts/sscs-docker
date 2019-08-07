@@ -98,14 +98,6 @@ echo "Creating CCD users and roles..."
 
 bin/create-users-and-roles.sh
 
-echo "Updating CCD defintion with local callback URLs"
-
-cd tools/ReplaceCallbackUrls
-echo "Changed directory to $(pwd)"
-java -jar bin/ReplaceCallbackUrls.jar $CCD_CASE_DEFINITION_XLS url-swaps.yml
-java -jar bin/ReplaceCallbackUrls.jar $CCD_BULK_SCAN_CASE_DEFINITION_XLS url-swaps.yml
-cd -
-
 echo "Changed directory to $(pwd)"
 
 echo "Importing CCD definition..."
