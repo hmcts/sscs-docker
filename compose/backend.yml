@@ -105,7 +105,7 @@ services:
       - service-auth-provider-api
 
   sidam-api:
-    image: hmctspublic.azurecr.io/idam/api:pr-350
+    image: hmctspublic.azurecr.io/idam/api:latest
     environment:
       JAVA_OPTS: -Xms128m -Xms512m -Dlogging.level.uk.gov.hmcts=DEBUG
       SPRING_DATASOURCE_URL: jdbc:postgresql://shared-db:5432/openidm?currentSchema=fridam
@@ -146,6 +146,8 @@ services:
 
   fr-am:
     image: hmctsprivate.azurecr.io/idam/idam-fr-am:latest
+    environment:
+      JAVA_OPTS: -Xms128m -Xmx512m
     ports:
       - 8097:8080
       - 1389:1389
@@ -159,6 +161,7 @@ services:
       - 9010:9010
     environment:
       JAVA_TOOL_OPTIONS: -Dcom.sun.management.jmxremote.port=9010 -Dcom.sun.management.jmxremote.local.only=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.rmi.server.hostname=vm-ubuntu16 -Dcom.sun.management.jmxremote.rmi.port=9010
+      JAVA_OPTS: -Xms128m -Xmx512m
     depends_on:
       - fr-am
       - shared-db
@@ -187,20 +190,23 @@ services:
     image: hmctsprivate.azurecr.io/idam/shared-db:latest
     ports:
       - 5051:5432
+    volumes:
+      - ccd-docker-idam-shared-database-data:/var/lib/postgresql/data      -
 
-#  am-database:
-#    image: hmctsprivate.azurecr.io/idam/am-db:latest
-#    container_name: access_management_db
-#    environment:
-#      AM_DB:
-#      AM_DB_USERNAME:
-#      AM_DB_PASSWORD:
-#    healthcheck:
-#      interval: 10s
-#      timeout: 10s
-#      retries: 10
-#    ports:
-#      - 5600:5432
+  am-database:
+    image: hmctspublic.azurecr.io/hmcts/idam/utils:db23
+    container_name: access_management_db
+    environment:
+      AM_DB:
+      AM_DB_USERNAME:
+      AM_DB_PASSWORD:
+    healthcheck:
+      interval: 10s
+      timeout: 10s
+      retries: 10
+    ports:
+      - 5600:5432
 
 volumes:
   ccd-docker-ccd-shared-database-data:
+  ccd-docker-idam-shared-database-data:
