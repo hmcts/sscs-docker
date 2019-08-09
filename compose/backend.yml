@@ -96,7 +96,7 @@ services:
     depends_on:
       - ccd-shared-database
       - ccd-user-profile-api
-      - ccd-definition-store-api
+      - ccd-definition-st8080ore-api
     links:
       - ccd-shared-database
       - ccd-user-profile-api
@@ -192,20 +192,6 @@ services:
       - 5051:5432
     volumes:
       - ccd-docker-idam-shared-database-data:/var/lib/postgresql/data      -
-
-  am-database:
-    image: hmctspublic.azurecr.io/hmcts/idam/utils:db23
-    container_name: access_management_db
-    environment:
-      AM_DB:
-      AM_DB_USERNAME:
-      AM_DB_PASSWORD:
-    healthcheck:
-      interval: 10s
-      timeout: 10s
-      retries: 10
-    ports:
-      - 5600:5432
 
 volumes:
   ccd-docker-ccd-shared-database-data:
