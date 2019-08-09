@@ -96,7 +96,7 @@ services:
     depends_on:
       - ccd-shared-database
       - ccd-user-profile-api
-      - ccd-definition-st8080ore-api
+      - ccd-definition-store-api
     links:
       - ccd-shared-database
       - ccd-user-profile-api
