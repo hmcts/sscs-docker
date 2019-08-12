@@ -3,7 +3,7 @@ version: '3'
 
 services:
   sscs-tribunals-case-api:
-    image: hmcts/tribunals-case-api
+    image: hmctspublic/sscs/tribunals-case-api
     environment:
       EMAIL_SERVER_HOST: smtp-server
       EMAIL_SERVER_PORT: 1025

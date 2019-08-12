@@ -3,6 +3,6 @@ version: '3'
 
 services:
   sscs-ccd-callback-orchestrator:
-    image: "hmcts/sscs-ccd-callback-orchestrator:${SSCS_CCD_CALLBACK_ORCHESTRATOR_TAG:-latest}"
+    image: "hmctspublic/sscs/ccd-callback-orchestrator:${SSCS_CCD_CALLBACK_ORCHESTRATOR_TAG:-latest}"
     ports:
       - 8070:8070
