@@ -107,7 +107,7 @@ services:
   sidam-api:
     image: hmctspublic.azurecr.io/idam/api:latest
     environment:
-      JAVA_OPTS: -Xms128m -Xms512m -Dlogging.level.uk.gov.hmcts=DEBUG
+      JAVA_OPTS: -Xms128m -Xmx512m -Dlogging.level.uk.gov.hmcts=DEBUG
       SPRING_DATASOURCE_URL: jdbc:postgresql://shared-db:5432/openidm?currentSchema=fridam
       TESTING_SUPPORT_ENABLED: "true"
     ports:
@@ -170,7 +170,6 @@ services:
     image: mailhog/mailhog
     ports:
       - 1025:1025
-      - 8025:8025
 
   ccd-shared-database:
     build: ../database
