@@ -52,7 +52,7 @@ services:
       no_proxy:
       #      logging env vars
       ROOT_APPENDER: JSON_CONSOLE
-      JSON_CONSOLE_PRETTY_PRINT: "false"
+      JSON_CONSOLE_PRETTY_PRINT: "true"
       REFORM_SERVICE_TYPE: java
       REFORM_SERVICE_NAME: document-management-store
       REFORM_TEAM: cc
