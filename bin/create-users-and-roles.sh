@@ -8,4 +8,4 @@ source .env
 ./bin/idam-create-caseworker.sh caseworker-sscs-systemupdate,caseworker-sscs,caseworker-sscs-clerk,caseworker,caseworker-sscs-superuser $HMCTS_EMAIL_ADDRESS
 ./bin/idam-create-caseworker.sh caseworker-sscs-systemupdate,caseworker-sscs,caseworker system.update@hmcts.net
 
-./bin/idam-create-caseworker.sh citizen sscs-citizen@hmcts.net
+./bin/idam-create-caseworker.sh citizen sscs-citizen2@hmcts.net
