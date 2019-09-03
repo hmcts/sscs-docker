@@ -72,6 +72,8 @@ services:
   ccd-data-store-api:
     image: "${CCD_DATA_STORE_API_USE_LOCAL-hmctspublic.azurecr.io/}ccd/data-store-api:${CCD_DATA_STORE_API_TAG:-latest}"
     environment:
+      JAVA_OPTS: -Xms128m -Xmx512m -Dlogging.level.uk.gov.hmcts=DEBUG -Dlogging.level.org.springframework.web=DEBUG
+      CCD_DM_DOMAIN: http://dm-store:5005
       DATA_STORE_DB_HOST: ccd-shared-database
       DATA_STORE_DB_PORT: 5432
       DATA_STORE_DB_USERNAME: "${DB_USERNAME}"
