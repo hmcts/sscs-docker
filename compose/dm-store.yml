@@ -62,7 +62,6 @@ services:
       PACKAGES_PROJECT: evidence
       PACKAGES_NAME: document-management-store
       PACKAGES_VERSION: unknown
-      CASE_WORKER_ROLES: caseworker,caseworker-sscs,citizen,caseworker-sscs-systemupdate
     #      debug mode
     #    JAVA_OPTS: -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
     links:
