@@ -7,6 +7,5 @@ source .env
 ./bin/add-sscs-ccd-roles.sh
 ./bin/idam-create-caseworker.sh caseworker-sscs-systemupdate,caseworker-sscs,caseworker-sscs-clerk,caseworker,caseworker-sscs-superuser local.test@example.com
 ./bin/idam-create-caseworker.sh caseworker-sscs-systemupdate,caseworker-sscs,caseworker system.update@hmcts.net
-./bin/idam-create-caseworker.sh caseworker-sscs-systemupdate,caseworker-sscs,caseworker-sscs-clerk,caseworker,caseworker-sscs-superuser ron.smith@example.com
 
 ./bin/idam-create-caseworker.sh citizen sscs-citizen2@hmcts.net
