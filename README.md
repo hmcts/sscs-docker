@@ -43,7 +43,7 @@ If all went well, the above script will have performed the following tasks:
 * Replace the AAT callback URLS in the CCD defintions to point to local services
 * Imported the CCD defintions specified in the .env file
 
-You can now visit [http://localhost:3451](http://localhost:3451), you can now log in using
+You can now visit [http://localhost:3451](http://localhost:3451), you can log in using
  
     local.test@example.com
     Pa55word11
