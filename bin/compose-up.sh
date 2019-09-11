@@ -50,13 +50,6 @@ if [ ! -f $CCD_BULK_SCAN_CASE_DEFINITION_XLS ]; then
   exit
 fi
 
-if [ -z $HMCTS_EMAIL_ADDRESS ]; then
-  echo "=========================================================================================="
-  echo "Please add your HMCTS email address to the .env file"
-  echo "=========================================================================================="
-  exit
-fi
-
 source ./bin/set-environment-variables.sh
 
 ./ccd login
@@ -85,14 +78,9 @@ echo "Everything looks ready."
 
 echo "Creating SIDAM services and roles. This will take around a minute..."
 
-if [ $MANUAL_SIDAM_ROLE_ENTRY == "y" ]; then
-    echo "Please install the Selenium IDE browser extension, then load the tools/SSCS_SIDAM.side script against http://localhost:8082"
-    echo "Press ENTER when done..."
-    read
-else
-    sleep 10
-    docker exec -t -i compose_selenium-runner_1 sh -c "selenium-side-runner --base-url http://dockerhost:8082 --server http://selenium-server:4444/wd/hub -c \"browserName=chrome\" /SSCS_SIDAM.side"
-fi
+echo "Please install the Selenium IDE browser extension, then load the tools/SSCS_SIDAM.side script against http://localhost:8082"
+echo "Press ENTER when done..."
+read
 
 echo "Creating CCD users and roles..."
 
