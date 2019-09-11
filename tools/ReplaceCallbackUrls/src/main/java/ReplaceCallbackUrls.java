@@ -16,15 +16,37 @@ import org.yaml.snakeyaml.*;
 
 class ReplaceCallbackUrls {
 
-    private final static String sheetName = "CaseEvent";
+    private final static List<String> sheetNames = Arrays.asList("CaseEvent", "CaseEventToFields");
 
     public static void main(String[] args) throws Exception {
 
         String excelFilePath = args[0];
+        String urlsSwapFile = args[1];
 
-        FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
-        Workbook workbook = WorkbookFactory.create(inputStream);
+        try (FileInputStream inputStream = new FileInputStream(new File(excelFilePath))) {
+            Workbook workbook = WorkbookFactory.create(inputStream);
 
+            Yaml yaml = new Yaml();
+            try (InputStream yamlInputStream = new FileInputStream(new File(urlsSwapFile))) {
+                LinkedHashMap<String, Object> linkedHashMap = yaml.load(yamlInputStream);
+                ArrayList urls = (ArrayList) linkedHashMap.get("urls");
+
+
+                for (String sheetName : sheetNames) {
+                    replaceUrlsInSheetName(urls, workbook, sheetName);
+                }
+            }
+            try (FileOutputStream outputStream = new FileOutputStream(excelFilePath)) {
+                workbook.write(outputStream);
+                workbook.close();
+            }
+        }
+
+
+
+    }
+
+    private static void replaceUrlsInSheetName(ArrayList urls, Workbook workbook, String sheetName) throws Exception {
         Sheet sheet = workbook.getSheet(sheetName);
 
         if (sheet == null) {
@@ -33,23 +55,18 @@ class ReplaceCallbackUrls {
 
         int rowCount = sheet.getLastRowNum();
 
-        Yaml yaml = new Yaml();
-        InputStream yamlInputStream = new FileInputStream(new File(args[1]));
-        LinkedHashMap<String, Object> linkedHashMap = yaml.load(yamlInputStream);
-        ArrayList urls = (ArrayList)linkedHashMap.get("urls");
-
-        for (int i=1; i<=rowCount; i++) {
+        for (int i = 1; i <= rowCount; i++) {
             Row row = sheet.getRow(i);
             int cellCount = row.getLastCellNum();
-            for (int j=0; j<cellCount; j++) {
+            for (int j = 0; j < cellCount; j++) {
                 Cell cell = row.getCell(j);
                 if (cell != null) {
                     CellType cellType = cell.getCellType();
                     if (cellType == CellType.STRING) {
                         String value = cell.getStringCellValue();
                         if (value.contains("http")) {
-                            for (int k=0; k<urls.size(); k++) {
-                                LinkedHashMap<String, Object> url = (LinkedHashMap)urls.get(k);
+                            for (int k = 0; k < urls.size(); k++) {
+                                LinkedHashMap<String, Object> url = (LinkedHashMap) urls.get(k);
                                 String from = (String) url.get("from");
                                 String to = (String) url.get("to");
                                 if (value.contains(from)) {
@@ -63,14 +80,6 @@ class ReplaceCallbackUrls {
                 }
             }
         }
-
-        inputStream.close();
-
-        FileOutputStream outputStream = new FileOutputStream(excelFilePath);
-        workbook.write(outputStream);
-        workbook.close();
-        outputStream.close();
-
     }
 
 }
