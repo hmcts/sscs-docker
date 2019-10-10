@@ -104,7 +104,7 @@ services:
       JAVA_OPTS: -Xms128m -Xms512m
       SPRING_PROFILES_ACTIVE: local
       CACHING_ENABLED: "false"
-      SPRING_DATA_ELASTICSEARCH_PROPERTIES_PATH_HOME: /tmp/es
+      APPSETTING_NODE_PATH: /opt/app
       TESTING_SUPPORT_ENABLED: "true"
       IDAMHEALTHCHECK_AM_ENABLED: "false"
       IDAMHEALTHCHECK_IDM_ENABLED: "false"
@@ -127,6 +127,7 @@ services:
       IDAM_SPI_FORGEROCK_IDM_PIN_DEFAULTPASSWORD: BlaBlaBlackSh33p
     ports:
       - 5000:5000
+    tmpfs: /opt/app/es
     links:
       - fr-am
       - fr-idm
