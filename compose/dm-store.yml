@@ -24,7 +24,7 @@ services:
       MICROSERVICE_KEYS_EM_GW: "${IDAM_KEY_DM_STORE}"
 
   dm-store:
-    image: "${DM_STORE_USE_LOCAL-hmctspublic.azurecr.io/}dm/store:${DM_STORE_TAG:-demo}"
+    image: "${DM_STORE_USE_LOCAL-hmctspublic.azurecr.io/}dm/store:${DM_STORE_TAG:-latest}"
     healthcheck:
       disable: true
     environment:
@@ -61,15 +61,14 @@ services:
       PACKAGES_PROJECT: evidence
       PACKAGES_NAME: document-management-store
       PACKAGES_VERSION: unknown
+      ENABLE_DB_MIGRATE: "true"
     #      debug mode
     #    JAVA_OPTS: -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
     links:
       - ccd-shared-database
-      - sidam-api
       - service-auth-provider-api
     depends_on:
       - ccd-shared-database
-      - sidam-api
       - service-auth-provider-api
       - azure-storage-emulator-azurite
     ports:
