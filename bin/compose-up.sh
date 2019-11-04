@@ -65,12 +65,14 @@ docker rm compose_ccd-shared-database_1 || true
 
 ./ccd compose up -d
 
+./bin/document-management-store-create-blob-store-container.sh
+
 echo "Is idam-api up and running http://localhost:5000/health ??"
 echo "if you can not get it healthy then run: sudo docker restart compose_sidam-api_1"
 echo "Press ENTER when http://localhost:5000/health is UP ..."
+# shellcheck disable=SC2162
 read
 
-./bin/document-management-store-create-blob-store-container.sh
 
 while [ `./ccd compose ps | grep starting | wc -l` != "0" ]
 do
