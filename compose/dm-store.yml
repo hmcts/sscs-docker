@@ -26,8 +26,8 @@ services:
       - IDAM_API_BASE_URI=http://sidam-api:5000
       - APPINSIGHTS_INSTRUMENTATIONKEY=test-key
       - DM_STORE_APP_URL=http://dm-store:5005
-      - DOCMOSIS_ACCESS_KEY=ZDYxMTkzZTQtMGY2Mi00NDM1LWIyN2ItNGRkNzdjOTczMjAwOjQ1NTE0ODQ
-      - DOCMOSIS_TEMPLATES_ENDPOINT_AUTH=ZGV2ZWxvcGVyczpPbUp4REJPbDJEMTJoNzdKbDd3cExFb041aUVrWEw
+      - DOCMOSIS_ACCESS_KEY=
+      - DOCMOSIS_TEMPLATES_ENDPOINT_AUTH=
     links:
       - service-auth-provider-api
     depends_on:
