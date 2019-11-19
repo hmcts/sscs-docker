@@ -26,6 +26,7 @@ services:
       - IDAM_API_BASE_URI=http://sidam-api:5000
       - APPINSIGHTS_INSTRUMENTATIONKEY=test-key
       - DM_STORE_APP_URL=http://dm-store:5005
+      # You need to add the below two keys for this service to work on docker locally
       - DOCMOSIS_ACCESS_KEY=
       - DOCMOSIS_TEMPLATES_ENDPOINT_AUTH=
     links:
