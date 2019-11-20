@@ -9,10 +9,6 @@ services:
     depends_on:
       - ccd-definition-designer-api
 
-  service-auth-provider-api:
-    environment:
-      MICROSERVICE_KEYS_DEFINITION_DESIGNER: "${IDAM_KEY_CCD_DEFINITION_DESIGNER}"
-
   ccd-definition-designer-api:
     image: "${CCD_DEFINITION_DESIGNER_API_USE_LOCAL-hmcts.azurecr.io/}hmcts/ccd-definition-designer-api:${CCD_DEFINITION_DESIGNER_API_TAG:-latest}"
     command: --wait-for-database 30

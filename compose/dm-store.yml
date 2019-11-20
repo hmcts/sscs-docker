@@ -19,9 +19,22 @@ services:
     environment:
       CCD_DM_DOMAIN: http://dm-store:5005
 
-  service-auth-provider-api:
+  rpa-dg-docassembly-api:
+    image: hmctspublic.azurecr.io/dg/docassembly:latest
     environment:
-      MICROSERVICE_KEYS_EM_GW: "${IDAM_KEY_DM_STORE}"
+      - S2S_BASE_URI=http://service-auth-provider-api:8080
+      - IDAM_API_BASE_URI=http://sidam-api:5000
+      - APPINSIGHTS_INSTRUMENTATIONKEY=test-key
+      - DM_STORE_APP_URL=http://dm-store:5005
+      # You need to add the below two keys for this service to work on docker locally
+      - DOCMOSIS_ACCESS_KEY=
+      - DOCMOSIS_TEMPLATES_ENDPOINT_AUTH=
+    links:
+      - service-auth-provider-api
+    depends_on:
+      - service-auth-provider-api
+    ports:
+      - 4631:8080
 
   dm-store:
     image: "${DM_STORE_USE_LOCAL-hmctspublic.azurecr.io/}dm/store:${DM_STORE_TAG:-latest}"
@@ -46,7 +59,7 @@ services:
       LOGGING_LEVEL_UK_GOV_HMCTS_IDAM: DEBUG
       IDAM_USER_BASE_URI: http://sidam-api:5000
       IDAM_S2S_BASE_URI: http://service-auth-provider-api:8080
-      S2S_NAMES_WHITELIST: sscs,divorce,em_gw,em_ccd_orchestrator,ccd,document-management-store,ccd_gw,idam-api,fpl_case_service,em_stitching_api,sscs_bulkscan,ccd_data
+      S2S_NAMES_WHITELIST: sscs,divorce,em_gw,em_ccd_orchestrator,ccd,document-management-store,ccd_gw,idam-api,fpl_case_service,em_stitching_api,sscs_bulkscan,ccd_data,dg_docassembly_api
       http_proxy:
       https_proxy:
       no_proxy:
