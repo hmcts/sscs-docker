@@ -16,7 +16,7 @@ services:
       - IDAM_API_BASE_URI=http://sidam-api:5000
       - ENABLE_LIQUIBASE=true
       - APPINSIGHTS_INSTRUMENTATIONKEY=test-key
-      - DM_STORE_APP_URL=http://dm-store:8080
+      - DM_STORE_APP_URL=http://dm-store:5005
       - DOCMOSIS_ACCESS_KEY=${DOCMOSIS_ACCESS_KEY}
       - S2S_NAMES_WHITELIST:jui_webapp,em_ccd_orchestrator,em_gw,sscs
     depends_on:
@@ -35,3 +35,5 @@ services:
       - POSTGRES_DB=emstitch
       - POSTGRES_USER=emstitch
       - POSTGRES_PASSWORD=emstitch
+    ports:
+      - 5678:5432
