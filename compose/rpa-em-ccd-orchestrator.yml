@@ -6,6 +6,7 @@ services:
     image: hmctspublic.azurecr.io/em/ccdorc:latest
     environment:
       - SERVER_PORT=8060
+      - CALLBACK_DOMAIN=rpa-em-ccd-orchestrator
       - IDAM_API_BASE_URI=http://sidam-api:5000
       - S2S_BASE_URI=http://service-auth-provider-api:8080
       - APPINSIGHTS_INSTRUMENTATIONKEY=test_app
