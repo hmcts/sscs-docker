@@ -17,6 +17,7 @@ services:
       - ENABLE_LIQUIBASE=true
       - APPINSIGHTS_INSTRUMENTATIONKEY=test-key
       - DM_STORE_APP_URL=http://dm-store:5005
+      - DOCMOSIS_ACCESS_KEY=${DOCMOSIS_ACCESS_KEY}
       - S2S_NAMES_WHITELIST:jui_webapp,em_ccd_orchestrator,em_gw,sscs
     depends_on:
       - stitching-db
