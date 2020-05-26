@@ -502,6 +502,46 @@
       ],
       "value": ""
     }, {
+      "id": "c4d7aecc-b3ad-4e18-8bda-1af395849318",
+      "comment": "",
+      "command": "click",
+      "target": "id=newRedirectUri",
+      "targets": [
+        ["id=newRedirectUri", "id"],
+        ["css=#newRedirectUri", "css:finder"],
+        ["xpath=//input[@id='newRedirectUri']", "xpath:attributes"],
+        ["xpath=//form[@id='servicesCommand']/div[6]/input", "xpath:idRelative"],
+        ["xpath=//div[6]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "368306f9-6615-4149-be2c-464bf23a116g",
+      "comment": "",
+      "command": "type",
+      "target": "id=newRedirectUri",
+      "targets": [
+        ["id=newRedirectUri", "id"],
+        ["css=#newRedirectUri", "css:finder"],
+        ["xpath=//input[@id='newRedirectUri']", "xpath:attributes"],
+        ["xpath=//form[@id='servicesCommand']/div[6]/input", "xpath:idRelative"],
+        ["xpath=//div[6]/input", "xpath:position"]
+      ],
+      "value": "https://localhost:3000/sign-in"
+    }, {
+      "id": "61d23a40-844c-4c5f-8eb1-c729710d7916",
+      "comment": "",
+      "command": "click",
+      "target": "id=newRedirectUriButton",
+      "targets": [
+        ["id=newRedirectUriButton", "id"],
+        ["css=#newRedirectUriButton", "css:finder"],
+        ["xpath=//button[@id='newRedirectUriButton']", "xpath:attributes"],
+        ["xpath=//form[@id='servicesCommand']/div[6]/button", "xpath:idRelative"],
+        ["xpath=//div[6]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Add URI')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
       "id": "fe707c5d-cef2-427a-aedf-062ced2b0713",
       "comment": "",
       "command": "mouseOver",
@@ -527,6 +567,17 @@
         ["xpath=//form[@id='servicesCommand']/div[6]/button", "xpath:idRelative"],
         ["xpath=//div[6]/button", "xpath:position"],
         ["xpath=//button[contains(.,'Add URI')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "f71c5f4c-375b-4ef1-937f-9c8746d4176d",
+      "comment": "",
+      "command": "click",
+      "target": "css=#tickbox > label",
+      "targets": [
+        ["css=#tickbox > label", "css:finder"],
+        ["xpath=//div[@id='tickbox']/label", "xpath:idRelative"],
+        ["xpath=//div[9]/div/label", "xpath:position"]
       ],
       "value": ""
     }, {
