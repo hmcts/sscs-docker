@@ -526,7 +526,7 @@
         ["xpath=//form[@id='servicesCommand']/div[6]/input", "xpath:idRelative"],
         ["xpath=//div[6]/input", "xpath:position"]
       ],
-      "value": "https://localhost:3000/sign-in"
+      "value": "http://localhost:3000/sign-in"
     }, {
       "id": "61d23a40-844c-4c5f-8eb1-c729710d7916",
       "comment": "",
