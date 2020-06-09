@@ -83,9 +83,9 @@ echo "Everything looks ready."
 
 echo "Creating SIDAM services and roles. This will take around a minute..."
 
-echo "Please install the Selenium IDE browser extension, then load the tools/SSCS_SIDAM.side script against http://localhost:8082"
-echo "Press ENTER when done..."
-read
+echo "Creating Service Clients..."
+
+bin/idam-client-setup.sh
 
 echo "Creating CCD users and roles..."
 
