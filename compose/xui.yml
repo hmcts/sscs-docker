@@ -1,0 +1,46 @@
+---
+version: '3'
+
+services:
+  xui:
+    image: "hmctspublic.azurecr.io/xui/webapp:latest"
+    environment:
+      MICROSERVICE: sscs
+      PROTOCOL: http
+      XUI_ENV: local
+
+      SERVICES_CCD_COMPONENT_API: http://ccd-api-gateway:3453
+      SERVICES_CCD_DATA_STORE_API: http://localhost:4452
+      SERVICES_DOCUMENTS_API: http://dm-store:5005
+      SERVICES_S2S: http://service-auth-provider-api:8080
+      SERVICES_IDAM_LOGIN_URL: http://localhost:3501
+      SERVICES_IDAM_API_URL: http://sidam-api:5000
+      SERVICES_IDAM_OAUTH_CALLBACK_URL: /oauth2/callback
+      SERVICES_IDAM_ISS_URL: http://sidam-api:5000
+      SERVICES_IDAM_CLIENT_ID: ccd_gateway
+      REDISCLOUD_URL: http://dummyrediscloudurl
+
+      SERVICES_EM_ANNO_API: http://localhost:3453
+
+      FEATURE_REDIS_ENABLED: "false"
+      FEATURE_APP_INSIGHTS_ENABLED: "false"
+      FEATURE_SECURE_COOKIE_ENABLED: "false"
+      APPINSIGHTS_INSTRUMENTATIONKEY: fake
+      DEBUG: xuiNode:*,-xuiNode:auth:s2s
+
+      S2S_SECRET:  "${IDAM_KEY_XUI_WEBAPP}"
+      IDAM_SECRET: "${OAUTH2_CLIENT_XUI}"
+
+      JURISDICTIONS: SSCS
+
+    ports:
+      - 3002:3000
+    links:
+      - sidam-api
+      - ccd-data-store-api
+      - ccd-api-gateway
+      - dm-store
+      - service-auth-provider-api
+    depends_on:
+      - sidam-api
+      - ccd-api-gateway
