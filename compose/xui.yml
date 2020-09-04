@@ -3,7 +3,7 @@ version: '3'
 
 services:
   xui:
-    image: "hmctspublic.azurecr.io/xui/webapp:prod-18634c34"
+    image: "hmctspublic.azurecr.io/xui/webapp:latest"
     environment:
       MICROSERVICE: xui_webapp
       PROTOCOL: http
@@ -15,7 +15,7 @@ services:
       SERVICES_S2S: http://service-auth-provider-api:8080
       SERVICES_IDAM_LOGIN_URL: http://localhost:3501
       SERVICES_IDAM_API_URL: http://sidam-api:5000
-      SERVICES_IDAM_OAUTH_CALLBACK_URL: oauth2/callback
+      SERVICES_IDAM_OAUTH_CALLBACK_URL: /oauth2/callback
       SERVICES_IDAM_ISS_URL: http://sidam-api:5000
       SERVICES_IDAM_CLIENT_ID: xui_webapp
       REDISCLOUD_URL: http://dummyrediscloudurl
