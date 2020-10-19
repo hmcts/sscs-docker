@@ -3,7 +3,7 @@ version: '3'
 
 services:
   stitching-api:
-    image: hmctspublic.azurecr.io/em/stitching:pr-394-758004da
+    image: hmctspublic.azurecr.io/em/stitching:latest
     healthcheck:
       interval: 10s
       timeout: 10s
