@@ -23,10 +23,10 @@ services:
       - compose_default
 
   ccd-logstash:
-    image: "hmcts/ccd-logstash:latest"
+    image: "ccd/sscs-logstash:1.0"
     container_name: ccd-logstash
     depends_on:
-          - "ccd-elasticsearch"
+      - "ccd-elasticsearch"
     environment:
       - XPACK_MONITORING_ENABLED=false
       - DB_URL=jdbc:postgresql://ccd-shared-database:5432/ccd_data?stringtype=unspecified&ssl=false

@@ -1,5 +1,8 @@
 # CCD/SSCS Docker :whale:
 
+- [Quick start](#Quick start)
+- [Elastic search](#elastic-search)
+
 ## Prerequisites
 
 - [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) - minimum version 2.0.57 
@@ -70,6 +73,132 @@ To manually import the case definition you can run this script:
 
     ./bin/ccd-import-definition.sh ~/defintions/CCD_SSCSDefinition_v5.1.01_AAT.xlsx
     
+##Elastic Search
+
+Some parts of the SSCS service require Elastic Search to be running in order to find cases. However, it is not recommended that this is always running as it uses a significant amount of RAM and can cause performance problems on your local environment.
+
+The following use cases need Elastic Search:
+
+- When submitting a case through SYA or Bulk scan, Elastic Search is required for the duplicate case check (same Mrn date/benefit type/nino)
+- Logging into MYA (with appeal ref number in link) for an appellant, appointee, rep or joint party
+- Linking a case to other similar cases (e.g. same nino, different mrn) for SYA and Bulk scan
+- Case loader when it can't find a case by case id so instead uses the GAPS case reference 
+
+### Starting Elastic Search for Development
+
+- Set the ES_ENABLED_DOCKER environment variable to true in your `.env` file
+
+- By default, ccd-logstash filters out SSCS cases. Therefore, we need to point logstash to the sscs config, build a local docker image and point sscs-docker at this new ccd-logstash image. To do this:
+  
+  1. Check out the https://github.com/hmcts/ccd-logstash project
+  
+  2. Change this line: https://github.com/hmcts/ccd-logstash/blob/master/Dockerfile#L3 to `ARG conf=ccdsscs_logstash.conf.in`
+  
+  3. Build the local docker image using `docker build -t ccd/sscs-logstash:1.0 .` This should create an image called ccd/sscs-logstash:1.0
+  
+  4. Update your ccd-logstash to use this local image by going to `elasticsearch.yaml` and setting the image to `image: "ccd/sscs-logstash:1.0"`
+  
+- Enable Elastic Search and logstash containers by adding `elasticsearch` to `tags.env`
+
+- Restart all docker containers. (Note: the first time I tried this it did not work and I had to restart my laptop in order for Elastic Search to be picked up)
+    
+- When adding a CCD definition file elastic search indexes will be created. To verify, you can hit the elastic search api directly on localhost:9200 with the following command. It will return all stored indexes:
+```shell script
+curl -X GET http://localhost:9200/benefit_cases-000001
+```
+
+Note: if you start elastic search after having existing cases, these cases will not be searchable using ES.
+
+### Useful Elastic Search commands:
+
+The following command will return all cases currently indexed:
+```shell script
+curl -X GET http://localhost:9200/benefit_cases-000001/_search
+```
+
+The following command will return all indices on Elastic Search:
+```shell script
+curl -X GET http://localhost:9200/_cat/indices
+```
+
+This is an example of an Elastic Search query looking for a case reference of 1234: 
+```shell script
+curl -X GET "localhost:9200/_search?pretty" -H 'Content-Type: application/json' -d'
+{
+  "query": {
+    "match": {
+      "reference": "1234"
+    }
+  }
+}
+'
+```
+
+### CoreCaseDataApi Elastic Search Endpoint
+    
+You can search on local envs using this endpoint: `localhost:4452/searchCases?ctid=case_type`
+
+An example of a JSON search query which would return any cases where the reference is 1234:
+```json
+{
+    "query": {
+        "match" : {
+          "reference" : "1234"
+        }
+    }
+}
+```
+
+Please see [ES docs - start searching](https://www.elastic.co/guide/en/elasticsearch/reference/current/getting-started-search.html) for more
+examples of search queries.
+
+Example curl:
+```shell script
+curl --location --request POST 'localhost:4452/searchCases?ctid=case_type' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: <auth-token> \
+--header 'ServiceAuthorization: <service-auth-token> \
+--data-raw '{
+  "query": {
+    "match" : {
+      "reference" : "1234"
+    }
+  }
+}'
+```
+
+Example response:
+```json
+{
+    "total": 1,
+    "cases": [
+        {
+            "id": 1234,
+            "jurisdiction": "jurisdiction",
+            "state": "Open",
+            "version": null,
+            "case_type_id": "case_type",
+            "created_date": "2020-03-09T16:05:01.742",
+            "last_modified": "2020-03-09T16:05:01.745",
+            "security_classification": "PUBLIC",
+            "case_data": {},
+            "data_classification": {
+                "creatorId": "PUBLIC"
+            },
+            "after_submit_callback_response": null,
+            "callback_response_status_code": null,
+            "callback_response_status": null,
+            "delete_draft_response_status_code": null,
+            "delete_draft_response_status": null,
+            "security_classifications": {
+                "creatorId": "PUBLIC"
+            }
+        }
+    ]
+}
+
+```
+
 ## LICENSE
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
