@@ -96,7 +96,7 @@ The following use cases need Elastic Search:
   
   3. Build the local docker image using `docker build -t ccd/sscs-logstash:1.0 .` This should create an image called ccd/sscs-logstash:1.0
   
-  4. Update your ccd-logstash to use this local image by going to `elasticsearch.yaml` and setting the image to `image: "ccd/sscs-logstash:1.0"`
+  4. In SSCS-Docker, update your ccd-logstash to use this local image by going to `elasticsearch.yaml` and setting the image to `image: "ccd/sscs-logstash:1.0"`
   
 - Enable Elastic Search and logstash containers by adding `elasticsearch` to `tags.env`
 
