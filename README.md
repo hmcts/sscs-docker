@@ -98,11 +98,11 @@ The following use cases need Elastic Search:
   
   4. In SSCS-Docker, update your ccd-logstash to use this local image by going to `elasticsearch.yaml` and setting the image to `image: "ccd/sscs-logstash:1.0"`
   
-- Enable Elastic Search and logstash containers by adding `elasticsearch` to `tags.env`
+  5. Enable Elastic Search and logstash containers by adding `elasticsearch` to `tags.env` in SSCS-Docker
 
-- Restart all docker containers. (Note: the first time I tried this it did not work and I had to restart my laptop in order for Elastic Search to be picked up)
+  6. Restart all docker containers. (Note: the first time I tried this it did not work and I had to restart my laptop in order for Elastic Search to be picked up)
     
-- When adding a CCD definition file elastic search indexes will be created. To verify, you can hit the elastic search api directly on localhost:9200 with the following command. It will return all stored indexes:
+  7. Reimport CCD definition file. When adding a CCD definition file elastic search indexes will be created. To verify, you can hit the elastic search api directly on localhost:9200 with the following command. It will return all stored indexes:
 ```shell script
 curl -X GET http://localhost:9200/benefit_cases-000001
 ```
