@@ -27,7 +27,115 @@ Then make the necessary changes at the top of the file.
 ./bin/docker-clean.sh
 ```
 
-### Bringing it up
+## Idam Stub
+It's possible to disable the Idam containers and run CCD with an Idam Stub provided by ccd-test-stubs-service. This is useful as a back up plan for when docker Idam is broken or when you local machine is running low on memory and you don't want to spin up the whole Idam containers
+
+### Enable Idam Stub
+
+#### Step 1 - Disable Sidam containers
+
+make sure 'sidam', 'sidam-local', 'sidam-local-ccd' docker compose files are not enabled. How you do that depends on your currently active compose files.
+When no active compose files are present, the default ones are executed. But if there's any active, then the defautl ones are ignored. For example:
+
+```bash
+./ccd enable show
+
+Currently active compose files:
+backend
+frontend
+sidam
+sidam-local
+sidam-local-ccd
+
+Default compose files:
+backend
+frontend
+sidam
+sidam-local
+sidam-local-ccd
+```
+
+In this case sidam is currently explicitly enabled. To disable it:
+
+```bash
+./ccd disable sidam sidam-local sidam-local-ccd
+```
+
+If you are instead running with the default compose file as in:
+```bash
+./ccd enable show
+
+Default compose files:
+backend
+frontend
+sidam
+sidam-local
+sidam-local-ccd
+```
+
+You must explicitly enable only CCD compose files but exclude sidam:
+
+```bash
+./ccd enable backend frontend
+./ccd enable show
+
+Currently active compose files:
+backend
+frontend
+
+Default compose files:
+backend
+frontend
+sidam
+sidam-local
+sidam-local-ccd
+```
+
+#### Step 2 - Setup Env Vars
+
+in the '.env' file, uncomment:
+
+```yaml
+#IDAM_STUB_SERVICE_NAME=http://ccd-test-stubs-service:5555
+#IDAM_STUB_LOCALHOST=http://localhost:5555
+```
+
+To allow definition imports to work ('ccd-import-definition.sh') you need to:
+
+```bash
+export IDAM_STUB_LOCALHOST=http://localhost:5555
+```
+
+:warning: Please note: remember to unset 'IDAM_STUB_LOCALHOST' when switching back to the real Idam, otherwise definition import won't work
+
+```bash
+unset IDAM_STUB_LOCALHOST
+```
+
+#### Step 3 - (Optional) Customise IDAM roles
+
+IDAM Stub comes with a predefined IDAM user.\
+To permanently customise the stub user info such as its roles follow the instructions in 'backend.yml' -> ccd-test-stubs-service\
+To modify the user info at runtime, see https://github.com/hmcts/ccd-test-stubs-service#idam-stub
+
+#### Step 4 - Enable stub service dependency
+
+Enable ccd-test-stubs-service dependency on ccd-data-store-api and ccd-definition-store-api in 'backend.yml' file.
+
+Uncomment the below lines in 'backend.yml' file
+```yaml 
+      #      ccd-test-stubs-service:
+      #        condition: service_started
+```
+
+Comment the below lines in 'backend.yml' file
+```yaml 
+      idam-api:
+        condition: service_started
+```
+
+
+#### Step 5 - bringing it up
 
 To bring up the containers, run the following from the root directory of the cloned repository:
 
@@ -35,18 +143,105 @@ To bring up the containers, run the following from the root directory of the clo
 ./bin/compose-up.sh
 ```
 
+#### Step 6 - import CCD definition
+
+To import the CCD definition locally, please follow instructions in the sscs-ccd-definitions README. 
+
+
+### Revert to Idam
+
+#### Step 1 - Enable Sidam containers
+
+```bash
+./ccd enable sidam sidam-local sidam-local-ccd
+```
+
+or just revert to the default:
+
+```bash
+./ccd enable default
+```
+
+#### Step 2 - Setup Env Vars
+
+in the '.env' file, make sure the following env vars are commented:
+
+```yaml
+#IDAM_STUB_SERVICE_NAME=http://ccd-test-stubs-service:5555
+#IDAM_STUB_LOCALHOST=http://localhost:5555
+```
+
+then from the command line:
+
+```bash
+unset IDAM_STUB_LOCALHOST
+```
+
+#### Step 3 - Disable stub service dependency
+
+Disable ccd-test-stubs-service dependency on ccd-data-store-api and ccd-definition-store-api in 'backend.yml' file.
+
+Comment the below lines in 'backend.yml' file
+```yaml 
+    #   ccd-test-stubs-service:
+    #       condition: service_started
+```
+
+Uncomment the below lines in 'backend.yml' file
+```yaml 
+      idam-api:
+        condition: service_started
+```
+
+#### Step 4 - bringing it up
+
+To bring up the containers, run the following from the root directory of the cloned repository:
+
+```bash
+./bin/compose-up-idam-full.sh
+```
+
+#### Step 5 - import CCD definition
+
+To import the CCD definition locally, please follow instructions in the sscs-ccd-definitions README. 
+
+
+### Switching between Idam and Idam Stub Example
+
+```bash
+#assuming no containers running and Idam is enabled
+
+#start with Idam
+./ccd compose up -d
+
+#services started
+
+./ccd compose stop
+
+#enable Idam Stub follwing the steps in 'Enable Idam Stub'
+
+#start with Idam Stub
+./ccd compose up -d
+
+#services started
+
+you also can issue a 'down' when Idam Stub is enabled without risking of losing Idam data, since it's disabled
+./ccd compose down
+
+enable Idam follwing the steps in 'Revert to Idam'
+
+#start with Idam. This will now create new CCD containers and reuse the old Idam ones
+./ccd compose up -d
+```
+
+NOTE: :warning: always use 'compose up' rather than 'compose start' when switching between Idam and Idam Stub to have docker compose pick up env vars changes.
+
+
 ### Ready for take-off 🛫
 
-If all went well, the above script will have performed the following tasks:
+You can now visit [http://localhost:3451](http://localhost:3451) (for CCD) or [http://localhost:3455](http://localhost:3455) (for Expert UI).
 
-* Pulled the latest docker images
-* Bring up the docker containers using docker-compose
-* Created the SIDAM services and roles using a Selenium script against SIDAM admin frontend.
-* Created the import user and the caseworker user specified in the .env file
-* Replace the AAT callback URLS in the CCD defintions to point to local services
-* Imported the CCD defintions specified in the .env file
-
-You can now visit [http://localhost:3451](http://localhost:3451), you can log in using
+If not using the idam stub, you can log in using
  
     local.test@example.com
     Pa55word11
@@ -92,17 +287,15 @@ The following use cases need Elastic Search:
   
   1. Check out the https://github.com/hmcts/ccd-logstash project
   
-  2. Change this line: https://github.com/hmcts/ccd-logstash/blob/master/Dockerfile#L3 to `ARG conf=ccdsscs_logstash.conf.in`
-  
-  3. Build the local docker image using `docker build -t ccd/sscs-logstash:1.0 .` This should create an image called ccd/sscs-logstash:1.0
-  
-  4. In SSCS-Docker, update your ccd-logstash to use this local image by going to `elasticsearch.yaml` and setting the image to `image: "ccd/sscs-logstash:1.0"`
-  
-  5. Enable Elastic Search and logstash containers by adding `elasticsearch` to `tags.env` in SSCS-Docker
-
-  6. Restart all docker containers. (Note: the first time I tried this it did not work and I had to restart my laptop in order for Elastic Search to be picked up)
+  2. Run the `./bin/build-logstash-instances.sh` script
     
-  7. Reimport CCD definition file. When adding a CCD definition file elastic search indexes will be created. To verify, you can hit the elastic search api directly on localhost:9200 with the following command. It will return all stored indexes:
+  3. In SSCS-Docker, update your ccd-logstash to use this local image by going to `elasticsearch.yaml` and setting the image to `image: "ccd/sscs-logstash:1.0"`
+  
+  4. Enable Elastic Search and logstash containers by adding `elasticsearch` to `tags.env` in SSCS-Docker
+
+  5. Restart all docker containers. (Note: the first time I tried this it did not work and I had to restart my laptop in order for Elastic Search to be picked up)
+    
+  6. Reimport CCD definition file. When adding a CCD definition file elastic search indexes will be created. To verify, you can hit the elastic search api directly on localhost:9200 with the following command. It will return all stored indexes:
 ```shell script
 curl -X GET http://localhost:9200/benefit_cases-000001
 ```

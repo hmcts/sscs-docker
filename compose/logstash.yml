@@ -1,5 +1,6 @@
 version: '2.4'
 services:
+
   ccd-logstash:
     image: "${CCD_LOGSTASH_REPOSITORY_URL:-hmctspublic.azurecr.io}/ccd/logstash:ccd-latest"
     container_name: ccd-logstash
@@ -10,7 +11,7 @@ services:
       - DB_PWD=ccd
       - ES_DATA_NODES_URL=http://ccd-elasticsearch:9200
     networks:
-      - compose_default
+      - ccd-network
 
   sscs-logstash:
     image: "${CCD_LOGSTASH_REPOSITORY_URL:-hmctspublic.azurecr.io}/ccd/logstash:sscs-latest"
@@ -22,8 +23,9 @@ services:
       - DB_PWD=ccd
       - ES_DATA_NODES_URL=http://ccd-elasticsearch:9200
     networks:
-      - compose_default
+      - ccd-network
 
 networks:
-  compose_default:
+  ccd-network:
     external: true
+
