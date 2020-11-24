@@ -45,7 +45,7 @@ services:
     healthcheck:
       disable: true
     environment:
-      SERVER_PORT: 8080
+      SERVER_PORT: 5005
       IDAM_SUPERUSER_EMAIL:
       IDAM_SECRET_KEY: "${IDAM_KEY_DM_STORE}"
       GOV_NOTIFY_API_KEY:
@@ -69,7 +69,7 @@ services:
       no_proxy:
       REFORM_SERVICE_TYPE: java
       REFORM_SERVICE_NAME: document-management-store
-      REFORM_TEAM: cc
+      REFORM_TEAM: ccd
       REFORM_ENVIRONMENT: docker
       #      healthcheck env vars
       PACKAGES_ENVIRONMENT: docker
@@ -84,7 +84,7 @@ services:
       - service-auth-provider-api
       - azure-storage-emulator-azurite
     ports:
-      - 4506:8080
+      - 5005:5005
     #   debug port exposed
     #   - 5006:5005
     networks:
