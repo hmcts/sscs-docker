@@ -38,4 +38,14 @@ source ./bin/set-environment-variables.sh
 
 ./ccd compose up -d
 
+while [ `./ccd compose ps | grep starting | wc -l` != "0" ]
+do
+    echo "Waiting for " `./ccd compose ps | grep starting | wc -l` " containers to start."
+    sleep 5
+done
+
+echo "Adding roles"
+
+./bin/add-sscs-ccd-roles.sh
+
 echo "Everything looks ok. It may take 5 - 10 minutes for all containers to start"

@@ -60,6 +60,10 @@ do
     sleep 5
 done
 
+echo "Adding roles"
+
+./bin/add-sscs-ccd-roles.sh
+
 echo
 echo "Everything looks ok. It may take 5 - 10 minutes for all containers to start"
 
