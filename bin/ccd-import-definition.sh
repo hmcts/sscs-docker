@@ -18,6 +18,11 @@ elif [ ! -f "$1" ]
     exit 1
 fi
 
+echo "Updating callback URLs..."
+cd tools/ReplaceCallbackUrls
+java -jar bin/ReplaceCallbackUrls.jar $1 url-swaps.yml
+cd -
+
 binFolder=$(dirname "$0")
 
 userToken="$(${binFolder}/utils/idam-user-token.sh)"
