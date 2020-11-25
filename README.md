@@ -41,6 +41,8 @@ Each subsequent time after you can just run this to restart the containers:
 ./bin/compose-up.sh
 ```
 
+Now import the CCD case definition locally. Please follow instructions in the sscs-ccd-definitions README. 
+
 ## Switching between Idam stub and Idam
 It's possible to disable the Idam containers and run CCD with an Idam Stub provided by ccd-test-stubs-service. This is useful as a back up plan for when docker Idam is broken or when you local machine is running low on memory and you don't want to spin up the whole Idam containers
 
