@@ -27,7 +27,21 @@ Then make the necessary changes at the top of the file.
 ./bin/docker-clean.sh
 ```
 
-## Idam Stub
+## Getting Started (assuming idam stub used)
+
+The first time you run the docker containers, you will need to pull the containers and setup the roles. This can be done with this script:
+
+```bash
+./bin/compose-up-full.sh
+```
+
+Each subsequent time after you can just run this to restart the containers:
+
+```bash
+./bin/compose-up.sh
+```
+
+## Switching between Idam stub and Idam
 It's possible to disable the Idam containers and run CCD with an Idam Stub provided by ccd-test-stubs-service. This is useful as a back up plan for when docker Idam is broken or when you local machine is running low on memory and you don't want to spin up the whole Idam containers
 
 ### Enable Idam Stub
