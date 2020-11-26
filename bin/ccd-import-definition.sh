@@ -7,6 +7,7 @@
 ##  - Microservice `ccd_gw` must be authorised to call service `ccd-definition-store-api`
 
 source ./bin/set-environment-variables.sh
+source .env
 
 if [ -z "$1" ]
   then
@@ -27,6 +28,8 @@ binFolder=$(dirname "$0")
 
 userToken="$(${binFolder}/utils/idam-user-token.sh)"
 serviceToken="$(${binFolder}/utils/lease-service-token.sh ccd_gw)"
+
+echo "About to import definition..."
 
 curl -S --silent \
   http://localhost:4451/import \

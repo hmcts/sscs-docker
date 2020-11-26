@@ -67,7 +67,7 @@ docker rm compose_ccd-shared-database_1 || true
 
 echo "Is idam-api up and running http://localhost:5000/health ??"
 echo "if you can not get it healthy then run: sudo docker restart compose_sidam-api_1"
-echo "Press ENTER when http://localhost:5000/health is UP ..."
+echo "Press ENTER when http://localhost:5000/health is UP. Also, make sure CCD definition store and CCD data store are up and running."
 read
 
 ./bin/document-management-store-create-blob-store-container.sh
@@ -102,5 +102,7 @@ echo
 echo "Importing CCD Bulk Scan definition..."
 
 ./bin/ccd-import-definition.sh $CCD_BULK_SCAN_CASE_DEFINITION_XLS
+
+echo "Success! Remember to update to latest definition if required"
 
 echo

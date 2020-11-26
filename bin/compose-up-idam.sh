@@ -34,14 +34,18 @@ command -v java >/dev/null 2>&1 || {
 
 source ./bin/set-environment-variables.sh
 
-./ccd compose down
+./ccd login
+
+./ccd compose stop
 
 ./ccd compose up -d
 
-while [ `./ccd compose ps | grep starting | wc -l` != "0" ]
-do
-    echo "Waiting for " `./ccd compose ps | grep starting | wc -l` " containers to start."
-    sleep 5
-done
+echo "Is idam-api up and running http://localhost:5000/health ??"
+echo "if you can not get it healthy then run: sudo docker restart compose_sidam-api_1"
+echo "Press ENTER when http://localhost:5000/health is UP"
+read
+echo "Press ENTER when CCD definition store and CCD data store are up and running"
+read
+echo
+echo "Success! Ensure latest definition is imported"
 
-echo "Everything looks ok. It may take 5 - 10 minutes for all containers to start"

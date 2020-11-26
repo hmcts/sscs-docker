@@ -27,21 +27,62 @@ Then make the necessary changes at the top of the file.
 ./bin/docker-clean.sh
 ```
 
-## Getting Started (assuming idam stub used)
+## Getting Started
 
-The first time you run the docker containers, you will need to pull the containers and setup the roles. This can be done with this script:
+The first time you set up, you will need to create the CCD network 
 
 ```bash
-./bin/compose-up-full.sh
+docker network create ccd-network
+```
+
+#### Using real idam (Default):
+
+Using idam for first time:./bin/compose-up-idam-full.sh
+
+```bash
+./bin/compose-up-idam-full.sh
 ```
 
 Each subsequent time after you can just run this to restart the containers:
 
 ```bash
-./bin/compose-up.sh
+./bin/compose-up-idam.sh
+```
+
+#### Using idam stub (Check setup instructions in section below before following this):
+
+Using the idam stub for first time:
+```bash
+./bin/compose-up-stub-full.sh
+```
+
+Each subsequent time after you can just run this to restart the containers:
+
+```bash
+./bin/compose-up-stub.sh
 ```
 
 Now import the CCD case definition locally. Please follow instructions in the sscs-ccd-definitions README. 
+
+Please read instructions below on how to switch between the real idam and idam stub
+
+#### Potential startup problems
+
+Network ccd-network declared as external, but could not be found error?
+Run `docker network create ccd-network` and try again.
+
+Authentication required error or error pulling images? try:
+
+```bash
+az acr login -n hmctspublic
+./ccd login
+```
+
+Pulling from sscs-logstash error? 
+Try opening the ccd-logstash project and running the `./bin/build-logstash-instances.sh` script.
+
+Error accessing CCD or XUI? 
+Ensure all environment variables are copied from .env.example to .env
 
 ## Switching between Idam stub and Idam
 It's possible to disable the Idam containers and run CCD with an Idam Stub provided by ccd-test-stubs-service. This is useful as a back up plan for when docker Idam is broken or when you local machine is running low on memory and you don't want to spin up the whole Idam containers
@@ -59,6 +100,8 @@ When no active compose files are present, the default ones are executed. But if 
 Currently active compose files:
 backend
 frontend
+dm-store
+xui
 sidam
 sidam-local
 sidam-local-ccd
@@ -66,6 +109,8 @@ sidam-local-ccd
 Default compose files:
 backend
 frontend
+dm-store
+xui
 sidam
 sidam-local
 sidam-local-ccd
@@ -84,6 +129,8 @@ If you are instead running with the default compose file as in:
 Default compose files:
 backend
 frontend
+dm-store
+xui
 sidam
 sidam-local
 sidam-local-ccd
@@ -98,10 +145,14 @@ You must explicitly enable only CCD compose files but exclude sidam:
 Currently active compose files:
 backend
 frontend
+dm-store
+xui
 
 Default compose files:
 backend
 frontend
+dm-store
+xui
 sidam
 sidam-local
 sidam-local-ccd
@@ -244,7 +295,7 @@ To import the CCD definition locally, please follow instructions in the sscs-ccd
 you also can issue a 'down' when Idam Stub is enabled without risking of losing Idam data, since it's disabled
 ./ccd compose down
 
-enable Idam follwing the steps in 'Revert to Idam'
+enable Idam following the steps in 'Revert to Idam'
 
 #start with Idam. This will now create new CCD containers and reuse the old Idam ones
 ./ccd compose up -d

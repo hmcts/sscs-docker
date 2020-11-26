@@ -1,0 +1,8 @@
+[
+
+  {"email": "local.test@example.com", "roles": "caseworker-sscs,caseworker,caseworker-sscs-superuser",  "lastName": "user", "firstName": "super"},
+  {"email": "system.update@hmcts.net", "roles": "caseworker-sscs-systemupdate,caseworker-sscs,caseworker",  "lastName": "user", "firstName": "system"},
+  {"email": "dwpuser@example.com", "roles": "caseworker,caseworker-sscs,caseworker-sscs-dwpresponsewriter",  "lastName": "user", "firstName": "dwp"},
+  {"email": "judge@example.com", "roles": "caseworker,caseworker-sscs,caseworker-sscs-judge",  "lastName": "user", "firstName": "judge"},
+  {"email": "sscs-citizen2@hmcts.net", "roles": "citizen",  "lastName": "user", "firstName": "citizen"}
+]

@@ -62,8 +62,11 @@ done
 
 echo "Adding roles - this may take a while (5 - 10 minutes)..."
 
-./bin/add-sscs-ccd-roles.sh
+./bin/add-roles.sh
 
 echo
 echo "Everything looks ok."
+echo
+echo "Remember to update to latest definition if required"
+
 
