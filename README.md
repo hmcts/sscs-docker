@@ -37,7 +37,7 @@ docker network create ccd-network
 
 #### Using real idam (Default):
 
-Using idam for first time:./bin/compose-up-idam-full.sh
+Using idam for first time:
 
 ```bash
 ./bin/compose-up-idam.sh
