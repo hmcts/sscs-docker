@@ -20,3 +20,7 @@ services:
       retries: 40
     networks:
       - ccd-network
+
+networks:
+  ccd-network:
+    external: true
