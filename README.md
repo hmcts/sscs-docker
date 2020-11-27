@@ -40,26 +40,27 @@ docker network create ccd-network
 Using idam for first time:./bin/compose-up-idam-full.sh
 
 ```bash
-./bin/compose-up-idam-full.sh
+./bin/compose-up-idam.sh
 ```
 
 Each subsequent time after you can just run this to restart the containers:
 
 ```bash
-./bin/compose-up-idam.sh
+./ccd compose up -d
 ```
 
 #### Using idam stub (Check setup instructions in section below before following this):
 
 Using the idam stub for first time:
+
 ```bash
-./bin/compose-up-stub-full.sh
+./bin/compose-up-stub.sh
 ```
 
 Each subsequent time after you can just run this to restart the containers:
 
 ```bash
-./bin/compose-up-stub.sh
+./ccd compose up -d
 ```
 
 Now import the CCD case definition locally. Please follow instructions in the sscs-ccd-definitions README. 
@@ -99,24 +100,24 @@ When no active compose files are present, the default ones are executed. But if 
 
 Currently active compose files:
 backend
-frontend
 dm-store
-xui
+frontend
 sidam
 sidam-local
 sidam-local-ccd
+xui
 
 Default compose files:
 backend
-frontend
 dm-store
-xui
+frontend
 sidam
 sidam-local
 sidam-local-ccd
+xui
 ```
 
-In this case sidam is currently explicitly enabled. To disable it:
+In this case sidam is currently explicitly enabled. To disable it either remove from `defaults.conf` or:
 
 ```bash
 ./ccd disable sidam sidam-local sidam-local-ccd
@@ -128,34 +129,34 @@ If you are instead running with the default compose file as in:
 
 Default compose files:
 backend
-frontend
 dm-store
-xui
+frontend
 sidam
 sidam-local
 sidam-local-ccd
+xui
 ```
 
 You must explicitly enable only CCD compose files but exclude sidam:
 
 ```bash
-./ccd enable backend frontend
+./ccd enable backend dm-store frontend xui
 ./ccd enable show
 
 Currently active compose files:
 backend
-frontend
 dm-store
+frontend
 xui
 
 Default compose files:
 backend
-frontend
 dm-store
-xui
+frontend
 sidam
 sidam-local
 sidam-local-ccd
+xui
 ```
 
 #### Step 2 - Setup Env Vars
@@ -189,13 +190,13 @@ To modify the user info at runtime, see https://github.com/hmcts/ccd-test-stubs-
 
 Enable ccd-test-stubs-service dependency on ccd-data-store-api and ccd-definition-store-api in 'backend.yml' file.
 
-Uncomment the below lines in 'backend.yml' file
+Uncomment the below lines in 'backend.yml' file for ccd-definition-store-api and ccd-data-store-api
 ```yaml 
       #      ccd-test-stubs-service:
       #        condition: service_started
 ```
 
-Comment the below lines in 'backend.yml' file
+Comment the below lines in 'backend.yml' file for ccd-definition-store-api and ccd-data-store-api
 ```yaml 
       idam-api:
         condition: service_started
@@ -204,10 +205,12 @@ Comment the below lines in 'backend.yml' file
 
 #### Step 5 - bringing it up
 
+Before bringing up the containers, if switching from the real idam to idam stub, please check all idam containers are stopped before continuing.
+
 To bring up the containers, run the following from the root directory of the cloned repository:
 
 ```bash
-./bin/compose-up.sh
+./bin/compose-up-stub.sh
 ```
 
 #### Step 6 - import CCD definition
@@ -265,7 +268,7 @@ Uncomment the below lines in 'backend.yml' file
 To bring up the containers, run the following from the root directory of the cloned repository:
 
 ```bash
-./bin/compose-up-idam-full.sh
+./bin/compose-up-idam.sh
 ```
 
 #### Step 5 - import CCD definition
@@ -354,15 +357,13 @@ The following use cases need Elastic Search:
   
   1. Check out the https://github.com/hmcts/ccd-logstash project
   
-  2. Run the `./bin/build-logstash-instances.sh` script
+  2. Run the `./bin/build-logstash-instances.sh` script (or just copy and paste the line that refers to SSCS into the terminal in that script)
     
-  3. In SSCS-Docker, update your ccd-logstash to use this local image by going to `elasticsearch.yaml` and setting the image to `image: "ccd/sscs-logstash:1.0"`
-  
-  4. Enable Elastic Search and logstash containers by adding `elasticsearch` to `tags.env` in SSCS-Docker
+  3. Enable Elastic Search and logstash containers by adding `elasticsearch` and `logstash` to `defaults.conf` in SSCS-Docker
 
-  5. Restart all docker containers. (Note: the first time I tried this it did not work and I had to restart my laptop in order for Elastic Search to be picked up)
+  4. Restart all docker containers. (Note: the first time I tried this it did not work and I had to restart my laptop in order for Elastic Search to be picked up)
     
-  6. Reimport CCD definition file. When adding a CCD definition file elastic search indexes will be created. To verify, you can hit the elastic search api directly on localhost:9200 with the following command. It will return all stored indexes:
+  5. Reimport CCD definition file. When adding a CCD definition file elastic search indexes will be created. To verify, you can hit the elastic search api directly on localhost:9200 with the following command. It will return all stored indexes:
 ```shell script
 curl -X GET http://localhost:9200/benefit_cases-000001
 ```

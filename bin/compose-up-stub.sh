@@ -34,9 +34,20 @@ command -v java >/dev/null 2>&1 || {
 
 source ./bin/set-environment-variables.sh
 
+./ccd login
+
+echo "Forcing re-creation of shared-db container to ensure SIDAM roles are cleared"
+
 ./ccd compose down
 
+docker rm compose_shared-db_1 || true
+docker rm compose_ccd-shared-database_1 || true
+
+./ccd compose pull
+
 ./ccd compose up -d
+
+./bin/document-management-store-create-blob-store-container.sh
 
 while [ `./ccd compose ps | grep starting | wc -l` != "0" ]
 do
@@ -44,6 +55,13 @@ do
     sleep 5
 done
 
-echo "Everything looks ok. It may take 5 - 10 minutes for all containers to start"
+echo "Adding roles "
+
+./bin/add-roles.sh
+
+echo
+echo "Everything looks ok. Please wait 5 - 10 minutes whilst all services start..."
 echo
 echo "Remember to update to latest definition if required"
+
+
