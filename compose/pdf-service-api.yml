@@ -18,3 +18,5 @@ services:
       - 5500:5500
     healthcheck:
       retries: 40
+    networks:
+      - ccd-network
