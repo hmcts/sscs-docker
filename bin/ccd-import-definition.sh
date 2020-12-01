@@ -26,7 +26,7 @@ cd -
 
 binFolder=$(dirname "$0")
 
-userToken="$(${binFolder}/idam-user-token.sh)"
+userToken="$(${binFolder}/utils/idam-user-token.sh)"
 serviceToken="$(${binFolder}/idam-service-token.sh ccd_gw)"
 
 curl --silent \
