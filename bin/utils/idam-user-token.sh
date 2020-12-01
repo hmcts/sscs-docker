@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source .env
+
 IMPORTER_USERNAME=${1:-ccd.docker.default@hmcts.net}
 IMPORTER_PASSWORD=${2:-Pa55word11}
 IDAM_URI=${IDAM_STUB_LOCALHOST:-http://localhost:5000}
