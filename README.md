@@ -13,13 +13,7 @@
 You can increase the memory available to Docker from the Preferences|Advanced options on your Docker installation. We recommend allocating 12G. The SIDAM containers
 are quite hungry.
 
-## Quick start
-
-First...
-
-	cp .env.example .env
-
-Then make the necessary changes at the top of the file.
+## Tip
 
 ***Note*** If you find yourself in a bit of a mess, you may want to destroy all your containers and images with the following command. This will make bringing it all up again slower as it will need to download the images again.
 
@@ -34,6 +28,8 @@ The first time you set up, you will need to create the CCD network
 ```bash
 docker network create ccd-network
 ```
+
+Also, ensure all environment variables are copied from `.env.example` to `.env` and update any variables that are unique to your envinroment (e.g. CCD_CASE_DEFINITION_XLS)
 
 #### Using real idam (Default):
 
