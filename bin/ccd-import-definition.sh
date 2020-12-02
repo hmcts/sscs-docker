@@ -7,6 +7,7 @@
 ##  - Microservice `ccd_gw` must be authorised to call service `ccd-definition-store-api`
 
 source ./bin/set-environment-variables.sh
+source .env
 
 if [ -z "$1" ]
   then
@@ -25,7 +26,7 @@ cd -
 
 binFolder=$(dirname "$0")
 
-userToken="$(${binFolder}/idam-user-token.sh)"
+userToken="$(${binFolder}/utils/idam-user-token.sh)"
 serviceToken="$(${binFolder}/idam-service-token.sh ccd_gw)"
 
 curl --silent \

@@ -38,11 +38,27 @@ function project_config() {
             repository="git@github.com:hmcts/ccd-case-management-web.git"
             envPrefix="CCD_CASE_MANAGEMENT_WEB"
             ;;
+        ccd-admin-web|admin-web|admin-web)
+            name=ccd-admin-web
+            repository="git@github.com:hmcts/ccd-admin-web.git"
+            envPrefix="CCD_ADMIN_WEB"
+            ;;
         dm-store|document-store)
             name=dm-store
             repository="git@github.com:hmcts/document-management-store-app.git"
             envPrefix="DM_STORE"
             buildCommand="./gradlew installDist assemble"
+            ;;
+        ccd-test-stubs-service|test-stubs-service)
+            name=ccd-test-stubs-service
+            repository="git@github.com:hmcts/ccd-test-stubs-service.git"
+            envPrefix="CCD_TEST_STUBS_SERVICE"
+            buildCommand=$GRADLE_ASSEMBLE_CMD
+            ;;
+        xui-manage-cases)
+            name=xui-manage-cases
+            repository="git@github.com:hmcts/rpx-xui-webapp.git"
+            envPrefix="XUI_MANAGE_CASES"
             ;;
         ccd-definition-designer-api|definition-designer-api|definition-designer|def-design|designer)
             name=ccd-definition-designer-api
@@ -51,7 +67,7 @@ function project_config() {
             buildCommand=$GRADLE_ASSEMBLE_CMD
             ;;
         *)
-            echo "Project must be one of: ccd-data-store-api, ccd-definition-store-api, ccd-user-profile-api, ccd-api-gateway, ccd-case-management-web, dm-store, ccd-definition-designer-api"
+            echo "Project must be one of: ccd-data-store-api, ccd-definition-store-api, ccd-user-profile-api, ccd-api-gateway, ccd-case-management-web, xui-manage-cases, ccd-admin-web, dm-store, ccd-definition-designer-api"
             exit 1 ;;
     esac
     case $config in
@@ -224,7 +240,13 @@ function docker_build() {
         buildProject="$buildProject-web"
     fi
     imageName=${buildProject#"ccd-"}
-    (cd $workspace && docker build . -t ccd/$imageName:$tagName || exit $?)
+    if [[ $project == "xui-manage-cases" ]]; then
+      (cd $workspace && docker build . -t xui/webapp:$tagName || exit $?)
+    fi
+
+    if [[ $project != "xui-manage-cases" ]]; then
+      (cd $workspace && docker build . -t ccd/$imageName:$tagName || exit $?)
+    fi
 }
 
 function available_compose_files() {
@@ -268,7 +290,9 @@ function active_compose_files() {
 function create_compose_file_options() {
     for compose_file in $(active_compose_files)
     do
-            compose_file_options="$compose_file_options -f compose/${compose_file}.yml"
+      if [ ${compose_file} != "logstash" ]; then
+        compose_file_options="$compose_file_options -f compose/${compose_file}.yml"
+      fi
     done
     echo $compose_file_options
 }
@@ -280,18 +304,19 @@ function status_tags() {
         do
             echo "$(tag_friendly_name $tag) branch:$(active_tag_branch $tag) hash:$(active_tag_hash $tag)"
         done
+        echo -e "\n"
     else
-        echo "No overrides, all using master"
+        echo -e "No overrides, all using master\n"
     fi
 }
 
 function status_compose_files() {
     if [ $(has_active_compose_files) -eq 1 ]; then
         echo "Active compose files:"
-        echo "$(active_compose_files)"
+        echo -e "$(active_compose_files)\n"
     else
         echo "Using default compose files:"
-        echo "$(default_compose_files)"
+        echo -e "$(default_compose_files)\n"
     fi
 }
 
@@ -409,6 +434,11 @@ function ccd_branches() {
     done
 }
 
+function ccd_init() {
+    echo "creating docker network 'ccd-network'"
+    docker network create ccd-network && echo "'ccd-network' created"
+}
+
 function ccd_status() {
     echo "Status:"
     echo "======="
@@ -454,7 +484,7 @@ function ccd_enable_compose_file() {
         else
             touch $TAGS_FILE
             source $TAGS_FILE
-            sed -i "/CCD_ENABLED_COMPOSE_FILES/d" $TAGS_FILE
+            sed -i '' "/CCD_ENABLED_COMPOSE_FILES/d" $TAGS_FILE
             existing=0
             for enabled_file in $CCD_ENABLED_COMPOSE_FILES
             do
@@ -496,11 +526,12 @@ function ccd_disable() {
         do
             touch $TAGS_FILE
             source $TAGS_FILE
-            sed -i "/CCD_ENABLED_COMPOSE_FILES/d" $TAGS_FILE
+            sed -i '' "/CCD_ENABLED_COMPOSE_FILES/d" $TAGS_FILE
             existing=0
             for enabled_file in $CCD_ENABLED_COMPOSE_FILES
             do
-                if [ "$compose_file" != "$enabled_file" ]; then
+                #if enabled_file is not in the list to be disabled and it's not in $new_enabled yet
+                if [[ ! " $* " =~ .*\ $enabled_file\ .* ]] && [[ ! " $new_enabled " =~ .*\ $enabled_file\ .* ]]; then
                     new_enabled="$new_enabled $enabled_file"
                 else
                     existing=1
@@ -518,6 +549,9 @@ function ccd_disable() {
 }
 
 function ccd_compose() {
+
+    print_warn_on_compose_down_if_idam_enabled $*
+
     usage_compose $*
     status_compose_files
     status_tags
@@ -526,11 +560,44 @@ function ccd_compose() {
         source $TAGS_FILE
     fi
     compose_file_options=$(create_compose_file_options)
+    echo "Docker compose:"
+    echo -e "docker-compose $compose_file_options $options\n"
     docker-compose $compose_file_options $options
+    ccd_compose_logstash $options
+}
+
+function ccd_compose_logstash() {
+     for compose_file in $(active_compose_files)
+     do
+       if [ ${compose_file} == "logstash" ]; then
+        var_services="sscs"
+
+          IFS=','
+         options="$@"
+         read -ra services <<< "${var_services}"
+           for service in "${services[@]}"; do
+             echo -e "docker-compose -p compose -f compose/logstash.yml $options $service-logstash\n"
+             docker-compose -p compose -f compose/logstash.yml "$@" $service-logstash
+           done
+         IFS=' '
+       fi
+     done
+ }
+
+function print_warn_on_compose_down_if_idam_enabled {
+    if [[ $(active_compose_files) == *"sidam"* ]] && [[ $1 = "down" ]]; then
+        read -p "WARNING - 'down' will remove Idam data. Use 'stop' to preserve data. Or if you intended to remove only CCD containers, disable Idam
+        compose files first. Do you want to continue?" yn
+        case $yn in
+            [Yy]* ) ;;
+            [Nn]* ) exit;;
+            * ) echo "Please answer yes or no.";;
+        esac
+    fi
 }
 
 function ccd_login() {
-    az acr login --name hmctspublic --subscription 8999dec3-0104-4a27-94ee-6588559729d1
+    #docker logout hmctspublic.azurecr.io &>/dev/null
     az acr login --name hmctsprivate --subscription 8999dec3-0104-4a27-94ee-6588559729d1
 }
 
@@ -541,6 +608,9 @@ fi
 command=$1
 shift
 case $command in
+    init)
+        ccd_init
+        ;;
     set)
         ccd_set $*
         ;;

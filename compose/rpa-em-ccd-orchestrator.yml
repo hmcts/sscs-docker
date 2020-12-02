@@ -24,3 +24,9 @@ services:
       - REFORM_ENVIRONMENT=docker
     ports:
       - 4623:8080
+    networks:
+      - ccd-network
+
+networks:
+  ccd-network:
+    external: true
