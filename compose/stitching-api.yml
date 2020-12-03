@@ -21,14 +21,14 @@ services:
       - DOCMOSIS_ACCESS_KEY=${DOCMOSIS_ACCESS_KEY}
       - S2S_NAMES_WHITELIST:jui_webapp,em_ccd_orchestrator,em_gw,sscs
     depends_on:
-      - sidam-api
+      - idam-api
       - stitching-db
       - dm-store
     links:
       - stitching-db
       - dm-store
       - service-auth-provider-api
-      - sidam-api
+      - idam-api
     ports:
       - 4630:8080
     extra_hosts:
