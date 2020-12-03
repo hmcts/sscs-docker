@@ -67,7 +67,7 @@ docker rm compose_ccd-shared-database_1 || true
 ./ccd compose up -d
 
 echo "Is idam-api up and running http://localhost:5000/health ??"
-echo "if you can not get it healthy then run: sudo docker restart compose_sidam-api_1"
+echo "if you can not get it healthy then run: sudo docker restart compose_idam-api_1"
 echo "Press ENTER when http://localhost:5000/health is UP."
 read
 
