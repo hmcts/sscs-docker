@@ -56,12 +56,25 @@ do
     sleep 5
 done
 
-echo "Adding roles "
+./ccd compose up -d
 
-./bin/add-roles.sh
+echo "Is ccd-definition-store-api up and running http://localhost:4451/health ??"
+echo "if you can not get it healthy then run: sudo docker restart compose_ccd-definition-store-api_1"
+echo "Press ENTER when http://localhost:4451/health is UP."
+read
+
+echo "Importing CCD definition..."
+
+./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION_XLS
 
 echo
-echo "Everything looks ok. Please wait 5 - 10 minutes whilst all services start..."
+
+echo "Importing CCD Bulk Scan definition..."
+
+./bin/ccd-import-definition.sh $CCD_BULK_SCAN_CASE_DEFINITION_XLS
+
+echo
+echo "Everything looks ok. Please wait a few minutes whilst all services start..."
 echo
 echo "Remember to update to latest definition if required"
 
