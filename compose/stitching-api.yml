@@ -45,6 +45,8 @@ services:
       - POSTGRES_PASSWORD=emstitch
     ports:
       - 5678:5432
+    networks:
+      - ccd-network
 networks:
   ccd-network:
     external: true
