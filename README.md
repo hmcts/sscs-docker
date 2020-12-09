@@ -81,6 +81,11 @@ Try opening the ccd-logstash project and running the `./bin/build-logstash-insta
 Error accessing CCD or XUI? 
 Ensure all environment variables are copied from .env.example to .env
 
+## Importing CCD case definition
+
+To import the CCD case definition locally, run the `./bin/import-local-definition.sh` script. 
+This builds a local version of the AAT CCD definition from your sscs-ccd-definitions project (assuming your directory structure matches the script. If your structure is different then follow the Readme in sscs-ccd-definitions project for details on how to import). 
+
 ## Switching between Idam stub and Idam
 It's possible to disable the Idam containers and run CCD with an Idam Stub provided by ccd-test-stubs-service. This is useful as a back up plan for when docker Idam is broken or when you local machine is running low on memory and you don't want to spin up the whole Idam containers
 
