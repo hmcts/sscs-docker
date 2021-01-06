@@ -94,7 +94,7 @@ It's possible to disable the Idam containers and run CCD with an Idam Stub provi
 #### Step 1 - Disable Sidam containers
 
 make sure 'sidam', 'sidam-local', 'sidam-local-ccd' docker compose files are not enabled. How you do that depends on your currently active compose files.
-When no active compose files are present, the default ones are executed. But if there's any active, then the defautl ones are ignored. For example:
+When no active compose files are present, the default ones are executed. But if there's any active, then the default ones are ignored. For example:
 
 ```bash
 ./ccd enable show
@@ -350,21 +350,15 @@ The following use cases need Elastic Search:
 - Linking a case to other similar cases (e.g. same nino, different mrn) for SYA and Bulk scan
 - Case loader when it can't find a case by case id so instead uses the GAPS case reference 
 
-### Starting Elastic Search for Development
+### Starting Elastic Search and Logstash for Development
 
-- Set the ES_ENABLED_DOCKER environment variable to true in your `.env` file
+  1.  Set the ES_ENABLED_DOCKER environment variable to true in your `.env` file
 
-- By default, ccd-logstash filters out SSCS cases. Therefore, we need to point logstash to the sscs config, build a local docker image and point sscs-docker at this new ccd-logstash image. To do this:
-  
-  1. Check out the https://github.com/hmcts/ccd-logstash project
-  
-  2. Run the `./bin/build-logstash-instances.sh` script (or just copy and paste the line that refers to SSCS into the terminal in that script)
+  2. Enable Elastic Search and logstash containers by adding `elasticsearch` and `logstash` to `defaults.conf` in SSCS-Docker
+
+  3. Restart all docker containers. (Note: the first time I tried this it did not work and I had to restart my laptop in order for Elastic Search to be picked up)
     
-  3. Enable Elastic Search and logstash containers by adding `elasticsearch` and `logstash` to `defaults.conf` in SSCS-Docker
-
-  4. Restart all docker containers. (Note: the first time I tried this it did not work and I had to restart my laptop in order for Elastic Search to be picked up)
-    
-  5. Reimport CCD definition file. When adding a CCD definition file elastic search indexes will be created. To verify, you can hit the elastic search api directly on localhost:9200 with the following command. It will return all stored indexes:
+  4. Reimport CCD definition file. When adding a CCD definition file elastic search indexes will be created. To verify, you can hit the elastic search api directly on localhost:9200 with the following command. It will return all stored indexes:
 ```shell script
 curl -X GET http://localhost:9200/benefit_cases-000001
 ```
@@ -459,45 +453,6 @@ Example response:
     ]
 }
 ```
-
-## To enable elastic search
-
-NOTE: we recommend at lest 6GB of memory for Docker when enabling elasticsearch
-    *  ./ccd enable elasticsearch (assuming backend is already enabled, otherwise enable it)
-    *  export ES_ENABLED_DOCKER=true
-    *  verify that Data Store is able to connect to elasticsearch: curl localhost:4452/health
-
-## To enable **logstash**  
-
-  `./ccd enable logstash` (assuming `elasticsearch` is already enabled, otherwise enable it)
-
- To run **service specific logstash instance**
-   * First build the local log stash instances for all services using instructions on ccd-logstash [ccd-logstash](https://github.com/hmcts/ccd-logstash)
-   * Export CCD_LOGSTASH_SERVICES environment variable to use service specific logstash instances
-   * If CCD_LOGSTASH_SERVICES is not exported, then `ccd-logstash:latest` will be used
-   * Make sure to set the below two environment variables in `.env` file
-   * By default CCD_LOGSTASH_REPOSITORY_URL is point to remote repository `hmctspublic.azurecr.io`, this is defined in `.env` file.
-
- ```bash
-     CCD_LOGSTASH_REPOSITORY_URL=hmctspublic.azurecr.io
- ```
-   
-    For local docker repository please change the values as below
-    
- ```bash
-     CCD_LOGSTASH_REPOSITORY_URL=hmcts
- ```
-    * To run service specific instances of logstash, give service names a comma serparated string as below
-    
- ```bash
-     export CCD_LOGSTASH_SERVICES=divorce,sscs,ethos,cmc,probate
- ```
-
-    * To run all service instances of logstash
-    
- ```bash
-     CCD_LOGSTASH_SERVICES=all
- ```
 
 ## LICENSE
 
