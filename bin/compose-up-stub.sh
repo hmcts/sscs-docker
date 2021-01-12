@@ -63,6 +63,10 @@ echo "if you can not get it healthy then run: sudo docker restart compose_ccd-de
 echo "Press ENTER when http://localhost:4451/health is UP."
 read
 
+echo "Creating CCD roles..."
+
+./bin/add-sscs-ccd-roles.sh
+
 echo "Importing CCD definition..."
 
 ./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION_XLS
