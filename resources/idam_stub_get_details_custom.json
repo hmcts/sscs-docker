@@ -17,11 +17,12 @@
         "caseworker",
         "ccd-import",
         "caseworker-sscs-superuser",
-        "caseworker-sscs"
+        "caseworker-sscs",
+        "caseworker-sscs-systemupdate"
       ],
       "name": "CCD",
       "given_name": "CCD",
-      "family_name": "Auto Test (Stub)"
+      "family_name": "Caseworker Test (Stub)"
     }
 
   }
