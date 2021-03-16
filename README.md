@@ -454,6 +454,24 @@ Example response:
 }
 ```
 
+## Bundling
+
+To run the bundling service locally, open up the rpa-em-ccd-orchestrator project and run :
+
+```
+./gradlew build
+./gradlew installDist
+docker-compose build
+```
+
+Point the rpa-em-ccd-orchestrator image at:
+
+```
+em-ccd-orchestrator_rpa-em-ccd-orchestrator:latest
+```
+
+Then restart 'rpa-em-ccd-orchestrator'
+
 ## LICENSE
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
