@@ -32,7 +32,7 @@ services:
     ports:
       - 4630:8080
     extra_hosts:
-      - "docmosis-development.platform.hmcts.net:172.16.0.6"
+      - "docmosis.aat.platform.hmcts.net:10.10.24.121"
     networks:
       - ccd-network
 
