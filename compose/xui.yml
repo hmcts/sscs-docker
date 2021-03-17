@@ -36,6 +36,8 @@ services:
       S2S_SECRET: "${BEFTA_S2S_CLIENT_SECRET_OF_XUI_WEBAPP}"
 
       LAUNCH_DARKLY_CLIENT_ID: 1
+      SYSTEM_USER_NAME: "dummy"
+      SYSTEM_USER_PASSWORD: "dummy"
 
     ports:
       - 3455:3000
