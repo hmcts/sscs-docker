@@ -63,6 +63,26 @@ Now import the CCD case definition locally. Please follow instructions in the ss
 
 Please read instructions below on how to switch between the real idam and idam stub
 
+#### Using idam simulator:
+
+Ensure the value `rse-idam-simulator` is in the defaults.conf file
+
+In your /etc/hosts file add a value for `127.0.0.1       rse-idam-simulator`
+
+Ensure the service_started conditions for ccd-test-stubs-service and idam-api are commented out and rse-idam-simulator are uncommented in `./compose/backend.yaml`
+
+Ensure the following variables are in your .env file
+```bash
+IDAM_STUB_SERVICE_NAME=http://rse-idam-simulator:5000
+IDAM_STUB_LOCALHOST=http://rse-idam-simulator:5000
+IDAM_API_BASE_URI=http://rse-idam-simulator:5000
+```
+
+Bring up the containers
+```bash
+./bin/compose-up-simulator.sh
+```
+
 #### Potential startup problems
 
 Network ccd-network declared as external, but could not be found error?

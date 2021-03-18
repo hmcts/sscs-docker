@@ -23,9 +23,9 @@ services:
     image: hmctspublic.azurecr.io/dg/docassembly:latest
     environment:
       - S2S_BASE_URI=http://service-auth-provider-api:8080
-      - IDAM_API_BASE_URI=http://idam-api:5000
+      - IDAM_API_BASE_URI=${IDAM_STUB_LOCALHOST:-http://idam-api:5000}
       - APPINSIGHTS_INSTRUMENTATIONKEY=test-key
-      - OPEN_ID_API_BASE_URI=http://idam-api:5000/o
+      - OPEN_ID_API_BASE_URI=${IDAM_STUB_LOCALHOST:-http://idam-api:5000}/o
       - OIDC_ISSUER_BASE_URI=http://fr-am:8080/openam/oauth2/hmcts
       - DM_STORE_APP_URL=http://dm-store:5005
       # You need to add the below two keys for this service to work on docker locally
