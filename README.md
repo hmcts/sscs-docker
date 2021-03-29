@@ -65,7 +65,7 @@ Please read instructions below on how to switch between the real idam and idam s
 
 #### Using idam simulator:
 
-Ensure the value `rse-idam-simulator` is in the defaults.conf file
+Ensure the value `rse-idam-simulator` is in the `./compose/defaults.conf` file
 
 In your /etc/hosts file add a value for `127.0.0.1       rse-idam-simulator`
 
