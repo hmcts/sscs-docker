@@ -73,13 +73,14 @@ Ensure the service_started conditions for ccd-test-stubs-service and idam-api ar
 
 Ensure the following variables are in your .env file
 ```bash
-IDAM_STUB_SERVICE_NAME=http://rse-idam-simulator:5000
-IDAM_STUB_LOCALHOST=http://rse-idam-simulator:5000
-IDAM_API_BASE_URI=http://rse-idam-simulator:5000
+export IDAM_STUB_SERVICE_NAME=http://rse-idam-simulator:5000
+export IDAM_STUB_LOCALHOST=http://rse-idam-simulator:5000
+export IDAM_API_BASE_URI=http://rse-idam-simulator:5000
 ```
 
 Bring up the containers
 ```bash
+source .env
 ./bin/compose-up-simulator.sh
 ```
 
