@@ -13,22 +13,24 @@ services:
       - SPRING_DATASOURCE_USERNAME=emstitch
       - SPRING_DATASOURCE_PASSWORD=emstitch
       - S2S_BASE_URI=http://service-auth-provider-api:8080
-      - IDAM_API_BASE_URI=http://idam-api:5000
-      - OPEN_ID_API_BASE_URI=http://idam-api:5000/o
+      - IDAM_API_BASE_URI=http://rse-idam-simulator:5000
+      - OPEN_ID_API_BASE_URI=http://rse-idam-simulator:5000/o
       - ENABLE_LIQUIBASE=true
       - APPINSIGHTS_INSTRUMENTATIONKEY=test-key
       - DM_STORE_APP_URL=http://dm-store:5005
       - DOCMOSIS_ACCESS_KEY=${DOCMOSIS_ACCESS_KEY}
       - S2S_NAMES_WHITELIST:jui_webapp,em_ccd_orchestrator,em_gw,sscs
     depends_on:
-      - idam-api
+#      - idam-api
+      - rse-idam-simulator
       - stitching-db
       - dm-store
     links:
       - stitching-db
       - dm-store
       - service-auth-provider-api
-      - idam-api
+      #- idam-api
+      - rse-idam-simulator
     ports:
       - 4630:8080
     extra_hosts:

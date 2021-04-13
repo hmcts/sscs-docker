@@ -35,7 +35,7 @@ services:
       IDAM_SECRET: xui_webapp_secrect
       S2S_SECRET: "${BEFTA_S2S_CLIENT_SECRET_OF_XUI_WEBAPP}"
 
-      LAUNCH_DARKLY_CLIENT_ID: 1
+      LAUNCH_DARKLY_CLIENT_ID: 5de6610b23ce5408280f2268
       SYSTEM_USER_NAME: "dummy"
       SYSTEM_USER_PASSWORD: "dummy"
 
