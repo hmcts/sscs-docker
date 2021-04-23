@@ -75,7 +75,6 @@ Ensure the following variables are in your .env file
 ```bash
 export IDAM_STUB_SERVICE_NAME=http://rse-idam-simulator:5000
 export IDAM_STUB_LOCALHOST=http://rse-idam-simulator:5000
-export IDAM_API_BASE_URI=http://rse-idam-simulator:5000
 ```
 
 Bring up the containers
