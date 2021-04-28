@@ -31,7 +31,7 @@ services:
       - dm-store
       - service-auth-provider-api
 #     - idam-api
-     - rse-idam-simulator
+      - rse-idam-simulator
 #      - ccd-test-stubs-service
     ports:
       - 4630:8080
