@@ -19,6 +19,9 @@ services:
       - APPINSIGHTS_INSTRUMENTATIONKEY=test-key
       - DM_STORE_APP_URL=http://dm-store:5005
       - DOCMOSIS_ACCESS_KEY=${DOCMOSIS_ACCESS_KEY}
+      - ROOT_LOGGING_LEVEL=WARN
+      - LOG_OUTPUT=single
+      - JSON_CONSOLE_PRETTY_PRINT=false
       - S2S_NAMES_WHITELIST:jui_webapp,em_ccd_orchestrator,em_gw,sscs
     depends_on:
 #      - idam-api
