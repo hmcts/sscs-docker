@@ -28,6 +28,7 @@ services:
       - OPEN_ID_API_BASE_URI=${IDAM_STUB_SERVICE_NAME:-http://idam-api:5000}/o
       - OIDC_ISSUER_BASE_URI=http://fr-am:8080/openam/oauth2/hmcts
       - DM_STORE_APP_URL=http://dm-store:5005
+      - S2S_NAMES_WHITELIST=sscs,divorce,ccd,em_gw,document-management-store,ccd_gw,idam-api,fpl_case_service,xui_webapp,ccd_case_document_am_api
       # You need to add the below two keys for this service to work on docker locally
       - DOCMOSIS_ACCESS_KEY=${DOCMOSIS_ACCESS_KEY}
       - DOCMOSIS_TEMPLATES_ENDPOINT_AUTH=${DOCMOSIS_TEMPLATES_ENDPOINT_AUTH}
@@ -109,4 +110,3 @@ volumes:
 networks:
   ccd-network:
     external: true
-
