@@ -1,5 +1,5 @@
 ---
-version: '2.4'
+version: '3'
 #only add core CCD services here. Side services should be added to others.yaml
 
 services:
