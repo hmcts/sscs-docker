@@ -44,8 +44,6 @@ echo "Forcing re-creation of shared-db container to ensure SIDAM roles are clear
 docker rm compose_shared-db_1 || true
 docker rm compose_ccd-shared-database_1 || true
 
-./ccd compose pull
-
 ./ccd compose up -d
 
 ./bin/document-management-store-create-blob-store-container.sh

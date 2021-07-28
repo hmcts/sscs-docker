@@ -4,7 +4,7 @@ version: '2.4'
 
 services:
   ccd-user-profile-api:
-    image: "${CCD_USER_PROFILE_API_USE_LOCAL-hmctspublic.azurecr.io/}ccd/user-profile-api:${CCD_USER_PROFILE_API_TAG:-latest}"
+    image: user-profile-api:arm64
     environment:
       USER_PROFILE_DB_HOST: ccd-shared-database
       USER_PROFILE_DB_PORT: 5432
@@ -24,7 +24,7 @@ services:
       - ccd-network
 
   ccd-definition-store-api:
-    image: "${CCD_DEFINITION_STORE_API_USE_LOCAL-hmctspublic.azurecr.io/}ccd/definition-store-api:${CCD_DEFINITION_STORE_API_TAG:-latest}"
+    image: case-definition-store-api:arm64
     environment:
       DEFINITION_STORE_DB_HOST: ccd-shared-database
       DEFINITION_STORE_DB_PORT: 5432
@@ -65,7 +65,7 @@ services:
       - ccd-network
 
   ccd-data-store-api:
-    image: "${CCD_DATA_STORE_API_USE_LOCAL-hmctspublic.azurecr.io/}ccd/data-store-api:${CCD_DATA_STORE_API_TAG:-latest}"
+    image: core-case-data:arm64
     environment:
       DATA_STORE_DB_HOST: ccd-shared-database
       DATA_STORE_DB_PORT: 5432
@@ -112,7 +112,7 @@ services:
       - ccd-network
 
   service-auth-provider-api:
-    image: "hmctspublic.azurecr.io/rpe/service-auth-provider:latest"
+    image: service-auth-provider:arm64
     healthcheck:
       interval: 10s
       timeout: 10s
@@ -158,7 +158,7 @@ services:
       - ccd-network
 
   ccd-test-stubs-service:
-    image: "${CCD_TEST_STUBS_SERVICE_USE_LOCAL-hmctspublic.azurecr.io/}ccd/test-stubs-service:${CCD_TEST_STUBS_SERVICE_TAG:-latest}"
+    image: ccd-test-stubs-service:arm64
     environment:
       - WIREMOCK_SERVER_MAPPINGS_PATH=wiremock
     ports:
