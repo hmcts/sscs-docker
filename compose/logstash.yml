@@ -2,7 +2,7 @@ version: '2.4'
 services:
 
   sscs-logstash:
-    image: "hmctspublic.azurecr.io/ccd/logstash:ccd-sscs-logstash-latest"
+    image: logstash:ccd-sscs-logstash-latest
     container_name: sscs-logstash
     environment:
       - XPACK_MONITORING_ENABLED=false

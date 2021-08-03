@@ -20,7 +20,7 @@ services:
       MICROSERVICE_KEYS_EM_GW: "${IDAM_KEY_DM_STORE}"
 
   rpa-dg-docassembly-api:
-    image: hmctspublic.azurecr.io/dg/docassembly:latest
+    image: docassembly:arm64
     environment:
       - S2S_BASE_URI=http://service-auth-provider-api:8080
       - IDAM_API_BASE_URI=${IDAM_STUB_SERVICE_NAME:-http://idam-api:5000}
@@ -43,7 +43,7 @@ services:
       - ccd-network
 
   dm-store:
-    image: "${DM_STORE_USE_LOCAL-hmctspublic.azurecr.io/}dm/store:${DM_STORE_TAG:-latest}"
+    image: dm-store:arm64
     healthcheck:
       disable: true
     environment:
