@@ -11,3 +11,5 @@ source .env
 ./bin/simulator-create-caseworker.sh caseworker,caseworker-sscs,caseworker-sscs-judge judge@example.com Pa55word11 Judge user
 
 ./bin/simulator-create-caseworker.sh citizen sscs-citizen2@hmcts.net
+
+./bin/simulator-create-caseworker.sh manage-user data.store.idam.system.user@gmail.com
