@@ -84,7 +84,7 @@ Testing123
 
 #####MYA and IdamSimulator:
 
-For MYA to run with simulator you will need to change the following uri like found in folder app/server/services.
+For MYA to run with simulator you will need to change the following uri found in folder app/server/services.
 
 change from:
 ```bash
