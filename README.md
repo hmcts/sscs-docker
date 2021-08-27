@@ -64,7 +64,7 @@ Then after the roles and users are created, reimport the definition file manuall
 
 To get SYA running with simulator you must make the following changes to SYA:
 
-first you must change the uri in accessToken.js found in this folder (@hmcts/div-idam-express-middleware/wrapper/accessToken.js)
+first you must change the uri in accessToken.js found in this folder (node_modules/@hmcts/div-idam-express-middleware/wrapper/accessToken.js)
 
 change from:
 ```bash
