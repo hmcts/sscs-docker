@@ -31,7 +31,53 @@ docker network create ccd-network
 
 Also, ensure all environment variables are copied from `.env.example` to `.env` and update any variables that are unique to your envinroment (e.g. CCD_CASE_DEFINITION_XLS)
 
-#### Using real idam (Default):
+#### Using idam simulator (Default):
+
+Ensure the value `rse-idam-simulator` is in the `./compose/defaults.conf` file
+
+In your /etc/hosts file add a value for `127.0.0.1       rse-idam-simulator`
+
+Ensure the service_started conditions for ccd-test-stubs-service and idam-api are commented out and rse-idam-simulator are uncommented in `./compose/backend.yaml` (This should be set by default)
+
+Uncomment the following variables in your .env file
+```bash
+export IDAM_STUB_SERVICE_NAME=http://rse-idam-simulator:5000
+export IDAM_STUB_LOCALHOST=http://rse-idam-simulator:5000
+```
+
+Bring up the containers
+```bash
+source .env
+./bin/compose-up-simulator.sh
+```
+
+After all the containers are up and running you may get an Invalid AccessProfile error when the definition is imported, if so run these commands to fix:
+
+```bash
+./bin/add-sscs-ccd-roles.sh
+./bin/create-simulator-users.sh
+```
+
+Then after the roles and users are created, reimport the definition file manually this should import the definition successfully.
+
+#####SYA and IdamSimulator:
+
+To get SYA running with simulator you must make the following changes to SYA:
+
+first you must change the uri in accessToken.js found in this folder (@hmcts/div-idam-express-middleware/wrapper/accessToken.js)
+
+change from:
+```bash
+uri: `${args.idamApiUrl}/oauth2/token`
+```
+to this:
+```bash
+uri: `${args.idamApiUrl}/oauth2/token?client_id=${args.idamClientID}&client_secret=${args.idamSecret}`
+```
+
+now you should be able to login and submit an appeal using idam simulator and SYA
+
+#### Using real idam:
 
 Using idam for first time:
 
@@ -62,26 +108,6 @@ Each subsequent time after you can just run this to restart the containers:
 Now import the CCD case definition locally. Please follow instructions in the sscs-ccd-definitions README. 
 
 Please read instructions below on how to switch between the real idam and idam stub
-
-#### Using idam simulator:
-
-Ensure the value `rse-idam-simulator` is in the `./compose/defaults.conf` file
-
-In your /etc/hosts file add a value for `127.0.0.1       rse-idam-simulator`
-
-Ensure the service_started conditions for ccd-test-stubs-service and idam-api are commented out and rse-idam-simulator are uncommented in `./compose/backend.yaml`
-
-Ensure the following variables are in your .env file
-```bash
-export IDAM_STUB_SERVICE_NAME=http://rse-idam-simulator:5000
-export IDAM_STUB_LOCALHOST=http://rse-idam-simulator:5000
-```
-
-Bring up the containers
-```bash
-source .env
-./bin/compose-up-simulator.sh
-```
 
 #### Potential startup problems
 
