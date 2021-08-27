@@ -75,7 +75,46 @@ to this:
 uri: `${args.idamApiUrl}/oauth2/token?client_id=${args.idamClientID}&client_secret=${args.idamSecret}`
 ```
 
-now you should be able to login and submit an appeal using idam simulator and SYA
+now you should be able to login and submit an appeal using idam simulator and SYA with user:
+
+```bash
+sscs-citizen2@hmcts.net
+Testing123
+```
+
+#####MYA and IdamSimulator:
+
+For MYA to run with simulator you will need to change the following uri like found in folder app/server/services.
+
+change from:
+```bash
+`${this.apiUrl}/oauth2/token`
+```
+to this:
+```bash
+uri: `${this.apiUrl}/oauth2/token?client_id=sscs&client_secret=${this.appSecret}`
+```
+
+Before running MYA, when exporting variables change IDAM_URL port to 5000 instead of 3501:
+
+```bash
+export SSCS_API_URL=http://localhost:8080
+export COH_URL=http://coh-cor-aat.service.core-compute-aat.internal
+export S2S_SECRET=AAAAAAAAAAAAAAAC
+export S2S_URL=http://localhost:4502
+export IDAM_API_URL=http://localhost:5000
+export IDAM_URL=http://localhost:5000
+export HTTP_PROTOCOL=http
+export TRIBUNALS_API_URL=http://localhost:8080
+export IDAM_CLIENT_SECRET=QM5RQQ53LZFOSIXJ
+export NODE_ENV=preview
+export MYA_FEATURE_FLAG=true
+export EVIDENCE_UPLOAD_QUESTION_PAGE_OVERRIDE_ALLOWED=true
+export EVIDENCE_UPLOAD_QUESTION_PAGE_ENABLED=false
+export ADDITIONAL_EVIDENCE_FEATURE_FLAG=true
+export POST_BULK_SCAN=true
+```
+Now you should be redirected to idam simulator login page when using MYA.
 
 #### Using real idam:
 
