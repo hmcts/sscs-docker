@@ -84,7 +84,7 @@ Testing123
 
 #####MYA and IdamSimulator:
 
-For MYA to run with simulator you will need to change the following uri found in folder app/server/services.
+For MYA to run with simulator you will need to change the following uri found in file app/server/services/idam.ts.
 
 change from:
 ```bash
@@ -94,6 +94,14 @@ to this:
 ```bash
 uri: `${this.apiUrl}/oauth2/token?client_id=sscs&client_secret=${this.appSecret}`
 ```
+
+Then in file app/server/controllers/login.ts at line 70 the following line must be added:
+
+ ```bash
+ else {
+       idamUrl.searchParams.append('state', '');
+     }
+ ```
 
 Before running MYA, when exporting variables change IDAM_URL port to 5000 instead of 3501:
 
