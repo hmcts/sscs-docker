@@ -144,8 +144,6 @@ rpa-em-ccd-orchestrator
 case-document-am
 ```
 
-To have all the above containers running in a stable state around 15.5GB of memory will need to be allocated to Docker.
-
 Next in the backend.yml file the following lines need to be commented out for both ccd-data-store-api and ccd-definition-store-api:
 
 ```bash
