@@ -37,7 +37,7 @@ Ensure the value `rse-idam-simulator` is in the `./compose/defaults.conf` file
 
 In your /etc/hosts file add a value for `127.0.0.1       rse-idam-simulator`
 
-Ensure the service_started conditions for ccd-test-stubs-service and idam-api are commented out and rse-idam-simulator are uncommented in `./compose/backend.yaml` (This should be set by default)
+Ensure the service_started conditions for ccd-test-stubs-service and  are commented out and rse-idam-simulator are uncommented in `./compose/backend.yaml` (This should be set by default)
 
 Uncomment the following variables in your .env file
 ```bash
@@ -118,9 +118,46 @@ Now you should be redirected to idam simulator login page when using MYA.
 
 #### Using real idam:
 
-Using idam for first time:
+To set up real idam first the idam images will need to be added to defualts.conf and idam simulator will need to be removed:
 
 ```bash
+backend
+frontend
+dm-store
+xui
+sidam
+sidam-local
+sidam-local-ccd
+pdf-service-api
+elasticsearch
+logstash
+stitching-api
+rpa-em-ccd-orchestrator
+case-document-am
+```
+
+To have all the above containers running in a stable state around 15.5GB of memory will need to be allocated to Docker.
+
+Next in the backend.yml file the following lines need to be commented out for both ccd-data-store-api and ccd-definition-store-api:
+
+```bash
+#rse-idam-simulator:
+ #condition: service_started
+```
+
+Then real idam needs to be uncommented for both ccd-data-store-api and ccd-definition-store-api:
+
+```bash
+idam-api:
+  condition: service_started
+```
+
+In the stitching-api.yml file under both the depends_on and links section, rse-idam-simulator needs to be commented out and idam-api needs to be uncommented
+
+Now the containers can be started using:
+
+```bash
+source .env
 ./bin/compose-up-idam.sh
 ```
 
