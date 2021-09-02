@@ -37,7 +37,7 @@ Ensure the value `rse-idam-simulator` is in the `./compose/defaults.conf` file
 
 In your /etc/hosts file add a value for `127.0.0.1       rse-idam-simulator`
 
-Ensure the service_started conditions for ccd-test-stubs-service and  are commented out and rse-idam-simulator are uncommented in `./compose/backend.yaml` (This should be set by default)
+Ensure the service_started conditions for ccd-test-stubs-service are commented out and rse-idam-simulator are uncommented in `./compose/backend.yaml` (This should be set by default)
 
 Uncomment the following variables in your .env file
 ```bash
