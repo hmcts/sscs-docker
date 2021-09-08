@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source .env
+
 ./bin/add-sscs-ccd-roles.sh
 
 echo "Creating CCD users..."
