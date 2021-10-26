@@ -8,6 +8,7 @@
 
 source ./bin/set-environment-variables.sh
 source .env
+definitionUrl=${CCD_DEFINITION_URL:-http://localhost:4451}
 
 if [ -z "$1" ]
   then
@@ -29,8 +30,9 @@ binFolder=$(dirname "$0")
 userToken="$(${binFolder}/utils/idam-user-token.sh)"
 serviceToken="$(${binFolder}/utils/lease-service-token.sh ccd_gw)"
 
+
 curl --silent \
-  http://localhost:4451/import \
+  "${definitionUrl}"/import \
   -H "Authorization: Bearer ${userToken}" \
   -H "ServiceAuthorization: Bearer ${serviceToken}" \
   -F file="@$1"
