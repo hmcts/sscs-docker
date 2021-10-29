@@ -110,4 +110,3 @@ volumes:
 networks:
   ccd-network:
     external: true
-

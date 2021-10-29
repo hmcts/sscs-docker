@@ -6,8 +6,6 @@
 ##
 containerName=${1:-hmctstestcontainer}
 
-echo $containerName
-
 curl -XPUT --verbose \
   http://127.0.0.1:10000/devstoreaccount1/${containerName}?restype=container
 
