@@ -16,6 +16,7 @@ email=$2
 password=${3:-Pa55word11}
 surname=${4:-Test}
 forename=${5:-User}
+idamUrl=${IDAM_API_BASE_URI:-http://localhost:5000}
 
 if [ -z "$rolesStr" ]
   then
@@ -40,6 +41,6 @@ rolesJson="${rolesJson}]"
 echo "Creating caseworker $email"
 
 curl -XPOST \
-  http://localhost:5000/testing-support/accounts \
+  "${idamUrl}"/testing-support/accounts \
   -H "Content-Type: application/json" \
   -d '{"email":"'${email}'","forename":"'${forename}'","surname":"'${surname}'","password":"'${password}'", "roles": '${rolesJson}'}'

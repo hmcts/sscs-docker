@@ -10,6 +10,7 @@
 
 role=$1
 classification=${2:-PUBLIC}
+definitionUrl=${CCD_DEFINITION_URL:-http://localhost:4451}
 
 if [ -z "$role" ]
   then
@@ -31,7 +32,7 @@ userToken="$(${binFolder}/utils/idam-user-token.sh)"
 serviceToken="$(${binFolder}/utils/lease-service-token.sh ccd_gw)"
 
 curl -XPUT \
-  http://localhost:4451/api/user-role \
+  ${definitionUrl}/api/user-role \
   -H "Authorization: Bearer ${userToken}" \
   -H "ServiceAuthorization: Bearer ${serviceToken}" \
   -H "Content-Type: application/json" \

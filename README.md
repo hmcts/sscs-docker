@@ -600,6 +600,16 @@ em-ccd-orchestrator_rpa-em-ccd-orchestrator:latest
 
 Then restart 'rpa-em-ccd-orchestrator'
 
+
+### WA Kube Environment ###
+The WA Kube Environment is [here](https://github.com/hmcts/wa-kube-environment).
+Once it has been setup, we can add users, roles and upload a definition.
+```bash
+./bin/create-simulator-users.sh # To create SSCS users
+./bin/add-sscs-ccd-roles.sh # To add SSCS roles
+./bin/ccd-import-definition.sh <Path to definition file> # to upload a CCD definition file
+```
+
 ## LICENSE
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
