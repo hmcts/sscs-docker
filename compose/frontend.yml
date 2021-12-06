@@ -11,6 +11,7 @@ services:
       CCD_ACTIVITY_BASE_URL:
       DM_GATEWAY_BASE_URL: https://api-gateway.dev.dm.reform.hmcts.net
       OAUTH2_CLIENT_ID: ccd_gateway
+      ROLE_ASSIGNMENT_URL: http://am-role-assignment-service:4096
     ports:
       - 3451:3451
     depends_on:
