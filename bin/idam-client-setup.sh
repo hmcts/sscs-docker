@@ -6,6 +6,6 @@
 ./bin/idam-client-setup-service.sh sscs QM5RQQ53LZFOSIXJ
 ./bin/idam-client-setup-service.sh ccd_gateway ccd_gateway_secret
 ./bin/idam-client-setup-service.sh xui_webapp xui_webapp_secrect "profile openid roles manage-user create-user"
-
+./bin/idam-client-setup-service.sh am_role_assignment am_role_assignment_secret
 
 
