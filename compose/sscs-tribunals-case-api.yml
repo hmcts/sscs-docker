@@ -1,5 +1,5 @@
 ---
-version: '3'
+version: "3"
 
 services:
   sscs-tribunals-case-api:
@@ -9,9 +9,11 @@ services:
       EMAIL_SERVER_PORT: 1025
       PDF_API_URL: http://pdf-service-api:5500
       CORE_CASE_DATA_API_URL: http://ccd-data-store-api:4452
-      IDAM_URL: http://idam-api:5000
+      IDAM_API_URL: "${IDAM_STUB_SERVICE_NAME:-http://idam-api:5000}"
       IDAM_S2S_AUTH: http://service-auth-provider-api:8080
-      DOCUMENT_MANAGEMENT_URL: http://dm-store:8080
-      IDAM_OAUTH2_REDIRECT_URL: https://localhost:9000/poc
+      DOCUMENT_MANAGEMENT_URL: http://dm-store:5005
+      IDAM_OAUTH2_REDIRECT_URL: http://localhost:900/poc
     ports:
       - 8080:8080
+    networks:
+      - ccd-network
