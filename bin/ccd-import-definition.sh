@@ -20,9 +20,18 @@ elif [ ! -f "$1" ]
     exit 1
 fi
 
+echo "Resolving host IP for URL swaps..."
+if uname -r | grep -iF -q 'wsl2'; then
+  hostIP="http://$(ifconfig eth0 | grep 'inet\b' | awk '{print $2}')"
+  echo "WSL2 in use. Using host: $hostIP"
+else
+  echo "WSL2 not in use, defaulting to host.docker.internal."
+  hostIP="http://host.docker.internal"
+fi
+
 echo "Updating callback URLs..."
 cd tools/ReplaceCallbackUrls
-java -jar bin/ReplaceCallbackUrls.jar $1 url-swaps.yml
+java -jar bin/ReplaceCallbackUrls.jar $1 url-swaps.yml $hostIP
 cd -
 
 binFolder=$(dirname "$0")

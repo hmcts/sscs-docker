@@ -22,6 +22,7 @@ class ReplaceCallbackUrls {
 
         String excelFilePath = args[0];
         String urlsSwapFile = args[1];
+        String host = args[2];
 
         try (FileInputStream inputStream = new FileInputStream(new File(excelFilePath))) {
             Workbook workbook = WorkbookFactory.create(inputStream);
@@ -33,7 +34,7 @@ class ReplaceCallbackUrls {
 
 
                 for (String sheetName : sheetNames) {
-                    replaceUrlsInSheetName(urls, workbook, sheetName);
+                    replaceUrlsInSheetName(urls, workbook, sheetName, host);
                 }
             }
             try (FileOutputStream outputStream = new FileOutputStream(excelFilePath)) {
@@ -46,7 +47,7 @@ class ReplaceCallbackUrls {
 
     }
 
-    private static void replaceUrlsInSheetName(ArrayList urls, Workbook workbook, String sheetName) throws Exception {
+    private static void replaceUrlsInSheetName(ArrayList urls, Workbook workbook, String sheetName, String host) throws Exception {
         Sheet sheet = workbook.getSheet(sheetName);
 
         if (sheet == null) {
@@ -68,9 +69,10 @@ class ReplaceCallbackUrls {
                             for (int k = 0; k < urls.size(); k++) {
                                 LinkedHashMap<String, Object> url = (LinkedHashMap) urls.get(k);
                                 String from = (String) url.get("from");
-                                String to = (String) url.get("to");
+                                String port = (String) url.get("to");
                                 if (value.contains(from)) {
-                                    String replaced = value.replace(from, to);
+                                    String newTo = host + port.trim();
+                                    String replaced = value.replace(from, newTo);
                                     System.out.println("Replacing " + value + " with " + replaced);
                                     cell.setCellValue(replaced);
                                 }

@@ -26,10 +26,6 @@ jar {
 
 repositories {
 
-    maven {
-        url "https://dl.bintray.com/hmcts/hmcts-maven"
-    }
-
     jcenter()
     mavenCentral()
 }
