@@ -52,9 +52,6 @@ fi
 
 source ./bin/set-environment-variables.sh
 
-az acr login -n hmctspublic
-./ccd login
-
 echo "Forcing re-creation of shared-db container to ensure SIDAM roles are cleared"
 
 ./ccd compose down
