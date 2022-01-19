@@ -596,11 +596,6 @@ function print_warn_on_compose_down_if_idam_enabled {
     fi
 }
 
-function ccd_login() {
-    #docker logout hmctspublic.azurecr.io &>/dev/null
-    az acr login --name hmctsprivate --subscription 8999dec3-0104-4a27-94ee-6588559729d1
-}
-
 if [ $# -lt 1 ]; then
     usage
 fi
@@ -634,9 +629,6 @@ case $command in
         ;;
     compose)
         ccd_compose "$@"
-        ;;
-    login)
-        ccd_login
         ;;
     *)
         usage
