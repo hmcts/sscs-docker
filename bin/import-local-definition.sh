@@ -21,6 +21,6 @@ fi
 cd ../sscs-ccd-definitions/benefit
 docker build -t hmctspublic.azurecr.io/sscs/ccd-definition-importer-benefit:dev -f ../docker/importer.Dockerfile .
 cd ../
-./bin/create-xlsx.sh benefit dev aat
+./bin/create-xlsx.sh benefit dev local
 cd ../sscs-docker
 ./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION_XLS
