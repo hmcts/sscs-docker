@@ -2,7 +2,7 @@
 
 source ./bin/set-environment-variables.sh
 
-roles=("caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-clerk" "caseworker-sscs-dwpresponsewriter" "caseworker-sscs-registrar" "caseworker-sscs-superuser" "caseworker-sscs-teamleader"  "caseworker-sscs-panelmember" "caseworker-sscs-bulkscan" "caseworker-sscs-pcqextractor" "caseworker-wa-task-configuration")
+roles=("caseworker-sscs" "citizen" "caseworker-sscs-systemupdate" "caseworker-sscs-anonymouscitizen" "caseworker-sscs-callagent" "caseworker-sscs-judge" "caseworker-sscs-clerk" "caseworker-sscs-dwpresponsewriter" "caseworker-sscs-registrar" "caseworker-sscs-superuser" "caseworker-sscs-teamleader"  "caseworker-sscs-panelmember" "caseworker-sscs-bulkscan" "caseworker-sscs-pcqextractor" "caseworker-wa-task-configuration" "caseworker-ia-caseofficer") ##temp due to xui whitelist
 
 TRY_AGAIN_SECONDS=15
 ATTEMPTS=0
