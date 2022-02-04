@@ -1,0 +1,1 @@
+cd ~/sscs-docker/ && source .env && ./ccd compose stop
