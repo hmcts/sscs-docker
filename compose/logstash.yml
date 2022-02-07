@@ -15,8 +15,11 @@ services:
       - ccd-network
     volumes:
       - type: bind
-        source: ./logstash_pipeline/
-        target: /usr/share/logstash/pipeline      
+        source: ./logstash/ccd_logstash.conf
+        target: /usr/share/logstash/pipeline/logstash.conf      
+      - type: bind
+        source: ./logstash/lib/postgresql-42.2.2.jar
+        target: /usr/share/logstash/postgresql-42.2.2.jar
 
 networks:
   ccd-network:
