@@ -570,7 +570,7 @@ function ccd_compose_logstash() {
      for compose_file in $(active_compose_files)
      do
        if [ ${compose_file} == "logstash" ]; then
-        var_services="ccd"
+        var_services="sscs"
 
           IFS=','
          options="$@"
