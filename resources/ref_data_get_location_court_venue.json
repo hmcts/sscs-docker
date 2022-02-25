@@ -86,6 +86,32 @@
         "venue_name": "Aldershot",
         "is_case_management_location": null,
         "is_hearing_location": null
+      },
+      {
+         "court_venue_id":"4561",
+         "site_name":"Ashford Tribunal Hearing Centre",
+         "court_name":"ASHFORD TRIBUNAL HEARING CENTRE",
+         "epimms_id":"239985",
+         "open_for_public":"YES",
+         "court_type_id":"31",
+         "court_type":"Social Security and Child Support Tribunal",
+         "region_id":"6",
+         "region":"South East",
+         "cluster_id":"11",
+         "cluster_name":"Kent",
+         "court_status":"Open",
+         "court_open_date":null,
+         "closed_date":null,
+         "postcode":"TN23 1YB",
+         "court_address":"COUNTY SQUARE",
+         "phone_number":"",
+         "court_location_code":"",
+         "dx_address":"",
+         "welsh_site_name":"",
+         "welsh_court_address":"",
+         "venue_name":"Ashford",
+         "is_case_management_location":"N",
+         "is_hearing_location":"Y"
       }
     ]
   }
