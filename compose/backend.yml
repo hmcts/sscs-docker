@@ -51,9 +51,9 @@ services:
       # - 5005:5005
     depends_on:
       # Uncomment this line to enable ccd test stub service
-#      ccd-test-stubs-service:
-      - rse-idam-simulator
-      #idam-api:
+#     # ccd-test-stubs-service:
+      #- rse-idam-simulator
+      - idam-api
       - ccd-shared-database
       - ccd-user-profile-api
     networks:
@@ -138,8 +138,8 @@ services:
       # Uncomment this line to enable ccd test stub service
 #      ccd-test-stubs-service:
 #        condition: service_started
-      - rse-idam-simulator
-      #idam-api:
+      # rse-idam-simulator
+      - idam-api
       - ccd-shared-database
       - ccd-user-profile-api
       - ccd-definition-store-api
@@ -188,6 +188,8 @@ services:
       DB_USERNAME:
       DB_PASSWORD:
       POSTGRES_HOST_AUTH_METHOD: trust
+      PG_MAJOR: 11.14
+      PG_VERSION: 11.14-1.pgdg110+1
     ports:
       - 5050:5432
     volumes:
