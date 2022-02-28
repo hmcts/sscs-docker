@@ -1,0 +1,16 @@
+---
+version: '3'
+services:
+
+  shared-db:
+    image: "hmctsprivate.azurecr.io/idam/shared-db:latest"
+    container_name: shared-db
+    ports:
+      - 5432:5432
+    networks:
+      - ccd-network
+
+networks:
+  ccd-network:
+    external: true
+
