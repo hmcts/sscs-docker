@@ -53,7 +53,7 @@ services:
       # Uncomment this line to enable ccd test stub service
 #      ccd-test-stubs-service:
       - rse-idam-simulator
-      # idam-api:
+      #idam-api:
       - ccd-shared-database
       - ccd-user-profile-api
     networks:
@@ -138,8 +138,8 @@ services:
       # Uncomment this line to enable ccd test stub service
 #      ccd-test-stubs-service:
 #        condition: service_started
-      # rse-idam-simulator
-      - idam-api
+      - rse-idam-simulator
+      #idam-api:
       - ccd-shared-database
       - ccd-user-profile-api
       - ccd-definition-store-api
