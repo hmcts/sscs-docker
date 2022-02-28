@@ -51,9 +51,9 @@ services:
       # - 5005:5005
     depends_on:
       # Uncomment this line to enable ccd test stub service
-#     # ccd-test-stubs-service:
-      #- rse-idam-simulator
-      - idam-api
+#      ccd-test-stubs-service:
+      - rse-idam-simulator
+      # idam-api:
       - ccd-shared-database
       - ccd-user-profile-api
     networks:
