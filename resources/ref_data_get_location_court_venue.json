@@ -112,6 +112,32 @@
          "venue_name":"Ashford",
          "is_case_management_location":"N",
          "is_hearing_location":"Y"
+      },
+      {
+         "court_venue_id":"4706",
+         "site_name":"Cardiff Social Security and Child Support Tribunal",
+         "court_name":"CARDIFF SOCIAL SECURITY AND CHILD SUPPORT TRIBUNAL",
+         "epimms_id":"372653",
+         "open_for_public":"YES",
+         "court_type_id":"31",
+         "court_type":"Social Security and Child Support Tribunal",
+         "region_id":"8",
+         "region":"Wales",
+         "cluster_id":null,
+         "cluster_name":null,
+         "court_status":"Open",
+         "court_open_date":null,
+         "closed_date":null,
+         "postcode":"CF24 0AB",
+         "court_address":"CARDIFF EASTGATE HOUSE, 35-43, NEWPORT ROAD",
+         "phone_number":"",
+         "court_location_code":"",
+         "dx_address":"",
+         "welsh_site_name":"",
+         "welsh_court_address":"",
+         "venue_name":"Cardiff",
+         "is_case_management_location":"Y",
+         "is_hearing_location":"Y"
       }
     ]
   }
