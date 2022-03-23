@@ -2,9 +2,9 @@
 version: '3'
 services:
 
-  sscs-logstash:
-    image: "hmctspublic.azurecr.io/ccd/logstash:ccd-sscs-logstash-latest"
-    container_name: sscs-logstash
+  ccd-logstash:
+    image: "hmctspublic.azurecr.io/imported/logstash/logstash:7.16.1"
+    container_name: ccd-logstash
     environment:
       - XPACK_MONITORING_ENABLED=false
       - DB_URL=jdbc:postgresql://ccd-shared-database:5432/ccd_data?stringtype=unspecified&ssl=false
@@ -13,8 +13,14 @@ services:
       - ES_DATA_NODES_URL=http://ccd-elasticsearch:9200
     networks:
       - ccd-network
+    volumes:
+      - type: bind
+        source: ./logstash/ccd_logstash.conf
+        target: /usr/share/logstash/pipeline/logstash.conf      
+      - type: bind
+        source: ./logstash/lib/postgresql-42.2.2.jar
+        target: /usr/share/logstash/postgresql-42.2.2.jar
 
 networks:
   ccd-network:
     external: true
-
