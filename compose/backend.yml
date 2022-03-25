@@ -209,6 +209,7 @@ services:
     #uncomment and add the desired roles to idam_stub_get_details_custom.json. Then restart the Stub Service
     volumes:
       - ${PWD}/resources/idam_stub_get_details_custom.json:/opt/app/wiremock/mappings/idam_get_details.json
+      - ${PWD}/resources/ref_data_get_location_court_venue.json:/opt/app/wiremock/mappings/refdata_get_location.json
 
 volumes:
   ccd-docker-ccd-shared-database-data:
