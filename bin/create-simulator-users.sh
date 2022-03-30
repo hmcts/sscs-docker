@@ -8,6 +8,8 @@ source .env
 ./bin/simulator-create-caseworker.sh caseworker-sscs-systemupdate,caseworker-sscs,caseworker system.update@hmcts.net
 
 ./bin/simulator-create-caseworker.sh caseworker,caseworker-sscs,caseworker-sscs-dwpresponsewriter dwpuser@example.com Pa55word11 DWP user
+./bin/simulator-create-caseworker.sh caseworker,caseworker-sscs,caseworker-sscs-hmrcresponsewriter hmrcuser@example.com Pa55word11 HMRC user
+
 ./bin/simulator-create-caseworker.sh caseworker,caseworker-sscs,caseworker-sscs-judge judge@example.com Pa55word11 Judge user
 
 ./bin/simulator-create-caseworker.sh caseworker,caseworker-sscs,caseworker-sscs-clerk clerk@example.com Pa55word11 Clerk user
