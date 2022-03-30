@@ -1,0 +1,22 @@
+# To URLS are just ports because they are resolved in ccd-import-definition.sh.
+urls:
+- from: http://sscs-ccd-callback-orchestrator-prod.service.core-compute-prod.internal
+  to: :8070
+- from: http://sscs-tribunals-api-prod.service.core-compute-prod.internal
+  to: :8080
+- from: http://sscs-tya-notif-prod.service.core-compute-prod.internal
+  to: :8081
+- from: http://sscs-bulk-scan-prod.service.core-compute-prod.internal
+  to: :8090
+- from: http://host.docker.internal:4623
+  to: :4623
+- from: http://sscs-ccd-callback-orchestrator-prod.service.core-compute-prod.internal
+  to: :8070
+- from: http://sscs-tribunals-api-prod.service.core-compute-prod.internal
+  to: :8080
+- from: http://sscs-tya-notif-prod.service.core-compute-prod.internal
+  to: :8081
+- from: http://sscs-bulk-scan-prod.service.core-compute-prod.internal
+  to: :8090
+- from: http://host.docker.internal:4623
+  to: :4623
