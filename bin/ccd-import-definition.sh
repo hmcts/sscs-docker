@@ -10,6 +10,8 @@ source ./bin/set-environment-variables.sh
 source .env
 definitionUrl=${CCD_DEFINITION_URL:-http://localhost:4451}
 
+echo "USING $2"
+
 if [ -z "$1" ]
   then
     echo "Usage: ./ccd-import-definition.sh path_to_definition"
@@ -31,7 +33,11 @@ fi
 
 echo "Updating callback URLs..."
 cd tools/ReplaceCallbackUrls
-java -jar bin/ReplaceCallbackUrls.jar $1 url-swaps.yml $hostIP
+if [ ${2} == "prod" ]; then
+  java -jar bin/ReplaceCallbackUrls.jar $1 url-swaps-prod.yml $hostIP
+else
+  java -jar bin/ReplaceCallbackUrls.jar $1 url-swaps.yml $hostIP
+fi
 cd -
 
 binFolder=$(dirname "$0")
