@@ -6,6 +6,8 @@
 ##
 ## Prerequisites:
 ##  - Microservice `ccd_gw` must be authorised to call service `ccd-definition-store-api`
+##
+## To create prod definitions and run them locally run ./import-local-definition.sh prod
 
 ENV=${1}
 
