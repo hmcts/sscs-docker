@@ -32,6 +32,31 @@ command -v java >/dev/null 2>&1 || {
     exit 1
 }
 
+waitForHealthy () {
+  local host=$1
+  local port=$2
+  echo "Waiting for http://$host:$port/health to be healthy"
+  while [[ $(curl "http://$host:$port/health" 2>/dev/null | jq -r '.status' ) != "UP" ]]
+  do
+      printf '.'
+      sleep 5
+      if [[ $(./ccd compose ps 2>/dev/null | grep stopped | wc -l) != "0" ]]; then
+        ./ccd compose start -d
+      fi
+  done
+  printf '\n'
+}
+
+waitForContainers () {
+  local status=$1
+  while [[ $(./ccd compose ps | grep $status | wc -l) != "0" ]]
+  do
+      numLeft=$(./ccd compose ps 2>/dev/null | grep $status | wc -l)
+      echo "Waiting for $numLeft containers to start."
+      sleep 5
+  done
+}
+
 source ./bin/set-environment-variables.sh
 
 echo "Forcing re-creation of shared-db container to ensure SIDAM roles are cleared"
@@ -47,21 +72,15 @@ docker rm compose_ccd-shared-database_1 || true
 
 ./bin/document-management-store-create-blob-store-container.sh
 
-while [ `./ccd compose ps | grep starting | wc -l` != "0" ]
-do
-    echo "Waiting for " `./ccd compose ps | grep starting | wc -l` " containers to start."
-    sleep 5
-done
+waitForContainers starting
 
 ./ccd compose up -d
 
-echo "Is ccd-definition-store-api up and running http://localhost:4451/health ??"
+echo "Is ccd-definition-store-api up and http://localhost:4451/health is UP"
 echo "if you can not get it healthy then run: sudo docker restart compose_ccd-definition-store-api_1"
-echo "Press ENTER when http://localhost:4451/health is UP."
-read
+waitForHealthy localhost 4451
 
 echo "Creating CCD roles..."
-
 
 ./bin/add-sscs-ccd-roles.sh
 
