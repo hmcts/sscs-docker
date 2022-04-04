@@ -6,6 +6,16 @@
 ##
 ## Prerequisites:
 ##  - Microservice `ccd_gw` must be authorised to call service `ccd-definition-store-api`
+##
+## To create prod definitions and run them locally run ./import-local-definition.sh prod
+
+ENV=${1}
+
+if [ -z "${ENV}" ]; then
+    ENV="local"
+fi
+
+echo "Importing ${ENV} Definitions"
 
 source .env
 
@@ -21,6 +31,15 @@ fi
 cd ../sscs-ccd-definitions/benefit
 docker build -t hmctspublic.azurecr.io/sscs/ccd-definition-importer-benefit:dev -f ../docker/importer.Dockerfile .
 cd ../
-./bin/create-xlsx.sh benefit dev local
+
+if [ ${ENV} == "prod" ]; then
+  echo "Enviroment ${ENV}"
+  export CCD_CASE_DEFINITION_XLS=~/sscs-ccd-definitions/releases/CCD_SSCSDefinition_vdev_PROD.xlsx
+  ./bin/create-xlsx.sh benefit dev prod
+else
+  echo "Enviroment ${ENV}"
+  export CCD_CASE_DEFINITION_XLS=~/sscs-ccd-definitions/releases/CCD_SSCSDefinition_vdev_LOCAL.xlsx
+  ./bin/create-xlsx.sh benefit dev local
+fi
 cd ../sscs-docker
-./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION_XLS
+./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION_XLS ${ENV}
