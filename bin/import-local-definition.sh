@@ -34,11 +34,11 @@ cd ../
 
 if [ ${ENV} == "prod" ]; then
   echo "Enviroment ${ENV}"
-  export CCD_CASE_DEFINITION_XLS=~/sscs-ccd-definitions/releases/CCD_SSCSDefinition_vdev_PROD.xlsx
+  export CCD_CASE_DEFINITION_XLS=${CCD_CASE_DEFINITION_XLS%/*}/CCD_SSCSDefinition_vdev_PROD.xlsx
   ./bin/create-xlsx.sh benefit dev prod
 else
   echo "Enviroment ${ENV}"
-  export CCD_CASE_DEFINITION_XLS=~/sscs-ccd-definitions/releases/CCD_SSCSDefinition_vdev_LOCAL.xlsx
+  export CCD_CASE_DEFINITION_XLS=${CCD_CASE_DEFINITION_XLS%/*}/CCD_SSCSDefinition_vdev_LOCAL.xlsx
   ./bin/create-xlsx.sh benefit dev local
 fi
 cd ../sscs-docker
