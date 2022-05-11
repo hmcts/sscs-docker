@@ -34,7 +34,7 @@ cd ../
 
 export CCD_CASE_DEFINITION_XLS=${CCD_CASE_DEFINITION_XLS%/*}/CCD_SSCSDefinition_vdev_${ENV^^}.xlsx
 ./bin/create-xlsx.sh benefit dev ${ENV}
-echo "Current CCD Definitions Path: ${CCD_CASE_DEFINITION_XLS}"
+echo "Resolved enviroment ${ENV}, Replacing Current CCD Definition path to ${CCD_CASE_DEFINITION_XLS}"
 
 cd ../sscs-docker
 ./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION_XLS ${ENV}
