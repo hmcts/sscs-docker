@@ -32,14 +32,9 @@ cd ../sscs-ccd-definitions/benefit
 docker build -t hmctspublic.azurecr.io/sscs/ccd-definition-importer-benefit:dev -f ../docker/importer.Dockerfile .
 cd ../
 
-if [ ${ENV} == "prod" ]; then
-  echo "Enviroment ${ENV}"
-  export CCD_CASE_DEFINITION_XLS=${CCD_CASE_DEFINITION_XLS%/*}/CCD_SSCSDefinition_vdev_PROD.xlsx
-  ./bin/create-xlsx.sh benefit dev prod
-else
-  echo "Enviroment ${ENV}"
-  export CCD_CASE_DEFINITION_XLS=${CCD_CASE_DEFINITION_XLS%/*}/CCD_SSCSDefinition_vdev_LOCAL.xlsx
-  ./bin/create-xlsx.sh benefit dev local
-fi
+export CCD_CASE_DEFINITION_XLS=${CCD_CASE_DEFINITION_XLS%/*}/CCD_SSCSDefinition_vdev_${ENV^^}.xlsx
+./bin/create-xlsx.sh benefit dev ${ENV}
+echo "Current CCD Definitions Path: ${CCD_CASE_DEFINITION_XLS}"
+
 cd ../sscs-docker
 ./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION_XLS ${ENV}
