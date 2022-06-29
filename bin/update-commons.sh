@@ -6,7 +6,7 @@ echo ${version}
 
 cd ../..
 
-for value in sscs-hearings-api
+for value in sscs-hearings-api sscs-tribunals-case-api sscs-track-your-appeal-notifications sscs-ccd-callback-orchestrator sscs-bulk-scan sscs-evidence-share sscs-case-loader
 do
     cd ${value}
 
@@ -43,3 +43,8 @@ done
 
 echo ${sscshearingsapi}
 echo ${sscstribunalscaseapi}
+echo ${sscstrackyourappealnotifications}
+echo ${sscsccdcallbackorchestrator}
+echo ${sscsbulkscan}
+echo ${sscsevidenceshare}
+echo ${sscscaseloader}
