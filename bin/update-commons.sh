@@ -1,6 +1,16 @@
 ticket=$1
 version=$2
 
+if [ $# -eq 0 ]; then
+    echo "Please provide a ticket number"
+    exit 1
+fi
+
+if [ $# -eq 1 ]; then
+    echo "Please provide the commons version"
+    exit 1
+fi
+
 echo ${ticket}
 echo ${version}
 
