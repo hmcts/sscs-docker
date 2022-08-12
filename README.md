@@ -1,3 +1,4 @@
+# **Superseded by CFT Lib. Only use compose files in the cftlib folder if required**
 # CCD/SSCS Docker :whale:
 
 - [Quick start](#Quick start)
