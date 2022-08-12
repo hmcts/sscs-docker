@@ -11,6 +11,8 @@ command -v az >/dev/null 2>&1 || {
     exit 1
 }
 
+az acr login -n hmctspublic
+
 command -v docker-compose >/dev/null 2>&1 || {
     echo "=========================================================================================="
     echo >&2 "Please install Docker Compose - instructions in README.md"
