@@ -28,13 +28,12 @@ if [ ! -f $CCD_CASE_DEFINITION_XLS ]; then
   exit
 fi
 
-cd ../sscs-ccd-definitions/benefit
-docker build -t hmctspublic.azurecr.io/sscs/ccd-definition-importer-benefit:dev -f ../docker/importer.Dockerfile .
-cd ../
+cd ~/projects/sscs-ccd-definitions
 
 export CCD_CASE_DEFINITION_XLS=${CCD_CASE_DEFINITION_XLS%/*}/CCD_SSCSDefinition_vdev_${ENV^^}.xlsx
+
 ./bin/create-xlsx.sh benefit dev ${ENV}
 echo "Resolved enviroment ${ENV}, Replacing Current CCD Definition path to ${CCD_CASE_DEFINITION_XLS}"
 
-cd ../sscs-docker
+cd ~/sscs-docker
 ./bin/ccd-import-definition.sh $CCD_CASE_DEFINITION_XLS ${ENV}

@@ -24,8 +24,9 @@ fi
 
 echo "Resolving host IP for URL swaps..."
 if uname -r | grep -iF -q 'wsl2'; then
-  hostIP="http://$(ifconfig eth0 | grep 'inet\b' | awk '{print $2}')"
-  echo "WSL2 in use. Using host: $hostIP"
+  # hostIP="http://$(ifconfig eth0 | grep 'inet\b' | awk '{print $2}')"
+   hostIP="http://host.docker.internal"
+  # echo "WSL2 in use. Using host: $hostIP"
 else
   echo "WSL2 not in use, defaulting to host.docker.internal."
   hostIP="http://host.docker.internal"
@@ -33,7 +34,7 @@ fi
 
 echo "Updating callback URLs..."
 cd tools/ReplaceCallbackUrls
-if [ ${2} == "prod" ]; then
+if [ "${2}" == "prod" ]; then
   java -jar bin/ReplaceCallbackUrls.jar $1 url-swaps-prod.yml $hostIP
 else
   java -jar bin/ReplaceCallbackUrls.jar $1 url-swaps.yml $hostIP
