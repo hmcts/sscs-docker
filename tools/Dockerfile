@@ -1,4 +1,4 @@
-FROM node:10.16.0
+FROM node:20.12.0
 MAINTAINER "Chris Moreton <christopher.moreton@hmcts.net>"
 
 RUN npm install -g selenium-side-runner
